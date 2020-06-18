@@ -20,13 +20,24 @@
     ]
   },
   "dependencies": {
+    "@ant-design/icons": "^4.0.2",
+    "@ant-design/pro-layout": "^5.0.17",
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.2.3",
+    "antd": "^4.0.0",
+    "classnames": "^2.2.6",
     "lint-staged": "^10.0.7",
+    "moment": "^2.22.2",
+    "omit.js": "^1.0.2",
     "prettier": "^1.19.1",
+    "qs": "^6.7.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "umi": "^3.2.3",
+    "umi-request": "^1.0.8",
     "yorkie": "^2.0.0"
+  },
+  "devDependencies": {
+    "@umijs/preset-ui": "^2.1.15"
   }
 }
