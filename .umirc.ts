@@ -4,13 +4,18 @@ export default defineConfig({
     type: 'none',
     exclude: [],
   },
-  layout: {},
+  //layout: {},
   dva: {},
   routes: [
     {
       name: '登录页',
       path: 'user/userlogin',
       component: './User/UserLogin',
+    },
+    {
+      name: '查询表格',
+      path: 'list/fuv_list',
+      component: './List/FUVList',
     },
     {
       path: '/',
