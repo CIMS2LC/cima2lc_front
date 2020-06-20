@@ -4,7 +4,8 @@ import { parse } from 'qs';
 import { fakeAccountLogin, getFakeCaptcha } from './service';
 
 export function getPageQuery() {
-  return parse(window.location.href.split('?')[1]);
+  //return parse(window.location.href.split('?')[1]);
+  return parse('redirect=http://localhost:8000/list/fuv_list');
 }
 
 export function setAuthority(authority: string | string[]) {
