@@ -1,29 +1,35 @@
 import React from 'react';
-import styles from './index.less';
-import { Menu, Button, Space, Layout } from 'antd';
+import { Menu, Button, Space, Layout, Steps } from 'antd';
+import CRFStep from './components/CRFStep';
+import styles from './style.less';
 
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
+const { Step } = Steps;
 
 export default () => {
   return (
-    <div>
-      <div>
-        <Button type="primary" id="btn_save">
-          保存
-        </Button>
-        <Button type="primary" id="btn_return">
-          返回
-        </Button>
-      </div>
-      <div>
-        <Menu>
-          <Menu.Item>菜单项</Menu.Item>
-          <SubMenu title="子菜单">
-            <Menu.Item>子菜单项</Menu.Item>
-          </SubMenu>
-        </Menu>
-      </div>
-    </div>
+    <>
+      <Layout>
+        <Header></Header>
+        <Layout>
+          <Sider theme="light">
+            <div>
+              <div className={styles.img_logo}>
+                <img
+                  className={styles.img_logo}
+                  src={require('@/img/logo.png')}
+                ></img>
+              </div>
+              <CRFStep />
+            </div>
+          </Sider>
+          <Content>
+            <Button id="save">保存</Button>
+            <Button id="return">返回</Button>
+          </Content>
+        </Layout>
+      </Layout>
+    </>
   );
 };
