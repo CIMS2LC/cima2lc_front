@@ -18,6 +18,11 @@ export default defineConfig({
       component: './List/FUVList',
     },
     {
+      name: 'CRF详情',
+      path: 'detail/crf_detail',
+      component: './Detail/CRFDetail',
+    },
+    {
       path: '/',
       component: '@/pages/index',
     },
