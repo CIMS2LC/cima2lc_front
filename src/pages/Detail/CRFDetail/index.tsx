@@ -59,41 +59,45 @@ class CRFSlidingTabs extends React.Component {
         <Tabs defaultActiveKey="1" tabPosition="left">
           <TabPane tab="基线资料" key="baseline_info">
             <Tabs tabPosition="top">
-              <TabPane tab="基本信息" key="basic_info"></TabPane>
-              <Form
-                name="basic_info"
-                //initialValues={{ remember: true }}
-              >
-                <Form.Item label="iDNumber" name="身份证号">
-                  <Input />
-                </Form.Item>
+              <TabPane tab="基本信息" key="basic_info">
+                <Form
+                  name="basic_info"
+                  {...layout}
+                  //className={styles.form_basic_info}
+                  //initialValues={{ remember: true }}
+                >
+                  <Form.Item label="身份证号" name="idNumber">
+                    <Input />
+                  </Form.Item>
 
-                <Form.Item label="aDNumber" name="住院号">
-                  <Input />
-                </Form.Item>
+                  <Form.Item label="住院号" name="adNumber">
+                    <Input />
+                  </Form.Item>
 
-                <Form.Item label="name" name="姓名">
-                  <Input />
-                </Form.Item>
+                  <Form.Item label="姓名" name="name">
+                    <Input />
+                  </Form.Item>
 
-                <Form.Item label="sex" name="性别">
-                  <Input />
-                </Form.Item>
+                  <Form.Item label="性别" name="sex">
+                    <Input />
+                  </Form.Item>
 
-                <Form.Item label="birthday" name="出生日期">
-                  <Input />
-                </Form.Item>
+                  <Form.Item label="出生日期" name="birthday">
+                    <Input />
+                  </Form.Item>
 
-                <Form.Item label="phoneNumber" name="电话号码">
-                  <Input />
-                </Form.Item>
+                  <Form.Item label="电话号码" name="phoneNumber">
+                    <Input />
+                  </Form.Item>
 
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    保存
-                  </Button>
-                </Form.Item>
-              </Form>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      保存
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </TabPane>
+
               <TabPane tab="既往史" key="pre_history"></TabPane>
               <TabPane tab="初诊过程" key="diag_procedure"></TabPane>
               <TabPane tab="实验室检查" key="labor_inspect"></TabPane>
@@ -126,7 +130,7 @@ export default () => {
                 src={require('@/img/logo.png')}
               ></img>
             </div>
-            <Button className={styles.btn_return} id="return">
+            <Button className={styles.btn_return} id="btn_return">
               返回
             </Button>
           </div>
