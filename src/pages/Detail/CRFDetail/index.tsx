@@ -16,18 +16,22 @@ import {
   Divider,
   Rate,
 } from 'antd';
-//import CRFStep from './components/CRFStep';
-import styles from './style.less';
 
+import styles from './style.less';
+import TreatmentInfo from './components/TreatmentInfo';
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 const { Step } = Steps;
 const { TabPane } = Tabs;
-
 const layout = {
-  labelCol: { span: 2 },
-  wrapperCol: { span: 8 },
+  labelCol: {
+    span: 2,
+  },
+  wrapperCol: {
+    span: 8,
+  },
 };
+
 class CRFSlidingTabs extends React.Component {
   // constructor(props) {
   //   super(props);
@@ -35,41 +39,33 @@ class CRFSlidingTabs extends React.Component {
   //     mode: 'top',
   //   };
   // }
-
   // handleModeChange = e => {
   //   const mode = e.target.value;
   //   this.setState({ mode });
   // };
-
   state = {
     value: 1,
     TMB_value: false,
   };
-
   TMB_onChange = (checked: any) => {
     this.setState({
       TMB_value: !checked,
     });
     console.log(`switch to ${checked}`);
   };
-
   idNumber_onChange = (value: any) => {
     console.log('changed', value);
   };
-
   sex_onChange = (e: any) => {
     console.log('radio checked', e.target.value);
     this.setState({
       value: e.target.value,
     });
   };
-
   birthday_onChange = (date: any, dateString: any) => {
     console.log(date, dateString);
   };
-
   fv_score_onChange = () => {};
-
   clinical_manifestation_Options = [
     '无',
     '体检',
@@ -86,9 +82,7 @@ class CRFSlidingTabs extends React.Component {
     '其他',
     '不详',
   ];
-
   clinical_manifestation_onChange = () => {};
-
   underlying_disease_history_Options = [
     '无',
     '高血压',
@@ -105,9 +99,7 @@ class CRFSlidingTabs extends React.Component {
     '其他',
     '不详',
   ];
-
   underlying_disease_history_onChange = () => {};
-
   infectious_disease_history_Options = [
     '无',
     '肺结核',
@@ -116,13 +108,9 @@ class CRFSlidingTabs extends React.Component {
     '其他',
     '不详',
   ];
-
   infectious_disease_history_onChange = () => {};
-
   part_Options = ['左上肺', '左下肺', '右上肺', '右中肺', '右下肺'];
-
   part_onChange = () => {};
-
   biopsy_way_Options = [
     '手术',
     '纵隔镜',
@@ -134,9 +122,7 @@ class CRFSlidingTabs extends React.Component {
     '淋巴结活检',
     '其他',
   ];
-
   biopsy_way_onChange = () => {};
-
   pathological_diagnosis_Options = [
     '鳞癌',
     '腺癌',
@@ -150,9 +136,7 @@ class CRFSlidingTabs extends React.Component {
     '（难以鉴别的）神经内分泌肿瘤',
     '其他',
   ];
-
   pathological_diagnosis_onChange = () => {};
-
   blood_routine_examination_labels = [
     'Hb(g/L)',
     'RBC_B(×10¹²/L)',
@@ -180,7 +164,6 @@ class CRFSlidingTabs extends React.Component {
     'P(mmol/L)',
   ];
   tumor_marker_labels = ['CEA(ng/ml)', 'SCC(U/ml)', 'NSE(u/ml)'];
-
   immunohistochemical_labels = [
     'ALKD5F3',
     'ALKD5F3-N',
@@ -240,8 +223,7 @@ class CRFSlidingTabs extends React.Component {
               <TabPane tab="基本信息" key="basic_info">
                 <Form
                   name="basic_info"
-                  {...layout}
-                  //className={styles.form_basic_info}
+                  {...layout} //className={styles.form_basic_info}
                   //initialValues={{ remember: true }}
                 >
                   <Form.Item label="身份证号" name="idNumber">
@@ -433,8 +415,12 @@ class CRFSlidingTabs extends React.Component {
               <TabPane tab="实验室检查" key="labor_inspect">
                 <Form
                   name="labor_inspect"
-                  labelCol={{ span: 2 }}
-                  wrapperCol={{ span: 4 }}
+                  labelCol={{
+                    span: 2,
+                  }}
+                  wrapperCol={{
+                    span: 4,
+                  }}
                 >
                   血常规及凝血功能
                   <Divider />
@@ -533,12 +519,9 @@ class CRFSlidingTabs extends React.Component {
             </Tabs>
           </TabPane>
           <TabPane tab="随访信息" key="followUp_info"></TabPane>
-          <TabPane tab="治疗信息" key="treatment_info"></TabPane>
-          {/* {[...Array(30).keys()].map(i => (
-            <TabPane tab={`Tab-${i}`} key={i} disabled={i === 28}>
-              Content of tab {i}
-            </TabPane>
-          ))} */}
+          <TabPane tab="治疗信息" key="treatment_info">
+            <TreatmentInfo />
+          </TabPane>
         </Tabs>
       </div>
     );
@@ -564,7 +547,12 @@ export default () => {
             </Button>
           </div>
         </Header>
-        <Content style={{ padding: '0 50px', marginTop: 64 }}>
+        <Content
+          style={{
+            padding: '0 50px',
+            marginTop: 64,
+          }}
+        >
           <div>
             <CRFSlidingTabs />
           </div>
