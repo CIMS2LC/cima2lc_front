@@ -577,15 +577,22 @@ export default () => {
   return (
     <>
       <Layout>
-        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-          <div className={styles.img_logo}>
+        <Header
+          style={{
+            position: 'fixed',
+            zIndex: 1,
+            width: '100%',
+            background: 1677215,
+          }}
+        >
+          <div>
             <img className={styles.img_logo} src={require('@/img/logo.png')} />
             <Button className={styles.btn_return} id="btn_return">
               返回
             </Button>
           </div>
         </Header>
-        <Content>
+        <Content style={{ padding: '0 50px', marginTop: 64 }}>
           <div>
             <CRFSlidingTabs />
           </div>
