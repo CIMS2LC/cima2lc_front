@@ -23,6 +23,11 @@ export default defineConfig({
       component: './Detail/CRFDetail',
     },
     {
+      name: '调查问卷',
+      path: 'Questionnaire',
+      component: './Questionnaire/index',
+    },
+    {
       path: '/',
       component: '@/pages/index',
     },
