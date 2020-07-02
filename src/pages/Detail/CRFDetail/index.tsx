@@ -18,7 +18,11 @@ import {
 } from 'antd';
 
 import styles from './style.less';
+import FollowUpInfo from './components/FollowUpInfo';
 import TreatmentInfo from './components/TreatmentInfo';
+import LaborInspect from './components/BasicComponents/LaborInspect';
+import Immunohistochemical from './components/BasicComponents/Immunohistochemical';
+import MolecularDetection from './components/BasicComponents/MolecularDetection';
 const { Header, Footer, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 const { Step } = Steps;
@@ -413,112 +417,19 @@ class CRFSlidingTabs extends React.Component {
                 </Form>
               </TabPane>
               <TabPane tab="实验室检查" key="labor_inspect">
-                <Form
-                  name="labor_inspect"
-                  labelCol={{
-                    span: 2,
-                  }}
-                  wrapperCol={{
-                    span: 4,
-                  }}
-                >
-                  血常规及凝血功能
-                  <Divider />
-                  {this.blood_routine_examination_labels.map(item => (
-                    <Form.Item label={item} name={item}>
-                      <div>
-                        <Input maxLength={18} />
-                        临床意义判定
-                        <Rate count={4} />
-                      </div>
-                    </Form.Item>
-                  ))}
-                  尿常规
-                  <Divider />
-                  {this.piss_routine_examination_labels.map(item => (
-                    <Form.Item label={item} name={item}>
-                      <Input maxLength={18} />
-                      临床意义判定
-                      <Rate count={4} />
-                    </Form.Item>
-                  ))}
-                  血生化
-                  <Divider />
-                  {this.blood_biochemistry_labels.map(item => (
-                    <Form.Item label={item} name={item}>
-                      <Input maxLength={18} />
-                      临床意义判定
-                      <Rate count={4} />
-                    </Form.Item>
-                  ))}
-                  肿瘤标志物
-                  <Divider />
-                  {this.tumor_marker_labels.map(item => (
-                    <Form.Item label={item} name={item}>
-                      <Input maxLength={18} />
-                      临床意义判定
-                      <Rate count={4} />
-                    </Form.Item>
-                  ))}
-                </Form>
+                <LaborInspect />
               </TabPane>
               <TabPane tab="免疫组化" key="immunohistochemical">
-                <Form name="immunohistochemical" {...layout}>
-                  {this.immunohistochemical_labels.map(item => (
-                    <Form.Item label={item} name={item}>
-                      <Radio.Group>
-                        <Radio value={1}>-</Radio>
-                        <Radio value={2}>±</Radio>
-                        <Radio value={3}>+</Radio>
-                        <Radio value={4}>++</Radio>
-                        <Radio value={4}>+++</Radio>
-                      </Radio.Group>
-                    </Form.Item>
-                  ))}
-                </Form>
+                <Immunohistochemical />
               </TabPane>
               <TabPane tab="分子检测" key="molecular_detection">
-                <Form name="molecular_detection" {...layout}>
-                  {this.molecular_detection_labels.map(item => (
-                    <Form.Item label={item} name={item}>
-                      <Radio.Group>
-                        <Radio value={0}>无</Radio>
-                        <Radio value={-1}>阴性</Radio>
-                        <Radio value={1}>阳性</Radio>
-                      </Radio.Group>
-                    </Form.Item>
-                  ))}
-                  <Form.Item label="MSI" name="MSI">
-                    <Radio.Group>
-                      <Radio value={0}>MSS</Radio>
-                      <Radio value={-1}>MSIH</Radio>
-                      <Radio value={1}>MSIL</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Form.Item label="分子检测" name="MD">
-                    <Radio.Group>
-                      <Radio value={0}>ARMS</Radio>
-                      <Radio value={-1}>FISH</Radio>
-                      <Radio value={1}>二代测序</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Form.Item label="TMB(/Mb)" name="TMB">
-                    <Input disabled={this.state.TMB_value} />
-                    <Switch
-                      checkedChildren="已检测"
-                      unCheckedChildren="未检测"
-                      defaultChecked
-                      onChange={this.TMB_onChange}
-                    />
-                  </Form.Item>
-                  <Form.Item label="其他" name="other">
-                    <Input />
-                  </Form.Item>
-                </Form>
+                <MolecularDetection />
               </TabPane>
             </Tabs>
           </TabPane>
-          <TabPane tab="随访信息" key="followUp_info"></TabPane>
+          <TabPane tab="随访信息" key="followUp_info">
+            <FollowUpInfo />
+          </TabPane>
           <TabPane tab="治疗信息" key="treatment_info">
             <TreatmentInfo />
           </TabPane>
