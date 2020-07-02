@@ -24,8 +24,6 @@ import LaborInspect from './components/BasicComponents/LaborInspect';
 import Immunohistochemical from './components/BasicComponents/Immunohistochemical';
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
 const { Header, Footer, Sider, Content } = Layout;
-const { SubMenu } = Menu;
-const { Step } = Steps;
 const { TabPane } = Tabs;
 const layout = {
   labelCol: {
@@ -49,13 +47,6 @@ class CRFSlidingTabs extends React.Component {
   // };
   state = {
     value: 1,
-    TMB_value: false,
-  };
-  TMB_onChange = (checked: any) => {
-    this.setState({
-      TMB_value: !checked,
-    });
-    console.log(`switch to ${checked}`);
   };
   idNumber_onChange = (value: any) => {
     console.log('changed', value);
@@ -141,82 +132,6 @@ class CRFSlidingTabs extends React.Component {
     '其他',
   ];
   pathological_diagnosis_onChange = () => {};
-  blood_routine_examination_labels = [
-    'Hb(g/L)',
-    'RBC_B(×10¹²/L)',
-    'WBC(×10⁹/L)',
-    'Plt(×10⁹L)',
-    'PT(S)',
-  ];
-  piss_routine_examination_labels = [
-    '白细胞(个/HP)',
-    '红细胞(个/HP)',
-    '尿蛋白(＋/－)',
-  ];
-  blood_biochemistry_labels = [
-    'ALT(IU/L)',
-    'AST(IU/L)',
-    'TBIL(umol/1)',
-    'DBIL(umol/1)',
-    'ALB(g/L)',
-    'Cr(umol/L)',
-    'BUN(mmol/1)',
-    'Glu(mmol/L)',
-    'K(mmol/L)',
-    'Na(mmol/L)',
-    'Cl(mmol/L)',
-    'P(mmol/L)',
-  ];
-  tumor_marker_labels = ['CEA(ng/ml)', 'SCC(U/ml)', 'NSE(u/ml)'];
-  immunohistochemical_labels = [
-    'ALKD5F3',
-    'ALKD5F3-N',
-    'CAIX',
-    'CAM5.2',
-    'CD10',
-    'CD34',
-    'CD56',
-    'CD117',
-    'CDX-2',
-    'CEA',
-    'CgA',
-    'CK',
-    'CK5/6',
-    'CK7',
-    'CK8/18',
-    'CK19',
-    'CK20',
-    'Cyn',
-    'DLL3',
-    'EMA',
-    'ERCC-1',
-    'LCA',
-    'MCM2',
-    'Napsin A',
-    'P16',
-    'P40',
-    'p53',
-    'P63',
-    'PAX-2',
-    'PAX-8',
-    'PCK',
-    'PD-L1',
-    'RRM-1',
-  ];
-  molecular_detection_labels = [
-    'ALK',
-    'BIM',
-    'BRAF',
-    'cMET',
-    'EGFR',
-    'HER-2',
-    'KRAS',
-    'PD-L1',
-    'PIK3CA',
-    'ROS1',
-    'RET',
-    'UGT1A1',
-  ];
 
   render() {
     return (
