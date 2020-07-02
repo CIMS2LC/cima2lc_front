@@ -16,101 +16,72 @@ import {
 
 const { Option } = Select;
 
-const steps = [
-  {
-    title: 'First',
-    content: 'qwe',
-  },
-  {
-    title: 'Second',
-    content: 'Second-content',
-  },
-  {
-    title: 'Last',
-    content: 'Last-content',
-  },
-];
-
 const layout = {
   labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 4,
-  },
-};
-const layout1 = {
-  //第三页文本样式
-  labelCol: {
-    span: 4.5,
-    offset: 6, //栅格左侧距离
+    span: 3,
   },
   wrapperCol: {
     span: 6,
   },
 };
-const radio = {
+const layout2 = {
+  //第2页的填写框
   labelCol: {
-    span: 8,
+    span: 4,
   },
   wrapperCol: {
-    span: 8,
+    span: 6,
+  },
+};
+const layout1 = {
+  //第三页疼痛部位填写框样式
+  labelCol: {
+    span: 10,
+  },
+  wrapperCol: {
+    span: 15,
+  },
+};
+const radio = {
+  //第一页的radio
+
+  wrapperCol: {
+    span: 18,
   },
 };
 const radio1 = {
   //第3页的1-28样式
   labelCol: {
     //默认右对齐，
-    span: 8, //跨度
-    offset: 6, //栅格左侧距离
+    span: 15, //跨度
   },
-  wrapperCol: {
-    span: 8,
-  },
-  colon: false,
+  colon: false, //有无冒号
 };
 const radio2 = {
   //29、30的radio样式
   labelCol: {
     //默认右对齐，
-    span: 5, //跨度
-    offset: 6, //栅格左侧距离
+    span: 9, //跨度
   },
-  wrapperCol: {
-    span: 8,
-  },
-  colon: false,
+  colon: false, //有无冒号
 };
 const radio3 = {
   //31-42的radio样式
   labelCol: {
     //默认右对齐，
-    span: 5, //跨度
-    offset: 6, //栅格左侧距离
+    span: 8, //跨度
   },
-  wrapperCol: {
-    span: 10,
-  },
-  colon: false,
+  colon: false, //有无冒号
 };
 const radio4 = {
   //音乐部分的radio样式
-  labelCol: {
-    //默认右对齐，
-    //  span: 1,  //跨度
-    offset: 6, //栅格左侧距离
-  },
-  wrapperCol: {
-    span: 10,
-  },
   colon: false, //有无冒号
 };
 
 const tailLayout = {
   //button样式
   wrapperCol: {
-    offset: 13,
-    span: 16,
+    offset: 18,
   },
 };
 const validateMessages = {
@@ -142,7 +113,7 @@ class App extends React.Component {
     });
   };
   onFinish = (values: any) => {
-    //提交成功的操作函数 values中没有多选框的值
+    //提交成功的操作函数
     message.success('提交成功!');
     console.log(values);
   };
@@ -172,7 +143,7 @@ class App extends React.Component {
   render() {
     const { current } = this.state;
     return (
-      <div>
+      <div className={styles.content}>
         <div className={styles.title}>
           <br></br>
           胸部肿瘤科肺康复患者调查表
@@ -182,8 +153,9 @@ class App extends React.Component {
           亲爱的病友:
           <br></br>
           &emsp;&emsp;您好！为了解您目前的健康状况以及肺康复训练的效果，请您在护士的帮助下回答以下所有问题，
-          并圈出<br></br>
-          对您最合适的答案。答案无“正确”与“错误”之分。您提供的信息我们将绝对保密。谢谢您的配合！
+          并圈出对您最合适的答案。答案无“正确”与“错误”之分。您提供的信息我们将绝对保密。谢谢您的配合！
+          <br></br>-----------------------------------------------------------
+          --------------------------------------------------------------------
         </div>
 
         <Form.Item {...tailLayout}>
@@ -191,7 +163,6 @@ class App extends React.Component {
         </Form.Item>
 
         <Form
-          {...layout}
           ref={this.formRef}
           name="control-hooks"
           validateMessages={validateMessages}
@@ -202,6 +173,8 @@ class App extends React.Component {
           <div style={{ display: this.state.display1 }}>
             <div className={styles.subtitle}>一、基本情况</div>
             <Form.Item
+              {...layout}
+              labelAlign="left"
               name="name"
               label="姓名"
               rules={[
@@ -214,6 +187,8 @@ class App extends React.Component {
             </Form.Item>
 
             <Form.Item
+              {...layout}
+              labelAlign="left"
               name="hospitalID"
               label="住院号"
               rules={[
@@ -226,6 +201,8 @@ class App extends React.Component {
             </Form.Item>
 
             <Form.Item
+              {...layout}
+              labelAlign="left"
               name="sex"
               label="性别"
               rules={[
@@ -241,6 +218,8 @@ class App extends React.Component {
             </Form.Item>
 
             <Form.Item
+              {...layout}
+              labelAlign="left"
               name="age"
               label="年龄"
               rules={[
@@ -252,30 +231,50 @@ class App extends React.Component {
               <Input />
             </Form.Item>
 
-            <Form.Item name="height" label="身高（cm）">
+            <Form.Item
+              {...layout}
+              labelAlign="left"
+              name="height"
+              label="身高（cm）"
+            >
               <Input />
             </Form.Item>
 
-            <Form.Item name="weight" label="体重（kg）">
+            <Form.Item
+              {...layout}
+              labelAlign="left"
+              name="weight"
+              label="体重（kg）"
+            >
               <Input />
             </Form.Item>
 
-            <Form.Item name="education" label="文化程度">
+            <Form.Item
+              {...layout}
+              labelAlign="left"
+              name="education"
+              label="文化程度"
+            >
               <Input />
             </Form.Item>
 
-            <Form.Item name="marriage" label="婚否">
+            <Form.Item
+              {...layout}
+              labelAlign="left"
+              name="phone"
+              label="联系电话"
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item {...radio} name="marriage" label="婚否">
               <Radio.Group>
                 <Radio value="married">已婚</Radio>&emsp;&emsp;
                 <Radio value="unmarried">未婚</Radio>
               </Radio.Group>
             </Form.Item>
 
-            <Form.Item name="phone" label="联系电话">
-              <Input />
-            </Form.Item>
-
-            <Form.Item name="marriage" label="居住地">
+            <Form.Item {...radio} name="marriage" label="居住地">
               <Radio.Group>
                 <Radio value="city">城市</Radio>&emsp;&emsp;
                 <Radio value="countryside">农村</Radio>
@@ -338,6 +337,7 @@ class App extends React.Component {
 
             <Form.Item
               name="chemotherapy"
+              {...radio}
               label="是否进行放化疗"
               rules={[
                 {
@@ -375,33 +375,76 @@ class App extends React.Component {
 
           <div style={{ display: this.state.display2 }}>
             <div className={styles.subtitle}>二、肺功能</div>
-            <Form.Item name="PET" label="（1） PET">
+            <Form.Item
+              {...layout2}
+              labelAlign="left"
+              name="PET"
+              label="（1） PET"
+            >
               <Input />
             </Form.Item>
-            <Form.Item name="PET(%)" label="（2） PET(%)">
+            <Form.Item
+              {...layout2}
+              labelAlign="left"
+              name="PET(%)"
+              label="（2） PET(%)"
+            >
               <Input />
             </Form.Item>
-            <Form.Item name="FEV1(L)" label="（3） FEV1(L)">
+            <Form.Item
+              {...layout2}
+              labelAlign="left"
+              name="FEV1(L)"
+              label="（3） FEV1(L)"
+            >
               <Input />
             </Form.Item>
-            <Form.Item name="FEV1(%)" label="（4） FEV1(%)">
+            <Form.Item
+              {...layout2}
+              labelAlign="left"
+              name="FEV1(%)"
+              label="（4） FEV1(%)"
+            >
               <Input />
             </Form.Item>
-            <Form.Item name="FVC(L)" label="（5） FVC(L)">
+            <Form.Item
+              {...layout2}
+              labelAlign="left"
+              name="FVC(L)"
+              label="（5） FVC(L)"
+            >
               <Input />
             </Form.Item>
-            <Form.Item name="FEV1/FVC" label="（6） FEV1/FVC">
+            <Form.Item
+              {...layout2}
+              labelAlign="left"
+              name="FEV1/FVC"
+              label="（6） FEV1/FVC"
+            >
               <Input />
             </Form.Item>
             <div className={styles.subtitle}>三、体力状况</div>
-            <Form.Item name="6MWD" label="（1） 6MWD(m)">
+            <Form.Item
+              {...layout2}
+              labelAlign="left"
+              name="6MWD"
+              label="（1） 6MWD(m)"
+            >
               <Input />
             </Form.Item>
-            <Form.Item name="ECOG" label="（2） ECOG(分)">
+            <Form.Item
+              {...layout2}
+              labelAlign="left"
+              name="ECOG"
+              label="（2） ECOG(分)"
+            >
               <Input />
             </Form.Item>
-            <Form.Item name="performance_status" label="体力状态：">
-              &emsp;&emsp;
+            <Form.Item
+              {...layout2}
+              name="performance_status"
+              label="体力状态："
+            >
               <Radio.Group>
                 <Radio value="0">0----活动能力完全正常</Radio>
                 <Radio value="1">1----能自由走动及轻体力活动</Radio>
@@ -410,8 +453,7 @@ class App extends React.Component {
                 <Radio value="4">4----卧床不起，生活不能自理</Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item name="dyspnea" label="呼吸困难情况：">
-              &emsp;&emsp;
+            <Form.Item {...layout2} name="dyspnea" label="呼吸困难情况：">
               <Radio.Group>
                 <Radio value="0">0----我仅在费力运动时出现呼吸困难</Radio>
                 <Radio value="1">
@@ -431,19 +473,17 @@ class App extends React.Component {
           </div>
 
           <div style={{ display: this.state.display3 }}>
-            <div className={styles.subtitle}>
-              四、生活质量<br></br>
+            <div className={styles.subtitle}>四、生活质量</div>
+            <div className={styles.explanation}>
               （1）EORTC QLQ-C30(version 3)
-              （1-28题：1--没有、2--有一点、3--有一些、4--非常多；<br></br>
-              29-30题：数字1-7代表从“很差”到很好的“等级”）
+              （1-28题：1--没有、2--有一点、3--有一些、4--非常多；29-30题：数字1-7代表从“很差”到很好的“等级”）
             </div>
-            <br></br>
 
             <Form.Item
               {...radio1}
               labelAlign="left"
               name="q1"
-              label="1.当您做一些费力的动作，如提沉重的购物袋或行李箱时，您是否感到困难？"
+              label="1.当您做费力的动作，如提沉重的购物袋或行李箱时，您是否感到困难？"
             >
               <Radio.Group>
                 <Radio value="1">1&emsp;</Radio>
@@ -804,14 +844,14 @@ class App extends React.Component {
               </Radio.Group>
             </Form.Item>
 
-            <div className={styles.subtitle}>
+            <div className={styles.explanation}>
               以下问题，数字1-7代表从“很差”到“很好”的等级，请在1至7之间圈出对您最合适的答案。
             </div>
             <Form.Item
               {...radio2}
               labelAlign="left"
               name="q29"
-              label="29.您如何评定过去一周中你的整体健康状况？"
+              label="29.您如何评定过去一周你的整体健康状况？"
             >
               <Radio.Group>
                 <Radio value="1">1&emsp;</Radio>
@@ -827,7 +867,7 @@ class App extends React.Component {
               {...radio2}
               labelAlign="left"
               name="q30"
-              label="30.您如何评定过去一周中你的整体生活质量？"
+              label="30.您如何评定过去一周你的整体生活质量？"
             >
               <Radio.Group>
                 <Radio value="1">1&emsp;</Radio>
@@ -842,9 +882,11 @@ class App extends React.Component {
 
             <div className={styles.subtitle}>
               五、EORTC QLQ-LC13 生存质量测定特异量表
-              <br></br>
+            </div>
+            <div className={styles.explanation}>
               请指出在过去一周内您所出现的这些临床症状或问题的程度。（1--没有，2--有一点，3--有一些，4--非常多）
             </div>
+
             <Form.Item
               {...radio3}
               labelAlign="left"
@@ -1004,6 +1046,7 @@ class App extends React.Component {
 
             <Form.Item
               name="body_part"
+              labelAlign="left"
               {...layout1}
               label="如果有身体或其他部位疼痛，请写出部位"
             >
@@ -1047,7 +1090,7 @@ class App extends React.Component {
               name="question2"
               label="&nbsp;"
             >
-              <Checkbox.Group className={styles.Checkboxlayout}>
+              <Checkbox.Group>
                 <Row>
                   <Col span={8}>
                     <Checkbox value="1">1、自我激励&emsp;&emsp;</Checkbox>
@@ -1092,7 +1135,7 @@ class App extends React.Component {
               name="question4"
               label="&nbsp;"
             >
-              <Checkbox.Group className={styles.Checkboxlayout}>
+              <Checkbox.Group>
                 <Row>
                   <Col span={6}>
                     <Checkbox value="1">1、肺部功能恢复</Checkbox>
@@ -1178,7 +1221,7 @@ class App extends React.Component {
               name="question8"
               label="&nbsp;"
             >
-              <Checkbox.Group className={styles.Checkboxlayout}>
+              <Checkbox.Group>
                 <Row>
                   <Col span={8}>
                     <Checkbox value="1">1、胸闷气短可以有疗效</Checkbox>
