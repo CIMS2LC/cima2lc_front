@@ -110,7 +110,7 @@ const TableList: React.FC<{}> = () => {
       ],
     },
     {
-      title: '出身年月',
+      title: '出生年月',
       dataIndex: 'birthday',
       rules: [
         {
@@ -128,28 +128,6 @@ const TableList: React.FC<{}> = () => {
       title: '治疗方案',
       dataIndex: 'theraShed',
       valueType: 'textarea',
-    },
-    {
-      title: '随访疗效评估',
-      dataIndex: 'folEffEva',
-      valueType: 'textarea',
-    },
-    // {
-    //   title: '服务调用次数',
-    //   dataIndex: 'callNo',
-    //   sorter: true,
-    //   hideInForm: true,
-    //   renderText: (val: string) => `${val} 万`,
-    // },
-    {
-      title: '生存状态',
-      dataIndex: 'status',
-      hideInForm: true,
-      valueEnum: {
-        0: { text: '关闭', status: 'Default' },
-        1: { text: '存活', status: 'Processing' },
-        2: { text: '死亡', status: 'Success' },
-      },
     },
     {
       title: '治疗结束时间',
@@ -183,6 +161,28 @@ const TableList: React.FC<{}> = () => {
           return <Input {...rest} placeholder="请输入异常原因！" />;
         }
         return defaultRender(item);
+      },
+    },
+    {
+      title: '随访疗效评估',
+      dataIndex: 'folEffEva',
+      valueType: 'textarea',
+    },
+    // {
+    //   title: '服务调用次数',
+    //   dataIndex: 'callNo',
+    //   sorter: true,
+    //   hideInForm: true,
+    //   renderText: (val: string) => `${val} 万`,
+    // },
+    {
+      title: '生存状态',
+      dataIndex: 'status',
+      hideInForm: true,
+      valueEnum: {
+        0: { text: '关闭', status: 'Default' },
+        1: { text: '存活', status: 'Processing' },
+        2: { text: '死亡', status: 'Success' },
       },
     },
     {
