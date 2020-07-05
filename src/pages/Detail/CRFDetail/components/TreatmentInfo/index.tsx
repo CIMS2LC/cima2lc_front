@@ -16,6 +16,8 @@ import styles from './index.less';
 import LaborInspect from '../BasicComponents/LaborInspect';
 import Immunohistochemical from '../BasicComponents/Immunohistochemical';
 import MolecularDetection from '../BasicComponents/MolecularDetection';
+import SideReaction from './SideReaction';
+import SystemSign from './SystemSign';
 
 const { TabPane } = Tabs;
 
@@ -99,8 +101,12 @@ class TreatmentInfo extends React.Component {
               </Form.Item>
             </Form>
           </TabPane>
-          <TabPane tab="症状体征" key="system_sign"></TabPane>
-          <TabPane tab="副反应" key="side_reaction"></TabPane>
+          <TabPane tab="症状体征" key="system_sign">
+            <SystemSign />
+          </TabPane>
+          <TabPane tab="副反应" key="side_reaction">
+            <SideReaction />
+          </TabPane>
         </Tabs>
       </div>
     );

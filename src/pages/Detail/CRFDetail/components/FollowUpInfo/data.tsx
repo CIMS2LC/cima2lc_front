@@ -57,12 +57,6 @@ var columns = [
     render: () => <Select style={{ width: 120 }} options={ls_Options} />,
   },
   {
-    title: '备注',
-    dataIndex: 'remark',
-    width: '10%',
-    editable: true,
-  },
-  {
     title: '影像类型',
     dataIndex: 'image_type',
     width: '10%',
