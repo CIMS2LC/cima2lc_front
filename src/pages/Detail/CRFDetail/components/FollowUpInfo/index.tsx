@@ -8,21 +8,13 @@ import {
   Form,
   TimePicker,
   Select,
+  DatePicker,
 } from 'antd';
 
+import { EditableRowProps, EditableCellProps } from './data.d';
+import { columns as dcolumns } from './data';
+
 const EditableContext = React.createContext<any>();
-
-interface Item {
-  order: number;
-  followup_time: Date;
-  response_evaluation: string;
-  remark: string;
-  image_type: number;
-}
-
-interface EditableRowProps {
-  index: number;
-}
 
 const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -34,15 +26,6 @@ const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
     </Form>
   );
 };
-
-interface EditableCellProps {
-  title: React.ReactNode;
-  editable: boolean;
-  children: React.ReactNode;
-  dataIndex: string;
-  record: Item;
-  handleSave: (record: Item) => void;
-}
 
 const EditableCell: React.FC<EditableCellProps> = ({
   title,
@@ -113,61 +96,7 @@ class EditableTable extends React.Component {
   constructor(props) {
     super(props);
     this.columns = [
-      {
-        title: '序号',
-        dataIndex: 'order',
-        width: '5%',
-      },
-      {
-        title: '随访日期',
-        key: 'followup_time',
-        width: '10%',
-        render: () => <TimePicker />,
-      },
-      {
-        title: '随访方式',
-        key: 'followup_way',
-        width: '10%',
-        render: () => (
-          <Select style={{ width: 120 }} options={this.fw_Options} />
-        ),
-      },
-      {
-        title: '疗效评估',
-        dataIndex: 'response_evaluation',
-        width: '10%',
-        render: () => (
-          <Select style={{ width: 120 }} options={this.re_Options} />
-        ),
-      },
-      {
-        title: '生存状态',
-        dataIndex: 'live_state',
-        width: '10%',
-        render: () => (
-          <Select style={{ width: 120 }} options={this.ls_Options} />
-        ),
-      },
-      {
-        title: '备注',
-        dataIndex: 'remark',
-        width: '10%',
-        editable: true,
-      },
-      {
-        title: '影像类型',
-        dataIndex: 'image_type',
-        width: '10%',
-        render: () => (
-          <Select style={{ width: 120 }} options={this.it_Options} />
-        ),
-      },
-      {
-        title: '影像',
-        dataIndex: 'image',
-        width: '10%',
-        editable: true,
-      },
+      ...dcolumns,
       {
         title: 'operation',
         dataIndex: 'operation',
@@ -182,32 +111,6 @@ class EditableTable extends React.Component {
           ) : null,
       },
     ];
-
-    this.fw_Options = [
-      { label: '电话', value: 1 },
-      { label: '门诊', value: 2 },
-      { label: '住院', value: 3 },
-    ];
-    this.re_Options = [
-      { label: 'PD-进展', value: 1 },
-      { label: 'SD-稳定', value: 2 },
-      { label: 'PR-部分缓解', value: 3 },
-      { label: 'CR-完全缓解', value: 4 },
-      { label: '术后未发现新病灶', value: 5 },
-    ];
-    this.ls_Options = [
-      { label: '死亡', value: 1 },
-      { label: '存活', value: 2 },
-      { label: '失联', value: 3 },
-    ];
-    this.it_Options = [
-      { label: 'X光', value: 1 },
-      { label: '超声', value: 2 },
-      { label: 'CT', value: 3 },
-      { label: 'MRI', value: 4 },
-      { label: 'PET/CT', value: 5 },
-    ];
-
     this.state = {
       dataSource: [
         {
