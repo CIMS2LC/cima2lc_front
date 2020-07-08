@@ -8,6 +8,7 @@ import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 import { TableListItem } from './data.d';
 import { queryRule, updateRule, addRule, removeRule } from './service';
+import { Link } from 'umi';
 
 /**
  * 添加节点
@@ -80,12 +81,16 @@ const TableList: React.FC<{}> = () => {
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<TableListItem>[] = [
     {
+      title: '住院号',
+      dataIndex: 'adnum',
+    },
+    {
       title: '姓名',
       dataIndex: 'name',
       rules: [
         {
           required: true,
-          message: '规则名称为必填项',
+          message: '姓名为必填项',
         },
       ],
     },
@@ -189,20 +194,23 @@ const TableList: React.FC<{}> = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      render: (_, record) => (
-        <>
-          <a
+      render: (_, record) => {
+        return (
+          <>
+            {/* <a
             onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
+              // handleUpdateModalVisible(true);
+              // setStepFormValues(record);
             }}
           >
             编辑
-          </a>
-          <Divider type="vertical" />
-          <a href="">删除</a>
-        </>
-      ),
+          </a> */}
+            <Link to={`/detail/crf_detail?`}>编辑</Link>
+            <Divider type="vertical" />
+            <a href="">删除</a>
+          </>
+        );
+      },
     },
   ];
 
@@ -212,6 +220,7 @@ const TableList: React.FC<{}> = () => {
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="key"
+        search={false}
         toolBarRender={(action, { selectedRows }) => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 添加
