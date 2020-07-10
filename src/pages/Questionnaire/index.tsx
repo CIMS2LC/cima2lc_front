@@ -1,6 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import styles from './index.less';
+import { Link } from 'umi';
 import {
   Form,
   Input,
@@ -13,8 +14,6 @@ import {
   Col,
   Modal,
 } from 'antd';
-
-const { Option } = Select;
 
 const layout = {
   labelCol: {
@@ -78,10 +77,16 @@ const radio4 = {
   colon: false, //有无冒号
 };
 
-const tailLayout = {
+const tailLayout1 = {
   //button样式
   wrapperCol: {
-    offset: 18,
+    offset: 21,
+  },
+};
+const tailLayout2 = {
+  //button样式
+  wrapperCol: {
+    offset: 10,
   },
 };
 const validateMessages = {
@@ -158,8 +163,10 @@ class App extends React.Component {
           --------------------------------------------------------------------
         </div>
 
-        <Form.Item {...tailLayout}>
-          <Button type="primary">返回</Button>
+        <Form.Item {...tailLayout1}>
+          <Button type="primary">
+            <Link to="Questionnaire_table">返回</Link>
+          </Button>
         </Form.Item>
 
         <Form
@@ -1243,7 +1250,7 @@ class App extends React.Component {
             </Form.Item>
           </div>
 
-          <Form.Item {...tailLayout}>
+          <Form.Item {...tailLayout2}>
             {current > 0 && (
               <Button style={{ margin: '0 8px' }} onClick={() => this.prev()}>
                 上一页
