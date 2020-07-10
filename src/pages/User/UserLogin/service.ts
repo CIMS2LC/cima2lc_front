@@ -8,10 +8,13 @@ export interface LoginParamsType {
 }
 
 export async function fakeAccountLogin(params: LoginParamsType) {
-  return request('/api/login/account?redirect=123', {
-    method: 'POST',
-    data: params,
-  });
+  return request(
+    '/api/login/account?redirect=http%3A%2F%2Flocalhost%3A8000%2Flist%2Ffuv_list',
+    {
+      method: 'POST',
+      data: params,
+    },
+  );
 }
 
 export async function getFakeCaptcha(mobile: string) {

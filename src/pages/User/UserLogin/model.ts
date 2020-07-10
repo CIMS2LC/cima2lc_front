@@ -5,7 +5,7 @@ import { fakeAccountLogin, getFakeCaptcha } from './service';
 
 export function getPageQuery() {
   //return parse(window.location.href.split('?')[1]);
-  return parse('redirect=http://localhost:8000/list/fuv_list');
+  return parse('redirect=/list/fuv_list');
 }
 
 export function setAuthority(authority: string | string[]) {
@@ -62,6 +62,9 @@ const Model: ModelType = {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
+        console.log(redirect);
+        redirect = window.location.origin + redirect;
+        console.log(redirect);
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {

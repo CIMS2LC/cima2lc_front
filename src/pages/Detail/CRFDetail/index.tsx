@@ -1,21 +1,16 @@
 import React from 'react';
 import {
-  Menu,
   Button,
-  Space,
   Layout,
-  Steps,
   Tabs,
   Form,
   Input,
   InputNumber,
   Checkbox,
-  Switch,
   Radio,
   DatePicker,
-  Divider,
-  Rate,
 } from 'antd';
+import { history } from 'umi';
 
 import styles from './style.less';
 import FollowUpInfo from './components/FollowUpInfo';
@@ -23,7 +18,7 @@ import TreatmentInfo from './components/TreatmentInfo';
 import LaborInspect from './components/BasicComponents/LaborInspect';
 import Immunohistochemical from './components/BasicComponents/Immunohistochemical';
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const layout = {
   labelCol: {
@@ -368,7 +363,15 @@ export default () => {
         >
           <div>
             <img className={styles.img_logo} src={require('@/img/logo.png')} />
-            <Button className={styles.btn_return} id="btn_return">
+            <Button
+              className={styles.btn_return}
+              id="btn_return"
+              onClick={() => {
+                // handleUpdateModalVisible(true);
+                // setStepFormValues(record);
+                history.push('/list/fuv_list');
+              }}
+            >
               返回
             </Button>
           </div>
