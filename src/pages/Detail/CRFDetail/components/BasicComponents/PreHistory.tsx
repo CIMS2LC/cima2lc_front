@@ -8,13 +8,15 @@ import {
   Checkbox,
   InputNumber,
 } from 'antd';
+import Hormone from './Hormone';
+import Medicine from './Medicine';
 
 const layout = {
   labelCol: {
-    span: 2,
+    span: 4,
   },
   wrapperCol: {
-    span: 8,
+    span: 10,
   },
 };
 
@@ -24,6 +26,8 @@ class PreHistory extends React.Component {
     stop_smoke: 0,
     is_drink: 0,
     stop_drink: 0,
+    is_hormone: 0,
+    is_medicine: 0,
   };
 
   onChange_smoke = (e: any) => {
@@ -50,6 +54,18 @@ class PreHistory extends React.Component {
     console.log('stop_drink', e.target.value);
     this.setState({
       stop_drink: e.target.value,
+    });
+  };
+  onChange_hormone = (e: any) => {
+    console.log('is_hormone', e.target.value);
+    this.setState({
+      is_hormone: e.target.value,
+    });
+  };
+  onChange_medicine = (e: any) => {
+    console.log('is_medicine', e.target.value);
+    this.setState({
+      is_medicine: e.target.value,
     });
   };
   clinical_manifestation_Options = [
@@ -194,6 +210,34 @@ class PreHistory extends React.Component {
                   <InputNumber />
                 </div>
               ) : null}
+            </div>
+          ) : null}
+        </Form.Item>
+        <Form.Item label="是否长期使用激素治疗" name="hormone">
+          <Radio.Group
+            onChange={this.onChange_hormone}
+            value={this.state.is_hormone}
+          >
+            <Radio value={1}>是</Radio>
+            <Radio value={0}>否</Radio>
+          </Radio.Group>
+          {this.state.is_hormone ? (
+            <div>
+              <Hormone />
+            </div>
+          ) : null}
+        </Form.Item>
+        <Form.Item label="是否长期使用其他药物" name="medicine">
+          <Radio.Group
+            onChange={this.onChange_medicine}
+            value={this.state.is_medicine}
+          >
+            <Radio value={1}>是</Radio>
+            <Radio value={0}>否</Radio>
+          </Radio.Group>
+          {this.state.is_medicine ? (
+            <div>
+              <Medicine />
             </div>
           ) : null}
         </Form.Item>
