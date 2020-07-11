@@ -28,6 +28,11 @@ export default defineConfig({
       component: './Questionnaire/index',
     },
     {
+      name: '调查统计表格',
+      path: 'Questionnaire_table',
+      component: './Questionnaire/table',
+    },
+    {
       path: '/',
       component: '@/pages/index',
     },
