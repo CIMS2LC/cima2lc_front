@@ -18,6 +18,8 @@ import TreatmentInfo from './components/TreatmentInfo';
 import LaborInspect from './components/BasicComponents/LaborInspect';
 import Immunohistochemical from './components/BasicComponents/Immunohistochemical';
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
+import PreHistory from './components/BasicComponents/PreHistory';
+
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const layout = {
@@ -56,49 +58,7 @@ class CRFSlidingTabs extends React.Component {
     console.log(date, dateString);
   };
   fv_score_onChange = () => {};
-  clinical_manifestation_Options = [
-    '无',
-    '体检',
-    '咳嗽',
-    '咳痰',
-    '痰中带血',
-    '咳血',
-    '胸闷',
-    '胸痛',
-    '气促',
-    '发热',
-    '食欲不佳',
-    '体重减轻',
-    '其他',
-    '不详',
-  ];
-  clinical_manifestation_onChange = () => {};
-  underlying_disease_history_Options = [
-    '无',
-    '高血压',
-    '冠心病',
-    '糖尿病',
-    '慢性阻塞性肺病',
-    '支气管哮喘',
-    '肺结核',
-    '间质性肺病',
-    '高血脂',
-    '肝炎',
-    '风湿性免疫性疾病',
-    '肾脏病',
-    '其他',
-    '不详',
-  ];
-  underlying_disease_history_onChange = () => {};
-  infectious_disease_history_Options = [
-    '无',
-    '肺结核',
-    '艾滋',
-    '梅毒',
-    '其他',
-    '不详',
-  ];
-  infectious_disease_history_onChange = () => {};
+
   part_Options = ['左上肺', '左下肺', '右上肺', '右中肺', '右下肺'];
   part_onChange = () => {};
   biopsy_way_Options = [
@@ -193,60 +153,7 @@ class CRFSlidingTabs extends React.Component {
                 </Form>
               </TabPane>
               <TabPane tab="既往史" key="pre_history">
-                <Form name="pre_history" {...layout}>
-                  <Form.Item label="临床表现" name="clinical_manifestation">
-                    <Checkbox.Group
-                      options={this.clinical_manifestation_Options}
-                      onChange={this.clinical_manifestation_onChange}
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="基础疾病史"
-                    name="underlying_disease_history"
-                  >
-                    <Checkbox.Group
-                      options={this.underlying_disease_history_Options}
-                      onChange={this.underlying_disease_history_onChange}
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="传染疾病史"
-                    name="infectious_disease_history"
-                  >
-                    <Checkbox.Group
-                      options={this.infectious_disease_history_Options}
-                      onChange={this.infectious_disease_history_onChange}
-                    />
-                  </Form.Item>
-
-                  <Form.Item label="肿瘤史" name="tumor_history">
-                    <Radio.Group>
-                      <Radio value={1}>有</Radio>
-                      <Radio value={0}>无</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-
-                  <Form.Item label="肿瘤家族史" name="tumor_family_history">
-                    <Radio.Group>
-                      <Radio value={1}>有</Radio>
-                      <Radio value={0}>无</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-
-                  <Form.Item label="是否吸烟" name="smoking">
-                    <Radio.Group>
-                      <Radio value={1}>有</Radio>
-                      <Radio value={0}>无</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      保存
-                    </Button>
-                  </Form.Item>
-                </Form>
+                <PreHistory />
               </TabPane>
               <TabPane tab="初诊过程" key="diag_procedure">
                 <Form name="diag_procedure" {...layout}>
