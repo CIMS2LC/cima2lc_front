@@ -20,7 +20,7 @@ import Immunohistochemical from '../BasicComponents/Immunohistochemical';
 import MolecularDetection from '../BasicComponents/MolecularDetection';
 import SideReaction from './SideReaction';
 import SystemSign from './SystemSign';
-
+import TreatSchedule from './TreatSchedule';
 const { TabPane } = Tabs;
 
 const layout = {
@@ -45,7 +45,6 @@ class TreatmentInfo extends React.Component {
     { label: '5线', value: 5 },
     { label: '手术', value: 6 },
     { label: '放疗', value: 7 },
-    { label: '抗血管治疗', value: 8 },
     { label: '其他', value: 0 },
   ];
 
@@ -95,11 +94,12 @@ class TreatmentInfo extends React.Component {
                       <Checkbox value={1}>化疗</Checkbox>
                       <Checkbox value={2}>靶向治疗</Checkbox>
                       <Checkbox value={3}>免疫治疗</Checkbox>
-                      <Checkbox value={4}>其他</Checkbox>
+                      <Checkbox value={4}>抗血管治疗</Checkbox>
+                      <Checkbox value={0}>其他</Checkbox>
                     </Checkbox.Group>
-                    {this.state.treat_schedule.map(item => {
-                      <label>123</label>;
-                    })}
+                    {this.state.treat_schedule.map(item => (
+                      <TreatSchedule />
+                    ))}
                   </div>
                   <div>
                     <label>开始日期</label>

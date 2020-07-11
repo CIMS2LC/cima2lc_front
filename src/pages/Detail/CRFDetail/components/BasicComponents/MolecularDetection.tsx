@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Radio, Input, Switch, Button } from 'antd';
+import { Form, Radio, Input, Switch, Button, InputNumber } from 'antd';
 
 const layout = {
   labelCol: {
@@ -13,6 +13,7 @@ const layout = {
 class MolecularDetection extends React.Component {
   state = {
     TMB_value: false,
+    md: this.molecular_detection_labels,
   };
 
   TMB_onChange = (checked: any) => {
@@ -40,13 +41,29 @@ class MolecularDetection extends React.Component {
   render() {
     return (
       <Form name="molecular_detection" {...layout}>
-        {this.molecular_detection_labels.map(item => (
+        {Object.keys(this.molecular_detection_labels).map((item: string) => (
           <Form.Item label={item} name={item}>
-            <Radio.Group>
+            <Radio.Group
+              onChange={e => {
+                this.molecular_detection_labels = this.state.md;
+                console.log(this.molecular_detection_labels[item]);
+                this.molecular_detection_labels[item] = e.target.value;
+                this.setState({
+                  md: this.molecular_detection_labels,
+                });
+              }}
+              value={this.molecular_detection_labels[item]}
+            >
               <Radio value={0}>无</Radio>
               <Radio value={-1}>阴性</Radio>
               <Radio value={1}>阳性</Radio>
             </Radio.Group>
+            {this.state.md[item] ? (
+              <div>
+                <label>检测样本</label>
+                <InputNumber />
+              </div>
+            ) : null}
           </Form.Item>
         ))}
         <Form.Item label="MSI" name="MSI">
@@ -54,13 +71,6 @@ class MolecularDetection extends React.Component {
             <Radio value={0}>MSS</Radio>
             <Radio value={-1}>MSIH</Radio>
             <Radio value={1}>MSIL</Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item label="分子检测" name="MD">
-          <Radio.Group>
-            <Radio value={0}>ARMS</Radio>
-            <Radio value={-1}>FISH</Radio>
-            <Radio value={1}>二代测序</Radio>
           </Radio.Group>
         </Form.Item>
         <Form.Item label="TMB(/Mb)" name="TMB">
