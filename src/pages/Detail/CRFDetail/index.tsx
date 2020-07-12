@@ -18,8 +18,6 @@ import TreatmentInfo from './components/TreatmentInfo';
 import LaborInspect from './components/BasicComponents/LaborInspect';
 import Immunohistochemical from './components/BasicComponents/Immunohistochemical';
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
-import PreHistory from './components/BasicComponents/PreHistory';
-
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const layout = {
@@ -58,6 +56,51 @@ class CRFSlidingTabs extends React.Component {
     console.log(date, dateString);
   };
   fv_score_onChange = () => {};
+  clinical_manifestation_Options = [
+    //临床表现
+    '颈部肿物',
+    '咳嗽',
+    '咳痰',
+    '痰中带血',
+    '咳血',
+    '胸闷',
+    '胸痛',
+    '气促',
+    '发热',
+    '食欲不佳',
+    '体重减轻',
+    '其他',
+    '无',
+  ];
+  clinical_manifestation_onChange = () => {};
+  underlying_disease_history_Options = [
+    //基础疾病史
+    '无',
+    '高血压',
+    '冠心病',
+    '糖尿病',
+    '慢性阻塞性肺病',
+    '支气管哮喘',
+    '肺结核',
+    '间质性肺病',
+    '高血脂',
+    '肝炎',
+    '风湿性免疫性疾病',
+    '肾脏病',
+    '其他',
+    '不详',
+  ];
+  underlying_disease_history_onChange = () => {};
+  infectious_disease_history_Options = [
+    //传染疾病史
+    '无',
+    '肺结核',
+    '艾滋',
+    '梅毒',
+    '其他',
+    '不详',
+  ];
+  infectious_disease_history_onChange = () => {};
 
   part_Options = ['左上肺', '左下肺', '右上肺', '右中肺', '右下肺'];
   part_onChange = () => {};
@@ -74,8 +117,8 @@ class CRFSlidingTabs extends React.Component {
   ];
   biopsy_way_onChange = () => {};
   pathological_diagnosis_Options = [
-    '鳞癌',
     '腺癌',
+    '鳞癌',
     '大细胞癌',
     '小细胞癌',
     '分化差的癌',
@@ -88,6 +131,21 @@ class CRFSlidingTabs extends React.Component {
   ];
   pathological_diagnosis_onChange = () => {};
 
+  transfer_site_Options = [
+    '肺内',
+    '对侧肺',
+    '胸腔镜',
+    '脑',
+    '脊柱',
+    '四肢骨',
+    '肝',
+    '脾',
+    '肾上腺',
+    '胰腺',
+    '双肺',
+    '其他',
+  ];
+  transfer_site_onChange = () => {};
   render() {
     return (
       <div>
@@ -134,17 +192,6 @@ class CRFSlidingTabs extends React.Component {
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label="首诊PS评分" name="fv_score">
-                    <Radio.Group
-                      onChange={this.fv_score_onChange}
-                      value={this.state.value}
-                    >
-                      {[...Array(6).keys()].map(i => (
-                        <Radio value={i}>{i}</Radio>
-                      ))}
-                    </Radio.Group>
-                  </Form.Item>
-
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
                       保存
@@ -153,18 +200,73 @@ class CRFSlidingTabs extends React.Component {
                 </Form>
               </TabPane>
               <TabPane tab="既往史" key="pre_history">
-                <PreHistory />
-              </TabPane>
-              <TabPane tab="初诊过程" key="diag_procedure">
-                <Form name="diag_procedure" {...layout}>
-                  <Form.Item label="CEA（ng/mL）" name="cea">
-                    <InputNumber></InputNumber>
-                    <Checkbox>无检测</Checkbox>
+                <Form name="pre_history" {...layout}>
+                  <Form.Item
+                    label="基础疾病史"
+                    name="underlying_disease_history"
+                  >
+                    <Checkbox.Group
+                      options={this.underlying_disease_history_Options}
+                      onChange={this.underlying_disease_history_onChange}
+                    />
                   </Form.Item>
 
-                  <Form.Item label="NSE（μg/L）" name="nes">
-                    <InputNumber></InputNumber>
-                    <Checkbox>无检测</Checkbox>
+                  <Form.Item
+                    label="传染疾病史"
+                    name="infectious_disease_history"
+                  >
+                    <Checkbox.Group
+                      options={this.infectious_disease_history_Options}
+                      onChange={this.infectious_disease_history_onChange}
+                    />
+                  </Form.Item>
+
+                  <Form.Item label="肿瘤史" name="tumor_history">
+                    <Radio.Group>
+                      <Radio value={1}>有</Radio>
+                      <Radio value={0}>无</Radio>
+                    </Radio.Group>
+                  </Form.Item>
+
+                  <Form.Item label="肿瘤家族史" name="tumor_family_history">
+                    <Radio.Group>
+                      <Radio value={1}>有</Radio>
+                      <Radio value={0}>无</Radio>
+                    </Radio.Group>
+                  </Form.Item>
+
+                  <Form.Item label="是否吸烟" name="smoking">
+                    <Radio.Group>
+                      <Radio value={1}>有</Radio>
+                      <Radio value={0}>无</Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      保存
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </TabPane>
+
+              <TabPane tab="初诊过程" key="diag_procedure">
+                <Form name="diag_procedure" {...layout}>
+                  <Form.Item label="首诊PS评分" name="fv_score">
+                    <Radio.Group
+                      onChange={this.fv_score_onChange}
+                      value={this.state.value}
+                    >
+                      {[...Array(5).keys()].map(i => (
+                        <Radio value={i}>{i}</Radio>
+                      ))}
+                    </Radio.Group>
+                  </Form.Item>
+
+                  <Form.Item label="临床表现" name="clinical_manifestation">
+                    <Checkbox.Group
+                      options={this.clinical_manifestation_Options}
+                      onChange={this.clinical_manifestation_onChange}
+                    />
                   </Form.Item>
 
                   <Form.Item label="影像学" name="iconography">
@@ -231,8 +333,19 @@ class CRFSlidingTabs extends React.Component {
                   <Form.Item label="Ki67（%）" name="5">
                     <Input />
                   </Form.Item>
+                  <Form.Item label="转移部位" name="Transfer_site">
+                    <Checkbox.Group
+                      options={this.transfer_site_Options}
+                      onChange={this.transfer_site_onChange}
+                    />
+                  </Form.Item>
+
+                  <Form.Item label="TSize" name="6">
+                    <Input />
+                  </Form.Item>
                 </Form>
               </TabPane>
+
               <TabPane tab="实验室检查" key="labor_inspect">
                 <LaborInspect />
               </TabPane>
