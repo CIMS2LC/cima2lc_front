@@ -1,5 +1,5 @@
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Dropdown, Menu, message, Input } from 'antd';
+import { Button, Divider, Dropdown, Menu, message, Input, Select } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -7,9 +7,12 @@ import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 import { TableListItem } from './data.d';
-import { queryRule, updateRule, addRule, removeRule } from './service';
+import { query, queryRule, updateRule, addRule, removeRule } from './service';
 import { Link } from 'umi';
+import { history } from 'umi';
 
+const { Option } = Select;
+const { Search } = Input;
 /**
  * 添加节点
  * @param fields
@@ -81,7 +84,7 @@ const TableList: React.FC<{}> = () => {
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<TableListItem>[] = [
     {
-      title: '住院号',
+      title: '住院号/就诊号',
       dataIndex: 'adnum',
     },
     {
@@ -214,8 +217,42 @@ const TableList: React.FC<{}> = () => {
     },
   ];
 
+  const state = {
+    select: 'all',
+  };
   return (
     <PageHeaderWrapper>
+      <Select
+        defaultValue="all"
+        style={{ width: 120 }}
+        onChange={value => {
+          state.select = value;
+        }}
+      >
+        <Option value="all">全部</Option>
+        <Option value="name">姓名</Option>
+        <Option value="id">身份证号</Option>
+        <Option value="ad">住院号</Option>
+      </Select>
+      <Search
+        placeholder="input search text"
+        enterButton="Search"
+        style={{ width: 400 }}
+        onSearch={value => {
+          var key = state.select;
+          query({ key, value });
+        }}
+      />
+      <Button
+        //className={styles.btn_return}
+        style={{ float: 'right' }}
+        id="btn_questionnaire"
+        onClick={() => {
+          history.push('/Questionnaire');
+        }}
+      >
+        调查问卷
+      </Button>
       <ProTable<TableListItem>
         headerTitle="查询表格"
         actionRef={actionRef}
@@ -243,7 +280,7 @@ const TableList: React.FC<{}> = () => {
                   }}
                   selectedKeys={[]}
                 >
-                  <Menu.Item key="remove">批量删除</Menu.Item>
+                  bbbbb
                   <Menu.Item key="approval">批量审批</Menu.Item>
                 </Menu>
               }

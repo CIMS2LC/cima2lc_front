@@ -10,6 +10,8 @@ import {
   Select,
   TimePicker,
   DatePicker,
+  Checkbox,
+  InputNumber,
 } from 'antd';
 import styles from './index.less';
 
@@ -18,7 +20,7 @@ import Immunohistochemical from '../BasicComponents/Immunohistochemical';
 import MolecularDetection from '../BasicComponents/MolecularDetection';
 import SideReaction from './SideReaction';
 import SystemSign from './SystemSign';
-
+import TreatSchedule from './TreatSchedule';
 const { TabPane } = Tabs;
 
 const layout = {
@@ -31,6 +33,10 @@ const layout = {
 };
 
 class TreatmentInfo extends React.Component {
+  state = {
+    treatment: -1,
+    treat_schedule: [1],
+  };
   trement = [
     { label: '1线', value: 1 },
     { label: '2线', value: 2 },
@@ -39,7 +45,7 @@ class TreatmentInfo extends React.Component {
     { label: '5线', value: 5 },
     { label: '手术', value: 6 },
     { label: '放疗', value: 7 },
-    { label: '其他', value: 8 },
+    { label: '其他', value: 0 },
   ];
 
   best_effect_evalution = [
@@ -56,8 +62,82 @@ class TreatmentInfo extends React.Component {
           <TabPane tab="治疗记录" key="treatment_record">
             <Form name="treatment_record" {...layout}>
               <Form.Item label="几线治疗" name="trement">
-                <Select style={{ width: 120 }} options={this.trement} />
+                <Select
+                  style={{ width: 120 }}
+                  options={this.trement}
+                  onChange={value => {
+                    this.setState({ treatment: value });
+                  }}
+                />
               </Form.Item>
+              {this.state.treatment < 6 && this.state.treatment >= 0 ? (
+                <div>
+                  <div>
+                    <label>是否加入临床治疗</label>
+                    <Radio.Group>
+                      <Radio value={1}>是</Radio>
+                      <Radio value={0}>否</Radio>
+                      <Radio value={-1}>不详</Radio>
+                    </Radio.Group>
+                  </div>
+                  <div>
+                    <label>治疗方案</label>
+                    <Checkbox.Group
+                      style={{ width: '100%' }}
+                      onChange={checkedValues => {
+                        this.setState({
+                          treat_schedule: checkedValues,
+                        });
+                        console.log(this.state.treat_schedule);
+                      }}
+                    >
+                      <Checkbox value={1}>化疗</Checkbox>
+                      <Checkbox value={2}>靶向治疗</Checkbox>
+                      <Checkbox value={3}>免疫治疗</Checkbox>
+                      <Checkbox value={4}>抗血管治疗</Checkbox>
+                      <Checkbox value={0}>其他</Checkbox>
+                    </Checkbox.Group>
+                    {this.state.treat_schedule.map(item => (
+                      <TreatSchedule />
+                    ))}
+                  </div>
+                  <div>
+                    <label>开始日期</label>
+                    <DatePicker />
+                  </div>
+                  <div>
+                    <label>结束日期</label>
+                    <DatePicker />
+                  </div>
+                  <div>
+                    <label>是否重复活检</label>
+                    <Radio.Group>
+                      <Radio value={1}>是</Radio>
+                      <Radio value={0}>否</Radio>
+                    </Radio.Group>
+                  </div>
+                </div>
+              ) : null}
+              {this.state.treatment == 6 ? (
+                <div>
+                  <label>手术范围</label>
+                  <Radio.Group>
+                    <Radio value={1}>是</Radio>
+                    <Radio value={0}>否</Radio>
+                    <Radio value={-1}>不详</Radio>
+                  </Radio.Group>
+                </div>
+              ) : null}
+              {this.state.treatment == 7 ? (
+                <div>
+                  <label>是否加入临床治疗</label>
+                  <Radio.Group>
+                    <Radio value={1}>是</Radio>
+                    <Radio value={0}>否</Radio>
+                    <Radio value={-1}>不详</Radio>
+                  </Radio.Group>
+                </div>
+              ) : null}
               <Form.Item>
                 <Button type="primary" htmlType="submit">
                   保存
