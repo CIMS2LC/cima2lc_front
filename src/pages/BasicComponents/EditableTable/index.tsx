@@ -1,18 +1,7 @@
-import styles from './index.less';
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import {
-  Table,
-  Input,
-  Button,
-  Popconfirm,
-  Form,
-  TimePicker,
-  Select,
-  DatePicker,
-} from 'antd';
+import { Table, Input, Button, Popconfirm, Form } from 'antd';
 
 import { EditableRowProps, EditableCellProps } from './data';
-import { columns as dcolumns } from './columns';
 
 const EditableContext = React.createContext<any>();
 
@@ -96,10 +85,11 @@ class EditableTable extends React.Component {
   constructor(props) {
     super(props);
     this.columns = [
-      ...dcolumns,
+      ...(props.dataColumns ? props.dataColumns : []),
+      ...(props.operColumns ? props.operColumns : []),
       {
-        title: 'operation',
-        dataIndex: 'operation',
+        title: '常用操作',
+        dataIndex: 'commonOper',
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <span>
@@ -114,22 +104,10 @@ class EditableTable extends React.Component {
           ) : null,
       },
     ];
+
     this.state = {
-      dataSource: [
-        {
-          key: '0',
-          order: 1,
-          age: '32',
-          address: 'London, Park Lane no. 0',
-        },
-        {
-          key: '1',
-          order: 2,
-          age: '32',
-          address: 'London, Park Lane no. 1',
-        },
-      ],
-      count: 2,
+      dataSource: props.dataSource ? props.dataSource : [],
+      count: 1,
     };
   }
 
@@ -207,10 +185,4 @@ class EditableTable extends React.Component {
   }
 }
 
-export default () => (
-  <div className={styles.container}>
-    <div id="components-table-demo-edit-cell">
-      <EditableTable />
-    </div>
-  </div>
-);
+export default EditableTable;

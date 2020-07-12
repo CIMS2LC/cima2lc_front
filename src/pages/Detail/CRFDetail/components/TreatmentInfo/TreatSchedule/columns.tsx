@@ -1,18 +1,7 @@
-import {
-  DatePicker,
-  Select,
-  Popconfirm,
-  Radio,
-  Rate,
-  Cascader,
-  Input,
-} from 'antd';
+import { DatePicker, Input } from 'antd';
 import React from 'react';
 
 // Just show the latest item.
-function displayRender(label: any) {
-  return label[label.length - 1];
-}
 var columns = [
   {
     title: '治疗名称',
