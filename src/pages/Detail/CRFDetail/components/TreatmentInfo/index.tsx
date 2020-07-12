@@ -22,8 +22,7 @@ import Immunohistochemical from '../BasicComponents/Immunohistochemical';
 import MolecularDetection from '../BasicComponents/MolecularDetection';
 import SideReaction from './SideReaction';
 import SystemSign from './SystemSign';
-import TreatSchedule from './TreatSchedule';
-import EditableTable from '@/pages/BasicComponents/EditableTable';
+import TreatSchedule from '../BasicComponents/TreatSchedule';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -40,7 +39,11 @@ const layout = {
 class TreatmentInfo extends React.Component {
   state = {
     treatment: -1,
-    treat_schedule: [1],
+    chemotherapy: false,
+    targetedtherapy: false,
+    immunotherapy: false,
+    othertherapy: false,
+    antivasculartherapy: false,
   };
   trement = [
     { label: '1线', value: 1 },
@@ -106,58 +109,67 @@ class TreatmentInfo extends React.Component {
                   </div>
                   <div>
                     <label>治疗方案</label>
-                    <Checkbox.Group
-                      style={{ width: '100%' }}
-                      onChange={checkedValues => {
-                        this.setState({
-                          treat_schedule: checkedValues,
-                        });
-                        console.log(this.state.treat_schedule);
-                      }}
-                    >
-                      <Checkbox value={1}>化疗</Checkbox>
-                      <Checkbox value={2}>靶向治疗</Checkbox>
-                      <Checkbox value={3}>免疫治疗</Checkbox>
-                      <Checkbox value={4}>抗血管治疗</Checkbox>
-                      <Checkbox value={0}>其他</Checkbox>
-                    </Checkbox.Group>
-                    {this.state.treat_schedule.map(item => (
-                      <EditableTable
-                        dataColumns={[
-                          {
-                            title: '治疗名称',
-                            dataIndex: 'description',
-                            width: '10%',
-                            render: () => <Input />,
-                          },
-                          {
-                            title: '药物名称',
-                            key: 'grade',
-                            width: '10%',
-                            render: () => <Input />,
-                          },
-                          {
-                            title: '给药/治疗开始日期',
-                            key: 'begin_time',
-                            width: '10%',
-                            render: () => <DatePicker />,
-                          },
-                          {
-                            title: '给药/治疗结束日期',
-                            key: 'begin_time',
-                            width: '10%',
-                            render: () => <DatePicker />,
-                          },
-                        ]}
-                        operColumns={[]}
-                        // {
-                        //   title: 'name',
-                        //   dataIndex: 'name',
-                        //   width: '30%',
-                        //   editable: true,
-                        // },
+                    <div>
+                      <label>化疗</label>
+                      <Switch
+                        defaultChecked={false}
+                        checkedChildren="有"
+                        unCheckedChildren="无"
+                        onChange={checked => {
+                          this.setState({ chemotherapy: checked });
+                        }}
                       />
-                    ))}
+                      {this.state.chemotherapy ? <TreatSchedule /> : null}
+                    </div>
+                    <div>
+                      <label>靶向治疗</label>
+                      <Switch
+                        defaultChecked={false}
+                        checkedChildren="有"
+                        unCheckedChildren="无"
+                        onChange={checked => {
+                          this.setState({ targetedtherapy: checked });
+                        }}
+                      />
+                      {this.state.targetedtherapy ? <TreatSchedule /> : null}
+                    </div>
+                    <div>
+                      <label>免疫治疗</label>
+                      <Switch
+                        defaultChecked={false}
+                        checkedChildren="有"
+                        unCheckedChildren="无"
+                        onChange={checked => {
+                          this.setState({ immunotherapy: checked });
+                        }}
+                      />
+                      {this.state.immunotherapy ? <TreatSchedule /> : null}
+                    </div>
+                    <div>
+                      <label>抗血管治疗</label>
+                      <Switch
+                        defaultChecked={false}
+                        checkedChildren="有"
+                        unCheckedChildren="无"
+                        onChange={checked => {
+                          this.setState({ antivasculartherapy: checked });
+                        }}
+                      />
+                      {this.state.antivasculartherapy ? (
+                        <TreatSchedule />
+                      ) : null}
+                    </div>
+                    <div>
+                      <label>其他</label>
+                      <Switch
+                        defaultChecked={false}
+                        checkedChildren="有"
+                        unCheckedChildren="无"
+                        onChange={checked => {
+                          this.setState({ othertherapy: checked });
+                        }}
+                      />
+                    </div>
                   </div>
                   <div>
                     <label>开始日期</label>
