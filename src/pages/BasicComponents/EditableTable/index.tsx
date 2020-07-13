@@ -82,7 +82,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 class EditableTable extends React.Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.columns = [
       ...(props.dataColumns ? props.dataColumns : []),

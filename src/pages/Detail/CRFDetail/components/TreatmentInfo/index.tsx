@@ -143,7 +143,9 @@ class TreatmentInfo extends React.Component {
                           this.setState({ immunotherapy: checked });
                         }}
                       />
-                      {this.state.immunotherapy ? <TreatSchedule /> : null}
+                      {this.state.immunotherapy ? (
+                        <TreatSchedule treat_schedule_name="immunotherapy" />
+                      ) : null}
                     </div>
                     <div>
                       <label>抗血管治疗</label>
@@ -156,7 +158,7 @@ class TreatmentInfo extends React.Component {
                         }}
                       />
                       {this.state.antivasculartherapy ? (
-                        <TreatSchedule />
+                        <TreatSchedule treat_schedule_name="antivasculartherapy" />
                       ) : null}
                     </div>
                     <div>
