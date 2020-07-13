@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Radio, Input, Switch, Button, InputNumber } from 'antd';
+import { Form, Radio, Input, Switch, Button, InputNumber, Select } from 'antd';
+
+const { Option } = Select;
 
 const layout = {
   labelCol: {
@@ -13,7 +15,20 @@ const layout = {
 class MolecularDetection extends React.Component {
   state = {
     TMB_value: false,
-    md: this.molecular_detection_labels,
+    molecular_detection_labels: {
+      ALK: 0,
+      BIM: 0,
+      BRAF: 0,
+      cMET: 0,
+      EGFR: 0,
+      'HER-2': 0,
+      KRAS: 0,
+      'PD-L1': 0,
+      PIK3CA: 0,
+      ROS1: 0,
+      RET: 0,
+      UGT1A1: 0,
+    },
   };
 
   TMB_onChange = (checked: any) => {
@@ -23,49 +38,48 @@ class MolecularDetection extends React.Component {
     console.log(`switch to ${checked}`);
   };
 
-  molecular_detection_labels = [
-    'ALK',
-    'BIM',
-    'BRAF',
-    'cMET',
-    'EGFR',
-    'HER-2',
-    'KRAS',
-    'PD-L1',
-    'PIK3CA',
-    'ROS1',
-    'RET',
-    'UGT1A1',
-  ];
-
   render() {
     return (
       <Form name="molecular_detection" {...layout}>
-        {Object.keys(this.molecular_detection_labels).map((item: string) => (
-          <Form.Item label={item} name={item}>
-            <Radio.Group
-              onChange={e => {
-                this.molecular_detection_labels = this.state.md;
-                console.log(this.molecular_detection_labels[item]);
-                this.molecular_detection_labels[item] = e.target.value;
-                this.setState({
-                  md: this.molecular_detection_labels,
-                });
-              }}
-              value={this.molecular_detection_labels[item]}
-            >
-              <Radio value={0}>无</Radio>
-              <Radio value={-1}>阴性</Radio>
-              <Radio value={1}>阳性</Radio>
-            </Radio.Group>
-            {this.state.md[item] ? (
-              <div>
-                <label>检测样本</label>
-                <InputNumber />
-              </div>
-            ) : null}
-          </Form.Item>
-        ))}
+        {Object.keys(this.state.molecular_detection_labels).map(
+          (item: string) => (
+            <Form.Item label={item} name={item}>
+              <Radio.Group
+                onChange={e => {
+                  var mdls = this.state.molecular_detection_labels;
+                  mdls[item] = e.target.value;
+                  this.setState({
+                    molecular_detection_labels: mdls,
+                  });
+                }}
+              >
+                <Radio value={0}>无</Radio>
+                <Radio value={-1}>阴性</Radio>
+                <Radio value={1}>阳性</Radio>
+              </Radio.Group>
+              {this.state.molecular_detection_labels[item] == 1 ? (
+                <div>
+                  <div>
+                    <label>检测样本</label>
+                    <Input />
+                  </div>
+                  <div>
+                    <label>检测方法</label>
+                    <Select style={{ width: 120 }} onChange={() => {}}>
+                      <Option value="ARMS">ARMS</Option>
+                      <Option value="FISH">FISH</Option>
+                      <Option value="NGS">NGS</Option>
+                    </Select>
+                  </div>
+                  <div>
+                    <label>检测描述</label>
+                    <Input />
+                  </div>
+                </div>
+              ) : null}
+            </Form.Item>
+          ),
+        )}
         <Form.Item label="MSI" name="MSI">
           <Radio.Group>
             <Radio value={0}>MSS</Radio>

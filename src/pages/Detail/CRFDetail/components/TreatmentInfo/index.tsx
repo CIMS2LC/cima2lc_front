@@ -119,7 +119,9 @@ class TreatmentInfo extends React.Component {
                           this.setState({ chemotherapy: checked });
                         }}
                       />
-                      {this.state.chemotherapy ? <TreatSchedule /> : null}
+                      {this.state.chemotherapy ? (
+                        <TreatSchedule treat_schedule_name="chemotherapy" />
+                      ) : null}
                     </div>
                     <div>
                       <label>靶向治疗</label>
@@ -131,7 +133,9 @@ class TreatmentInfo extends React.Component {
                           this.setState({ targetedtherapy: checked });
                         }}
                       />
-                      {this.state.targetedtherapy ? <TreatSchedule /> : null}
+                      {this.state.targetedtherapy ? (
+                        <TreatSchedule treat_schedule_name="targetedtherapy" />
+                      ) : null}
                     </div>
                     <div>
                       <label>免疫治疗</label>

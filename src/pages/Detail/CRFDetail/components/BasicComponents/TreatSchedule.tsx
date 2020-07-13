@@ -1,9 +1,29 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 import { Input, DatePicker, Select } from 'antd';
+const { Option } = Select;
 
 //const treat_schedule_name = ['chemotherapy','targetedtherapy','immunotherapy','antivasculartherapy'];
 const treat_schedule_medicine = {
+  chemotherapy: [],
+  targetedtherapy: [
+    '吉非替尼',
+    '厄洛替尼',
+    '埃克替尼',
+    '阿法替尼',
+    '克唑替尼',
+    '奥希替尼',
+    '曲妥珠单抗',
+    '拉帕替尼',
+    '贝伐单抗',
+    '依维莫司',
+    '尼妥珠单抗',
+    '帕妥珠单抗',
+    'TDM1',
+    '不详',
+    '其他',
+  ],
+  immunotherapy: [],
   antivasculartherapy: [
     '重组人血管内皮抑素',
     '贝伐珠单抗',
@@ -19,7 +39,7 @@ class TreatSchedule extends React.Component {
   constructor(props: TreatScheduleProps) {
     super(props);
     treat_schedule_medicine[props.treat_schedule_name].map((item: string) => {
-      this.children_option.push(<Option key={item} />);
+      this.children_option.push(<Option key={item}>{item}</Option>);
     });
     console.log(this.children_option);
     this.setState({
