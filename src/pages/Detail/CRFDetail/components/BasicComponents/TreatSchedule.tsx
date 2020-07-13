@@ -1,6 +1,14 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
-import { Input, DatePicker, Select } from 'antd';
+import {
+  Input,
+  DatePicker,
+  Select,
+  Tag,
+  Popover,
+  InputNumber,
+  Radio,
+} from 'antd';
 const { Option } = Select;
 
 //const treat_schedule_name = ['chemotherapy','targetedtherapy','immunotherapy','antivasculartherapy'];
@@ -73,6 +81,28 @@ class TreatSchedule extends React.Component {
                     mode="tags"
                     style={{ width: '100%' }}
                     placeholder="Tags Mode"
+                    tagRender={props => {
+                      return (
+                        <div>
+                          <Popover
+                            content={
+                              <div>
+                                <label>剂量</label>
+                                <InputNumber />
+                                <label>单位</label>
+                                <Radio.Group>
+                                  <Radio value={1}>克</Radio>
+                                  <Radio value={2}>毫克</Radio>
+                                  <Radio value={3}>毫升</Radio>
+                                </Radio.Group>
+                              </div>
+                            }
+                          >
+                            <Tag>{props.label}</Tag>
+                          </Popover>
+                        </div>
+                      );
+                    }}
                   >
                     {this.children_option}
                   </Select>
