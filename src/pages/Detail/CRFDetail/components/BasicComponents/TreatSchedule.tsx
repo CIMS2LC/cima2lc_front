@@ -4,7 +4,7 @@ import { Input, DatePicker, Select } from 'antd';
 
 //const treat_schedule_name = ['chemotherapy','targetedtherapy','immunotherapy','antivasculartherapy'];
 const treat_schedule_medicine = {
-  antivasculartherapy_medicine: [
+  antivasculartherapy: [
     '重组人血管内皮抑素',
     '贝伐珠单抗',
     '安罗替尼',
@@ -18,9 +18,12 @@ interface TreatScheduleProps {
 class TreatSchedule extends React.Component {
   constructor(props: TreatScheduleProps) {
     super(props);
-    console.log(props.treat_schedule_name);
+    treat_schedule_medicine[props.treat_schedule_name].map((item: string) => {
+      this.children_option.push(<Option key={item} />);
+    });
+    console.log(this.children_option);
     this.setState({
-      children: treat_schedule_medicine[props.treat_schedule_name],
+      children: this.children_option,
     });
     console.log(this.state.children);
   }
@@ -28,6 +31,7 @@ class TreatSchedule extends React.Component {
     treat_schedule: '',
     children: [],
   };
+  children_option = [];
   render() {
     return (
       <div>
@@ -50,7 +54,7 @@ class TreatSchedule extends React.Component {
                     style={{ width: '100%' }}
                     placeholder="Tags Mode"
                   >
-                    {this.state.children}
+                    {this.children_option}
                   </Select>
                 );
               },
