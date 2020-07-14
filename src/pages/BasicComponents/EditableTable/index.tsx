@@ -93,7 +93,7 @@ class EditableTable extends React.Component {
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <span>
-              <a style={{ marginRight: 8 }}>编辑</a>
+              {/* <a style={{ marginRight: 8 }}>编辑</a> */}
               <Popconfirm
                 title="确认删除（不可恢复）？"
                 onConfirm={() => this.handleDelete(record.key)}
