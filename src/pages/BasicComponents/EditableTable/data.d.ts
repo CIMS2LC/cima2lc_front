@@ -1,11 +1,8 @@
-import { Select, DatePicker } from 'antd';
-
 interface Item {
-  order: number;
-  followup_time: Date;
-  response_evaluation: string;
-  remark: string;
-  image_type: number;
+  key: string;
+  name: string;
+  age: string;
+  address: string;
 }
 
 interface EditableRowProps {
