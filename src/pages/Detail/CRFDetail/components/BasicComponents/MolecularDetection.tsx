@@ -1,5 +1,15 @@
 import React from 'react';
-import { Form, Radio, Input, Switch, Button, InputNumber, Select } from 'antd';
+import {
+  Form,
+  Radio,
+  Input,
+  Switch,
+  Button,
+  InputNumber,
+  Select,
+  Upload,
+} from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -98,6 +108,17 @@ class MolecularDetection extends React.Component {
         </Form.Item>
         <Form.Item label="其他" name="other">
           <Input />
+        </Form.Item>
+        <Form.Item label="上传" name="upload">
+          <Upload
+            name="file" //发到后端的文件参数名
+            action="https://www.mocky.io/v2/5cc8019d300000980a055e76" //上传的地址
+            headers={{ authorization: 'authorization-text' }}
+          >
+            <Button>
+              <UploadOutlined /> 上传报告
+            </Button>
+          </Upload>
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">

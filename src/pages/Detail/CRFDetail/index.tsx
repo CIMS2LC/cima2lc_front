@@ -18,6 +18,7 @@ import TreatmentInfo from './components/TreatmentInfo';
 import LaborInspect from './components/BasicComponents/LaborInspect';
 import Immunohistochemical from './components/BasicComponents/Immunohistochemical';
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
+import PreHistory from './components/BasicComponents/PreHistory';
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const layout = {
@@ -200,53 +201,7 @@ class CRFSlidingTabs extends React.Component {
                 </Form>
               </TabPane>
               <TabPane tab="既往史" key="pre_history">
-                <Form name="pre_history" {...layout}>
-                  <Form.Item
-                    label="基础疾病史"
-                    name="underlying_disease_history"
-                  >
-                    <Checkbox.Group
-                      options={this.underlying_disease_history_Options}
-                      onChange={this.underlying_disease_history_onChange}
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="传染疾病史"
-                    name="infectious_disease_history"
-                  >
-                    <Checkbox.Group
-                      options={this.infectious_disease_history_Options}
-                      onChange={this.infectious_disease_history_onChange}
-                    />
-                  </Form.Item>
-
-                  <Form.Item label="肿瘤史" name="tumor_history">
-                    <Radio.Group>
-                      <Radio value={1}>有</Radio>
-                      <Radio value={0}>无</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-
-                  <Form.Item label="肿瘤家族史" name="tumor_family_history">
-                    <Radio.Group>
-                      <Radio value={1}>有</Radio>
-                      <Radio value={0}>无</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-
-                  <Form.Item label="是否吸烟" name="smoking">
-                    <Radio.Group>
-                      <Radio value={1}>有</Radio>
-                      <Radio value={0}>无</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      保存
-                    </Button>
-                  </Form.Item>
-                </Form>
+                <PreHistory />
               </TabPane>
 
               <TabPane tab="初诊过程" key="diag_procedure">
