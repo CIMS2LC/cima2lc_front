@@ -18,4 +18,9 @@ interface EditableCellProps {
   handleSave: (record: Item) => void;
 }
 
-export { EditableRowProps, EditableCellProps };
+interface EditableColumnProps {
+  dataColumns: [];
+  operColumns?: [];
+  dataSource?: [];
+}
+export { EditableRowProps, EditableCellProps, EditableColumnProps };

@@ -163,7 +163,7 @@ class CRFSlidingTabs extends React.Component {
                     <Input maxLength={18} />
                   </Form.Item>
 
-                  <Form.Item label="住院号" name="adNumber">
+                  <Form.Item label="住院号/就诊号" name="adNumber">
                     <Input />
                   </Form.Item>
 
