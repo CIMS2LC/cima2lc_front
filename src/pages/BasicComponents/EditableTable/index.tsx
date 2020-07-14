@@ -1,7 +1,11 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Table, Input, Button, Popconfirm, Form } from 'antd';
 
-import { EditableRowProps, EditableCellProps } from './data';
+import {
+  EditableRowProps,
+  EditableCellProps,
+  EditableColumnProps,
+} from './data';
 
 const EditableContext = React.createContext<any>();
 
@@ -82,7 +86,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 class EditableTable extends React.Component {
-  constructor(props: any) {
+  constructor(props: EditableColumnProps) {
     super(props);
     this.columns = [
       ...(props.dataColumns ? props.dataColumns : []),
@@ -93,7 +97,7 @@ class EditableTable extends React.Component {
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <span>
-              <a style={{ marginRight: 8 }}>编辑</a>
+              {/* <a style={{ marginRight: 8 }}>编辑</a> */}
               <Popconfirm
                 title="确认删除（不可恢复）？"
                 onConfirm={() => this.handleDelete(record.key)}
