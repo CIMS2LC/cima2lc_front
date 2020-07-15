@@ -1,11 +1,14 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Table, Button, Space, Input, Popconfirm } from 'antd';
+import { Table, Button, Space, Input, Popconfirm, Select } from 'antd';
 import { Link } from 'umi';
 import styles from './table.less';
 
 const { Search } = Input;
-
+const { Option } = Select;
+const state = {
+  select: 'all',
+};
 const columns = [
   {
     title: 'ID', //列名
@@ -43,7 +46,10 @@ const columns = [
     width: 200,
     render: (text, record) => (
       <Space size="middle">
-        <a>查看详情</a>
+        <a>
+          {' '}
+          <Link to="Questionnaire">查看详情</Link>
+        </a>
         <Popconfirm
           title="确定删除?"
           onConfirm={() => handleDelete(record.key)}
@@ -54,27 +60,29 @@ const columns = [
     ),
   },
 ];
-const handleDelete = key => {
+const handleDelete = (key: any) => {
+  //确认删除直接获取key，并传入后端
   //删除函数
   console.log(key);
   console.log('删除成功');
 };
 
 const data = [
+  //设置key等于id
   {
-    key: '1',
+    key: '147',
     id: '1',
     name: 'John Brown',
     age: 32,
   },
   {
-    key: '2',
+    key: '29807',
     id: '2',
     name: 'Jim Green',
     age: 42,
   },
   {
-    key: '3',
+    key: '36789',
     name: 'Joe Black',
     age: 32,
   },
@@ -85,17 +93,30 @@ export default () => {
     <div className={styles.mainlayout}>
       <div>
         <br />
+        <Select
+          defaultValue="all"
+          style={{ width: 120 }}
+          onChange={value => {
+            state.select = value;
+          }}
+        >
+          <Option value="all">全部</Option>
+          <Option value="name">姓名</Option>
+          <Option value="id">身份证号</Option>
+          <Option value="ad">住院号</Option>
+        </Select>
         <Search
           //  placeholder="input search text"
           style={{ width: 250 }}
           enterButton="查找"
           onSearch={value => console.log(value)}
         />
-        <Button style={{ left: 450 }} type="primary">
+
+        <Button style={{ left: 380 }} type="primary">
           <Link to="Questionnaire">肺康复患者调查表</Link>
         </Button>
-        <Button style={{ left: 500 }} type="primary">
-          <Link to="detail/crf_detail">返回主页面</Link>
+        <Button style={{ left: 430 }} type="primary">
+          <Link to="list/fuv_list">返回主页面</Link>
         </Button>
       </div>
       <br />
@@ -103,10 +124,8 @@ export default () => {
         <Table
           columns={columns}
           dataSource={data}
-          pagination={{ pageSize: 10 }}
-        >
-          {' '}
-        </Table>
+          pagination={{ pageSize: 15 }} //每页显示15条
+        ></Table>
       </div>
     </div>
   );
