@@ -74,7 +74,7 @@ class CRFSlidingTabs extends React.Component {
                     <Input maxLength={18} />
                   </Form.Item>
 
-                  <Form.Item label="住院号" name="adNumber">
+                  <Form.Item label="住院号/就诊号" name="adNumber">
                     <Input />
                   </Form.Item>
 
@@ -102,17 +102,6 @@ class CRFSlidingTabs extends React.Component {
 
                   <Form.Item label="电话号码（选填）" name="phoneNumber_opt">
                     <Input />
-                  </Form.Item>
-
-                  <Form.Item label="首诊PS评分" name="fv_score">
-                    <Radio.Group
-                      onChange={this.fv_score_onChange}
-                      value={this.state.value}
-                    >
-                      {[...Array(6).keys()].map(i => (
-                        <Radio value={i}>{i}</Radio>
-                      ))}
-                    </Radio.Group>
                   </Form.Item>
 
                   <Form.Item>
