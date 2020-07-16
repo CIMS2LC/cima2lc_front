@@ -13,7 +13,7 @@ import {
 import { history } from 'umi';
 
 import styles from './style.less';
-import FollowUpInfo from './components/FollowUpInfo';
+import FollowUpInfo from './components/BasicComponents/FollowUpInfo';
 import TreatmentInfo from './components/TreatmentInfo';
 import LaborInspect from './components/BasicComponents/LaborInspect';
 import Immunohistochemical from './components/BasicComponents/Immunohistochemical';

@@ -37,7 +37,7 @@ const UserLogin: React.FC<UserLoginProps> = props => {
       <img src={require('@/img/logo.png')} />
       <LoginFrom activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
         <UserName
-          name="userName"
+          name="account"
           placeholder="用户名"
           rules={[
             {

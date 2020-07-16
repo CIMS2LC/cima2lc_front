@@ -3,6 +3,23 @@ import { message } from 'antd';
 import { parse } from 'qs';
 import { fakeAccountLogin, getFakeCaptcha } from './service';
 
+export function setCookie(key: string, value: string) {
+  const d = new Date();
+  d.setTime(d.getTime() + 30 * 24 * 60 * 60 * 1000);
+  const expires = 'expires=' + d.toUTCString();
+  document.cookie = key + '=' + value + '; ' + expires;
+}
+export function getCookie(key: string) {
+  const name = key + '=';
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    const c = ca[i].trim();
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return '';
+}
 export function getPageQuery() {
   //return parse(window.location.href.split('?')[1]);
   return parse('redirect=/list/fuv_list');
@@ -25,6 +42,8 @@ export function setAuthority(authority: string | string[]) {
 }
 
 export interface StateType {
+  code?: 200 | 10033 | 10034;
+  msg?: '登录成功' | '用户名或密码错误';
   status?: 'ok' | 'error';
   type?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
@@ -57,14 +76,13 @@ const Model: ModelType = {
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.code === 200) {
+        setCookie('token', response.token);
         message.success('登录成功！');
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
-        console.log(redirect);
         redirect = window.location.origin + redirect;
-        console.log(redirect);
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
