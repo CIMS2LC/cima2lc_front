@@ -10,24 +10,14 @@ const genList = (current: number, pageSize: number) => {
   for (let i = 0; i < pageSize; i += 1) {
     const index = (current - 1) * 10 + i;
     tableListDataSource.push({
-      key: index,
-      disabled: i % 6 === 0,
-      idNum: 322000020200200,
-      sex: '男',
-      birthday: '2020-06-18',
-      href: 'https://ant.design',
-      avatar: [
-        'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-        'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
-      ][i % 2],
-      name: `张 ${index}`,
-      owner: '曲丽丽',
-      desc: '这是一段描述',
-      callNo: Math.floor(Math.random() * 1000),
-      status: (Math.floor(Math.random() * 10) % 4).toString(),
-      updatedAt: new Date(),
-      createdAt: new Date(),
-      progress: Math.ceil(Math.random() * 100),
+      id: index,
+      age: 20,
+      gender: '男',
+      hospitalNumber: '1234',
+      idNumber: '1234',
+      name: 'test',
+      phoneNumber: '123456',
+      patDia: '比较牛逼，还活着',
     });
   }
   tableListDataSource.reverse();
