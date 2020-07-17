@@ -6,17 +6,17 @@ function getFakeCaptcha(req: Request, res: Response) {
 }
 
 export default {
-  'POST  /api/login/account': (req: Request, res: Response) => {
-    const { password, userName, type } = req.body;
-    if (password === '123456' && userName === 'admin') {
+  'POST  /login': (req: Request, res: Response) => {
+    const { password, account, type } = req.body;
+    if (password === '123456' && account === 'admin') {
       res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
+        code: 200,
+        msg: '登录成功',
+        token: '123456',
       });
       return;
     }
-    if (password === '123456' && userName === 'user') {
+    if (password === '123456' && account === 'user') {
       res.send({
         status: 'ok',
         type,

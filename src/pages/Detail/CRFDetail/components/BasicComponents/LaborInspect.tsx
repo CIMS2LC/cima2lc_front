@@ -592,7 +592,7 @@ class LaborInspect extends React.Component {
           span: 2,
         }}
         wrapperCol={{
-          span: 4,
+          span: 12,
         }}
       >
         {Object.keys(labor_inspect).map(item => {
@@ -604,7 +604,7 @@ class LaborInspect extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col span={4}>
+                <Col span={2}>
                   <label>代码</label>
                 </Col>
                 <Col span={4}>
@@ -613,7 +613,7 @@ class LaborInspect extends React.Component {
                 <Col span={4}>
                   <label>测定值</label>
                 </Col>
-                <Col span={4}>
+                <Col span={2}>
                   <label>单位</label>
                 </Col>
                 <Col span={4}>
@@ -626,7 +626,7 @@ class LaborInspect extends React.Component {
               {Object.keys(labor_inspect[item]).map(para => {
                 return (
                   <Row>
-                    <Col span={4}>
+                    <Col span={2}>
                       <label>{para}</label>
                     </Col>
                     <Col span={4}>
@@ -637,7 +637,7 @@ class LaborInspect extends React.Component {
                         <Input />
                       </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={2}>
                       <label>{labor_inspect[item][para]['unit']}</label>
                     </Col>
                     <Col span={4}>
@@ -656,9 +656,10 @@ class LaborInspect extends React.Component {
                         </Radio.Group>
                         {this.state[`${item}_${para}`] ? (
                           <Rate
-                          // character={({ index }) => {
-                          //   return index + 1;
-                          // }}
+                            defaultValue={2}
+                            character="!"
+                            tooltips={['o1', 'o2', 'o3', 'o4', 'o5']}
+                            style={{ fontSize: 36 }}
                           />
                         ) : null}
                       </Form.Item>

@@ -34,7 +34,7 @@ export default defineConfig({
     },
     {
       path: '/',
-      component: '@/pages/index',
+      component: './User/UserLogin',
     },
   ],
 });

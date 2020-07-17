@@ -1,20 +1,17 @@
 import request from 'umi-request';
 
 export interface LoginParamsType {
-  userName: string;
+  account: string;
   password: string;
   mobile: string;
   captcha: string;
 }
 
 export async function fakeAccountLogin(params: LoginParamsType) {
-  return request(
-    '/api/login/account?redirect=http%3A%2F%2Flocalhost%3A8000%2Flist%2Ffuv_list',
-    {
-      method: 'POST',
-      data: params,
-    },
-  );
+  return request('/login', {
+    method: 'POST',
+    data: params,
+  });
 }
 
 export async function getFakeCaptcha(mobile: string) {
