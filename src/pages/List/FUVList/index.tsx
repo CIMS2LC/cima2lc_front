@@ -85,114 +85,83 @@ const TableList: React.FC<{}> = () => {
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '住院号/就诊号',
-      dataIndex: 'adnum',
+      dataIndex: 'hospitalNumber',
     },
     {
       title: '姓名',
       dataIndex: 'name',
-      rules: [
-        {
-          required: true,
-          message: '姓名为必填项',
-        },
-      ],
     },
     {
       title: '身份证号',
-      dataIndex: 'idNum',
-      rules: [
-        {
-          required: true,
-          message: '规则名称为必填项',
-        },
-      ],
+      dataIndex: 'idNumber',
+    },
+    {
+      title: '手机号',
+      dataIndex: 'phoneNumber',
     },
     {
       title: '性别',
-      dataIndex: 'sex',
-      rules: [
-        {
-          required: true,
-          message: '规则名称为必填项',
-        },
-      ],
-    },
-    {
-      title: '出生年月',
-      dataIndex: 'birthday',
-      rules: [
-        {
-          required: true,
-          message: '规则名称为必填项',
-        },
-      ],
+      dataIndex: 'gender',
     },
     {
       title: '病理诊断',
-      dataIndex: 'pathoDiag',
-      valueType: 'textarea',
-    },
-    {
-      title: '治疗方案',
-      dataIndex: 'theraShed',
-      valueType: 'textarea',
-    },
-    {
-      title: '治疗结束时间',
-      dataIndex: 'endtreatedAt',
-      sorter: true,
-      valueType: 'dateTime',
-      hideInForm: true,
-      renderFormItem: (item, { defaultRender, ...rest }, form) => {
-        const status = form.getFieldValue('status');
-        if (`${status}` === '0') {
-          return false;
-        }
-        if (`${status}` === '3') {
-          return <Input {...rest} placeholder="请输入异常原因！" />;
-        }
-        return defaultRender(item);
-      },
-    },
-    {
-      title: '上次随访时间',
-      dataIndex: 'lastfolAt',
-      sorter: true,
-      valueType: 'dateTime',
-      hideInForm: true,
-      renderFormItem: (item, { defaultRender, ...rest }, form) => {
-        const status = form.getFieldValue('status');
-        if (`${status}` === '0') {
-          return false;
-        }
-        if (`${status}` === '3') {
-          return <Input {...rest} placeholder="请输入异常原因！" />;
-        }
-        return defaultRender(item);
-      },
-    },
-    {
-      title: '随访疗效评估',
-      dataIndex: 'folEffEva',
+      dataIndex: 'patDia',
       valueType: 'textarea',
     },
     // {
-    //   title: '服务调用次数',
-    //   dataIndex: 'callNo',
-    //   sorter: true,
-    //   hideInForm: true,
-    //   renderText: (val: string) => `${val} 万`,
+    //   title: '治疗方案',
+    //   dataIndex: 'theraShed',
+    //   valueType: 'textarea',
     // },
-    {
-      title: '生存状态',
-      dataIndex: 'status',
-      hideInForm: true,
-      valueEnum: {
-        0: { text: '关闭', status: 'Default' },
-        1: { text: '存活', status: 'Processing' },
-        2: { text: '死亡', status: 'Success' },
-      },
-    },
+    // {
+    //   title: '治疗结束时间',
+    //   dataIndex: 'endtreatedAt',
+    //   sorter: true,
+    //   valueType: 'dateTime',
+    //   hideInForm: true,
+    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
+    //     const status = form.getFieldValue('status');
+    //     if (`${status}` === '0') {
+    //       return false;
+    //     }
+    //     if (`${status}` === '3') {
+    //       return <Input {...rest} placeholder="请输入异常原因！" />;
+    //     }
+    //     return defaultRender(item);
+    //   },
+    // },
+    // {
+    //   title: '上次随访时间',
+    //   dataIndex: 'lastfolAt',
+    //   sorter: true,
+    //   valueType: 'dateTime',
+    //   hideInForm: true,
+    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
+    //     const status = form.getFieldValue('status');
+    //     if (`${status}` === '0') {
+    //       return false;
+    //     }
+    //     if (`${status}` === '3') {
+    //       return <Input {...rest} placeholder="请输入异常原因！" />;
+    //     }
+    //     return defaultRender(item);
+    //   },
+    // },
+    // {
+    //   title: '随访疗效评估',
+    //   dataIndex: 'folEffEva',
+    //   valueType: 'textarea',
+    // },
+    // {
+    //   title: '生存状态',
+    //   dataIndex: 'status',
+    //   hideInForm: true,
+    //   valueEnum: {
+    //     0: { text: '关闭', status: 'Default' },
+    //     1: { text: '存活', status: 'Processing' },
+    //     2: { text: '死亡', status: 'Success' },
+    //   },
+    // },
     {
       title: '操作',
       dataIndex: 'option',
@@ -200,14 +169,6 @@ const TableList: React.FC<{}> = () => {
       render: (_, record) => {
         return (
           <>
-            {/* <a
-            onClick={() => {
-              // handleUpdateModalVisible(true);
-              // setStepFormValues(record);
-            }}
-          >
-            编辑
-          </a> */}
             <Link to={`/detail/crf_detail?`}>编辑</Link>
             <Divider type="vertical" />
             <a href="">删除</a>
@@ -259,7 +220,12 @@ const TableList: React.FC<{}> = () => {
         rowKey="key"
         search={false}
         toolBarRender={(action, { selectedRows }) => [
-          <Button type="primary" onClick={() => handleModalVisible(true)}>
+          <Button
+            type="primary"
+            onClick={() => {
+              history.push('/detail/crf_detail');
+            }}
+          >
             <PlusOutlined /> 添加
           </Button>,
           <Button type="primary" onClick={() => handleModalVisible(true)}>
@@ -307,26 +273,6 @@ const TableList: React.FC<{}> = () => {
         columns={columns}
         rowSelection={{}}
       />
-      <CreateForm
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-      >
-        <ProTable<TableListItem, TableListItem>
-          onSubmit={async value => {
-            const success = await handleAdd(value);
-            if (success) {
-              handleModalVisible(false);
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="key"
-          type="form"
-          columns={columns}
-          rowSelection={{}}
-        />
-      </CreateForm>
       {stepFormValues && Object.keys(stepFormValues).length ? (
         <UpdateForm
           onSubmit={async value => {
