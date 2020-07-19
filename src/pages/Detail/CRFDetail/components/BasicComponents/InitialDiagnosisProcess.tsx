@@ -601,7 +601,12 @@ class InitialDiagnosisProcess extends React.Component {
   onFinish = (values: any) => {
     //提交成功的操作函数
     //message.success('提交成功!');
-    console.log(values);
+    const formvalues = {
+      ...values,
+      firVisDate: values['firVisDate'].format('YYYY-MM-DD'),
+      patReDate: values['patReDate'].format('YYYY-MM-DD'),
+    };
+    console.log(formvalues); //需要传入后端的值
   };
   clinical_manifestation_Options = [
     //临床表现
@@ -647,7 +652,7 @@ class InitialDiagnosisProcess extends React.Component {
   ];
   render() {
     return (
-      <Form name="diag_procedure" {...layout} onFinish={this.onFinish}>
+      <Form name=" " {...layout} onFinish={this.onFinish}>
         <Form.Item label="首诊PS评分" name="PSScore">
           <Radio.Group value={this.state.value}>
             {[...Array(5).keys()].map(i => (
