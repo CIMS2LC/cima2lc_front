@@ -4,7 +4,6 @@ import React, { useState, useRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 
-import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 import { TableListItem } from './data.d';
 import { query, queryRule, updateRule, addRule, removeRule } from './service';
@@ -13,23 +12,6 @@ import { history } from 'umi';
 
 const { Option } = Select;
 const { Search } = Input;
-/**
- * 添加节点
- * @param fields
- */
-const handleAdd = async (fields: TableListItem) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addRule({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
 
 /**
  * 更新节点
@@ -76,7 +58,6 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
 };
 
 const TableList: React.FC<{}> = () => {
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(
     false,
   );
@@ -96,7 +77,7 @@ const TableList: React.FC<{}> = () => {
       dataIndex: 'idNumber',
     },
     {
-      title: '手机号',
+      title: '联系方式',
       dataIndex: 'phoneNumber',
     },
     {
@@ -106,7 +87,6 @@ const TableList: React.FC<{}> = () => {
     {
       title: '病理诊断',
       dataIndex: 'patDia',
-      valueType: 'textarea',
     },
     // {
     //   title: '治疗方案',
@@ -166,10 +146,10 @@ const TableList: React.FC<{}> = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      render: (_, record) => {
+      render: (text, record) => {
         return (
           <>
-            <Link to={`/detail/crf_detail?`}>编辑</Link>
+            <Link to={`/detail/crf_detail?id=${record.id}`}>编辑</Link>
             <Divider type="vertical" />
             <a href="">删除</a>
           </>
@@ -192,8 +172,8 @@ const TableList: React.FC<{}> = () => {
       >
         <Option value="all">全部</Option>
         <Option value="name">姓名</Option>
-        <Option value="id">身份证号</Option>
-        <Option value="ad">住院号</Option>
+        <Option value="idNumber">身份证号</Option>
+        <Option value="hospitalNumber">住院号</Option>
       </Select>
       <Search
         placeholder="input search text"
@@ -228,10 +208,10 @@ const TableList: React.FC<{}> = () => {
           >
             <PlusOutlined /> 添加
           </Button>,
-          <Button type="primary" onClick={() => handleModalVisible(true)}>
+          <Button type="primary" onClick={() => {}}>
             <PlusOutlined /> 统计分析
           </Button>,
-          <Button type="primary" onClick={() => handleModalVisible(true)}>
+          <Button type="primary" onClick={() => {}}>
             <PlusOutlined /> CSV导出
           </Button>,
           selectedRows && selectedRows.length > 0 && (
