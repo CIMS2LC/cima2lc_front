@@ -25,6 +25,7 @@ export interface PatientItem {
 }
 
 export interface PastHisItem {
+  id: number;
   pid: number;
   CliniManifest: string;
   BasDisHis: string;
@@ -42,6 +43,8 @@ export interface PastHisItem {
 }
 
 export interface ImmunohisItem {
+  id: number;
+  pid: number;
   ALKD5F3: number;
   'ALKD5F3-N': number;
   CAIX: number;

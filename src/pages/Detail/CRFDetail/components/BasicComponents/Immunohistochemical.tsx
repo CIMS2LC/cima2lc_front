@@ -62,7 +62,7 @@ class Immunohistochemical extends React.Component {
         name="immunohistochemical"
         {...layout}
         onFinish={values => {
-          Immunohissave({ id: this.state.id, ...values });
+          Immunohissave({ pid: this.state.id, ...values });
         }}
       >
         {immunohistochemical_labels.map(item => (
