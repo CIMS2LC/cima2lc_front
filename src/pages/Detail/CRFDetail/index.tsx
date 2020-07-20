@@ -20,6 +20,8 @@ import Immunohistochemical from './components/BasicComponents/Immunohistochemica
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
 import PreHistory from './components/BasicComponents/PreHistory';
 import InitialDiagnosisProcess from './components/BasicComponents/InitialDiagnosisProcess';
+import { Patientsave } from './service';
+import { PatientItem } from './data';
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const layout = {
@@ -43,6 +45,7 @@ class CRFSlidingTabs extends React.Component {
   //   this.setState({ mode });
   // };
   state = {
+    id: -1,
     value: 1,
   };
   idNumber_onChange = (value: any) => {
@@ -67,28 +70,31 @@ class CRFSlidingTabs extends React.Component {
               <TabPane tab="基本信息" key="basic_info">
                 <Form
                   name="basic_info"
-                  {...layout} //className={styles.form_basic_info}
-                  //initialValues={{ remember: true }}
+                  {...layout}
+                  onFinish={values => {
+                    console.log();
+                    Patientsave({ id: this.state.id, ...values });
+                  }}
                 >
                   <Form.Item label="身份证号" name="idNumber">
                     <Input maxLength={18} />
                   </Form.Item>
 
-                  <Form.Item label="住院号/就诊号" name="adNumber">
+                  <Form.Item label="住院号/就诊号" name="hospitalNumber">
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label="姓名" name="name">
+                  <Form.Item label="姓名" name="patientName">
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label="性别" name="sex">
+                  <Form.Item label="性别" name="gender">
                     <Radio.Group
                       onChange={this.sex_onChange}
                       value={this.state.value}
                     >
-                      <Radio value={1}>男</Radio>
-                      <Radio value={2}>女</Radio>
+                      <Radio value={true}>男</Radio>
+                      <Radio value={false}>女</Radio>
                     </Radio.Group>
                   </Form.Item>
 
@@ -96,11 +102,11 @@ class CRFSlidingTabs extends React.Component {
                     <DatePicker onChange={this.birthday_onChange} />
                   </Form.Item>
 
-                  <Form.Item label="电话号码（必填）" name="phoneNumber_req">
+                  <Form.Item label="电话号码（必填）" name="phoneNumber1">
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label="电话号码（选填）" name="phoneNumber_opt">
+                  <Form.Item label="电话号码（选填）" name="phoneNumber2">
                     <Input />
                   </Form.Item>
 

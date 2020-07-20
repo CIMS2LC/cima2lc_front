@@ -96,7 +96,7 @@ const TableList: React.FC<{}> = () => {
       dataIndex: 'idNumber',
     },
     {
-      title: '手机号',
+      title: '联系方式',
       dataIndex: 'phoneNumber',
     },
     {
@@ -106,7 +106,6 @@ const TableList: React.FC<{}> = () => {
     {
       title: '病理诊断',
       dataIndex: 'patDia',
-      valueType: 'textarea',
     },
     // {
     //   title: '治疗方案',
