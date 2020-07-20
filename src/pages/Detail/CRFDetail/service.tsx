@@ -1,14 +1,24 @@
 import request from 'umi-request';
-import { QueryListItem, TableListParams } from './data.d';
+import { PatientItem, PastHisItem, TableListParams } from './data.d';
 
-export async function query(params?: QueryListItem) {
-  return request('/api/illCase/find', {
-    params,
+export async function Patientsave(params?: PatientItem) {
+  return request('/api/Patient/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
   });
 }
-
-export async function queryRule(params?: TableListParams) {
-  return request('/api/rule', {
+export async function PastHissave(params?: PastHisItem) {
+  return request('/api/PastHis/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function querydetail(params?: TableListParams) {
+  return request('/api/illCase/allinfo/find', {
     params,
   });
 }
