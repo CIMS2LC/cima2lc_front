@@ -40,3 +40,45 @@ export interface PastHisItem {
   drug: boolean;
   drugUseHis: string;
 }
+
+export interface ImmunohisItem {
+  ALKD5F3: number;
+  'ALKD5F3-N': number;
+  CAIX: number;
+  'CAM5.2': number;
+  CD10: number;
+  CD34: number;
+  CD56: number;
+  CD117: number;
+  'CDX-2': number;
+  CEA: number;
+  CgA: number;
+  CK: number;
+  'CK5/6': number;
+  CK7: number;
+  'CK8/18': number;
+  CK19: number;
+  CK20: number;
+  Cyn: number;
+  DLL3: number;
+  EMA: number;
+  'ERCC-1': number;
+  LCA: number;
+  MCM2: number;
+  'Napsin A': number;
+  P16: number;
+  P40: number;
+  p53: number;
+  P63: number;
+  'PAX-2': number;
+  'PAX-8': number;
+  PCK: number;
+  'PD-L1': number;
+  SATB2: number;
+  Syn: number;
+  TTF1: number;
+  'VEGF-C': number;
+  Villin: number;
+  VIM: number;
+  其他: string;
+}

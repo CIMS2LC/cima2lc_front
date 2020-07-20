@@ -97,7 +97,10 @@ class CRFSlidingTabs extends React.Component {
                     name="basic_info"
                     {...layout}
                     onFinish={values => {
-                      values.birthday = values['birthday'].format('YYYY-MM-DD');
+                      if (values.birthday)
+                        values.birthday = values['birthday'].format(
+                          'YYYY-MM-DD',
+                        );
                       Patientsave({ id: this.state.id, ...values });
                     }}
                   >
@@ -152,7 +155,7 @@ class CRFSlidingTabs extends React.Component {
                   <LaborInspect />
                 </TabPane>
                 <TabPane tab="免疫组化" key="immunohistochemical">
-                  <Immunohistochemical />
+                  <Immunohistochemical id={this.id} />
                 </TabPane>
                 <TabPane tab="分子检测" key="molecular_detection">
                   <MolecularDetection />

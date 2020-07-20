@@ -77,22 +77,22 @@ class PreHistory extends React.Component {
       [key]: value,
     });
   };
-  clinical_manifestation_Options = [
-    '无',
-    '体检',
-    '咳嗽',
-    '咳痰',
-    '痰中带血',
-    '咳血',
-    '胸闷',
-    '胸痛',
-    '气促',
-    '发热',
-    '食欲不佳',
-    '体重减轻',
-    '其他',
-    '不详',
-  ];
+  // clinical_manifestation_Options = [
+  //   '无',
+  //   '体检',
+  //   '咳嗽',
+  //   '咳痰',
+  //   '痰中带血',
+  //   '咳血',
+  //   '胸闷',
+  //   '胸痛',
+  //   '气促',
+  //   '发热',
+  //   '食欲不佳',
+  //   '体重减轻',
+  //   '其他',
+  //   '不详',
+  // ];
   underlying_disease_history_Options = [
     '无',
     '高血压',
@@ -172,9 +172,9 @@ class PreHistory extends React.Component {
           PastHissave({ id: this.state.id, ...values });
         }}
       >
-        <Form.Item label="临床表现" name="CliniManifest">
+        {/* <Form.Item label="临床表现" name="CliniManifest">
           <Checkbox.Group options={this.clinical_manifestation_Options} />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item label="基础疾病史" name="BasDisHis">
           <Checkbox.Group options={this.underlying_disease_history_Options} />

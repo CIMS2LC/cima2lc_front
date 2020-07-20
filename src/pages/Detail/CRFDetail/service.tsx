@@ -1,5 +1,10 @@
 import request from 'umi-request';
-import { PatientItem, PastHisItem, TableListParams } from './data.d';
+import {
+  PatientItem,
+  PastHisItem,
+  TableListParams,
+  ImmunohisItem,
+} from './data.d';
 
 export async function Patientsave(params?: PatientItem) {
   return request('/api/Patient/add', {
@@ -11,6 +16,14 @@ export async function Patientsave(params?: PatientItem) {
 }
 export async function PastHissave(params?: PastHisItem) {
   return request('/api/PastHis/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function Immunohissave(params?: ImmunohisItem) {
+  return request('/api/Immunohis/add', {
     method: 'POST',
     data: {
       ...params,
