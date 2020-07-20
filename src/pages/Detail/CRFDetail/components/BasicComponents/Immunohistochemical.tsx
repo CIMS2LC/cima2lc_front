@@ -72,7 +72,7 @@ class Immunohistochemical extends React.Component {
               <Radio value={2}>±</Radio>
               <Radio value={3}>+</Radio>
               <Radio value={4}>++</Radio>
-              <Radio value={4}>+++</Radio>
+              <Radio value={5}>+++</Radio>
             </Radio.Group>
           </Form.Item>
         ))}
