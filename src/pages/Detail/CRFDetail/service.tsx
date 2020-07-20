@@ -2,7 +2,7 @@ import request from 'umi-request';
 import { PatientItem, TableListParams } from './data.d';
 
 export async function Patientsave(params?: PatientItem) {
-  return request('/patient/add', {
+  return request('/api/patient/add', {
     method: 'POST',
     data: {
       ...params,
