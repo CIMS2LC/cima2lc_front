@@ -34,14 +34,10 @@ const layout = {
 };
 
 class CRFSlidingTabs extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   console.log(props.location);
-  //   this.state = {
-  //     id: -1,
-  //     value: 1,
-  //   };
-  // }
+  constructor(props) {
+    super(props);
+    this.id = props.location.query.id;
+  }
   formRef = React.createRef();
   componentDidMount = () => {
     console.log(this.props);
@@ -51,7 +47,6 @@ class CRFSlidingTabs extends React.Component {
   //   this.setState({ mode });
   // };
   state = {
-    id: -1,
     value: 1,
   };
   idNumber_onChange = (value: any) => {
@@ -148,7 +143,7 @@ class CRFSlidingTabs extends React.Component {
                   </Form>
                 </TabPane>
                 <TabPane tab="既往史" key="pre_history">
-                  <PreHistory id={this.state.id} />
+                  <PreHistory id={this.id} />
                 </TabPane>
                 <TabPane tab="初诊过程" key="diag_procedure">
                   <InitialDiagnosisProcess />
