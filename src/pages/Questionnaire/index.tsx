@@ -126,6 +126,9 @@ class App extends React.Component {
             );
             this.setState({ data: res.data.data });
             this.formRef.current.setFieldsValue(this.state.data);
+
+            if (res.data.data.isLunSur) this.setState({ display4: 'block' });
+            if (res.data.data.isChem) this.setState({ display5: 'block' });
           } else message.error('数据加载失败');
         });
     }
@@ -145,7 +148,7 @@ class App extends React.Component {
     values.doByMus = (values.doByMus || []).join();
     values.breExeHelp = (values.breExeHelp || []).toString();
     values.breExeEff = (values.breExeEff || []).toString();
-    console.log(values);
+
     if (!this.props.location.query.id) {
       //添加调查表
       values = {
@@ -153,8 +156,10 @@ class App extends React.Component {
         date: moment().format('YYYY-MM-DD'),
       };
       axios.post('/api/Questionnaire/add', values).then(res => {
-        if (res.data.code === 200) message.success(res.data.msg);
-        else if (res.data.code === 4001) message.success(res.data.msg);
+        if (res.data.code === 200) {
+          message.success(res.data.msg);
+          this.props.history.push('Questionnaire_table');
+        } else if (res.data.code === 4001) message.success(res.data.msg);
         else message.error('出现未知错误！请重试');
       });
     } else {
@@ -162,8 +167,10 @@ class App extends React.Component {
       let RequestData = { id: this.props.location.query.id, ...values };
       console.log(RequestData);
       axios.put('/api/Questionnaire/update', RequestData).then(res => {
-        if (res.data.code === 200) message.success(res.data.msg);
-        else if (res.data.code === 4001) message.success(res.data.msg);
+        if (res.data.code === 200) {
+          message.success(res.data.msg);
+          this.props.history.push('Questionnaire_table');
+        } else if (res.data.code === 4001) message.success(res.data.msg);
         else message.error('出现未知错误！请重试');
       });
     }
@@ -362,7 +369,7 @@ class App extends React.Component {
             >
               <Radio.Group
                 onChange={v => {
-                  if (v.target.value == 1) {
+                  if (v.target.value === true) {
                     this.setState({ display4: 'block' });
                   } else this.setState({ display4: 'none' });
                 }}
@@ -395,7 +402,7 @@ class App extends React.Component {
             >
               <Radio.Group
                 onChange={v => {
-                  if (v.target.value == 1) {
+                  if (v.target.value === true) {
                     this.setState({ display5: 'block' });
                   } else this.setState({ display5: 'none' });
                 }}
@@ -760,7 +767,7 @@ class App extends React.Component {
             <Form.Item
               {...radio1}
               labelAlign="left"
-              name="ninteen"
+              name="nineteen"
               label="19.在过去的一周中，疼痛妨碍您的日常活动吗？"
             >
               <Radio.Group>
@@ -1137,19 +1144,19 @@ class App extends React.Component {
               <Checkbox.Group>
                 <Row>
                   <Col span={8}>
-                    <Checkbox value={1}>1、自我激励&emsp;&emsp;</Checkbox>
+                    <Checkbox value="1">1、自我激励&emsp;&emsp;</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value={2}>2、自我放松&emsp;&emsp;</Checkbox>
+                    <Checkbox value="2">2、自我放松&emsp;&emsp;</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value={3}>3、帮助睡眠&emsp;&emsp;</Checkbox>
+                    <Checkbox value="3">3、帮助睡眠&emsp;&emsp;</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value={4}>4、怀旧&emsp;&emsp;&emsp;</Checkbox>
+                    <Checkbox value="4">4、怀旧&emsp;&emsp;&emsp;</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value={5}>5、提升记忆&emsp;&emsp;</Checkbox>
+                    <Checkbox value="5">5、提升记忆&emsp;&emsp;</Checkbox>
                   </Col>
                 </Row>
               </Checkbox.Group>
@@ -1182,28 +1189,28 @@ class App extends React.Component {
               <Checkbox.Group>
                 <Row>
                   <Col span={6}>
-                    <Checkbox value={1}>1、肺部功能恢复</Checkbox>
+                    <Checkbox value="1">1、肺部功能恢复</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value={2}>2、失眠</Checkbox>
+                    <Checkbox value="2">2、失眠</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value={3}>3、记忆力衰退</Checkbox>
+                    <Checkbox value="3">3、记忆力衰退</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value={4}>4、心理困扰</Checkbox>
+                    <Checkbox value="4">4、心理困扰</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value={5}>5、自闭</Checkbox>
+                    <Checkbox value="5">5、自闭</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value={6}>6、焦虑症</Checkbox>
+                    <Checkbox value="6">6、焦虑症</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value={7}>7、抑郁症等</Checkbox>
+                    <Checkbox value="7">7、抑郁症等</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value={8}>8、其他</Checkbox>
+                    <Checkbox value="8">8、其他</Checkbox>
                   </Col>
                 </Row>
               </Checkbox.Group>
@@ -1268,19 +1275,19 @@ class App extends React.Component {
               <Checkbox.Group>
                 <Row>
                   <Col span={8}>
-                    <Checkbox value={1}>1、胸闷气短可以有疗效</Checkbox>
+                    <Checkbox value="1">1、胸闷气短可以有疗效</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value={2}>2、失眠、抑郁可以有疗效</Checkbox>
+                    <Checkbox value="2">2、失眠、抑郁可以有疗效</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value={3}>3、调节心理有疗效</Checkbox>
+                    <Checkbox value="3">3、调节心理有疗效</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value={4}>4、多半不会有明显差异</Checkbox>
+                    <Checkbox value="4">4、多半不会有明显差异</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value={5}>5、不知道</Checkbox>
+                    <Checkbox value="5">5、不知道</Checkbox>
                   </Col>
                 </Row>
               </Checkbox.Group>
