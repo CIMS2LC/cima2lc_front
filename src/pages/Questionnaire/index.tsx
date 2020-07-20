@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import styles from './index.less';
 import { Link } from 'umi';
 import axios from 'axios';
+import moment from 'moment';
 import {
   Form,
   Input,
@@ -93,15 +94,7 @@ const tailLayout2 = {
 const validateMessages = {
   required: "'${label}' 是必填字段",
 };
-function getTodayDate() {
-  var date = new Date();
 
-  var year = date.getFullYear().toString();
-  var month = (date.getMonth() + 1).toString();
-  var day = date.getDate().toString();
-
-  return year + '年' + month + '月' + day + '日';
-}
 class App extends React.Component {
   state = {
     data: {}, //表单数据
@@ -124,6 +117,13 @@ class App extends React.Component {
         })
         .then(res => {
           if (res.data.code === 200) {
+            res.data.data.doByMus = (res.data.data.doByMus || '').split(',');
+            res.data.data.breExeHelp = (res.data.data.breExeHelp || '').split(
+              ',',
+            );
+            res.data.data.breExeEff = (res.data.data.breExeEff || '').split(
+              ',',
+            );
             this.setState({ data: res.data.data });
             this.formRef.current.setFieldsValue(this.state.data);
           } else message.error('数据加载失败');
@@ -142,13 +142,16 @@ class App extends React.Component {
   };
   onFinish = (values: any) => {
     //点击提交的数据请求
-
-    values = {
-      ...values,
-      Date: getTodayDate(),
-    };
+    values.doByMus = (values.doByMus || []).join();
+    values.breExeHelp = (values.breExeHelp || []).toString();
+    values.breExeEff = (values.breExeEff || []).toString();
+    console.log(values);
     if (!this.props.location.query.id) {
       //添加调查表
+      values = {
+        ...values,
+        date: moment().format('YYYY-MM-DD'),
+      };
       axios.post('/api/Questionnaire/add', values).then(res => {
         if (res.data.code === 200) message.success(res.data.msg);
         else if (res.data.code === 4001) message.success(res.data.msg);
@@ -235,7 +238,6 @@ class App extends React.Component {
             >
               <Input />
             </Form.Item>
-
             <Form.Item
               {...layout}
               labelAlign="left"
@@ -262,8 +264,8 @@ class App extends React.Component {
               ]}
             >
               <Radio.Group>
-                <Radio value={1}>男&emsp;&emsp;</Radio>
-                <Radio value={0}>女</Radio>
+                <Radio value={true}>男&emsp;&emsp;</Radio>
+                <Radio value={false}>女</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -319,15 +321,15 @@ class App extends React.Component {
 
             <Form.Item {...radio} name="isMarry" label="婚否">
               <Radio.Group>
-                <Radio value={1}>已婚</Radio>&emsp;&emsp;
-                <Radio value={0}>未婚</Radio>
+                <Radio value={true}>已婚</Radio>&emsp;&emsp;
+                <Radio value={false}>未婚</Radio>
               </Radio.Group>
             </Form.Item>
 
             <Form.Item {...radio} name="residence" label="居住地">
               <Radio.Group>
-                <Radio value={0}>城市</Radio>&emsp;&emsp;
-                <Radio value={1}>农村</Radio>
+                <Radio value={false}>城市</Radio>&emsp;&emsp;
+                <Radio value={true}>农村</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -365,8 +367,8 @@ class App extends React.Component {
                   } else this.setState({ display4: 'none' });
                 }}
               >
-                <Radio value={1}>有</Radio>&emsp;&emsp;
-                <Radio value={0}>无</Radio>
+                <Radio value={true}>有</Radio>&emsp;&emsp;
+                <Radio value={false}>无</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -398,8 +400,8 @@ class App extends React.Component {
                   } else this.setState({ display5: 'none' });
                 }}
               >
-                <Radio value={1}>有</Radio>&emsp;&emsp;
-                <Radio value={0}>无</Radio>
+                <Radio value={true}>有</Radio>&emsp;&emsp;
+                <Radio value={false}>无</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -432,7 +434,7 @@ class App extends React.Component {
             <Form.Item
               {...layout2}
               labelAlign="left"
-              name="PET%"
+              name="PET_"
               label="（2） PET(%)"
             >
               <Input />
@@ -448,7 +450,7 @@ class App extends React.Component {
             <Form.Item
               {...layout2}
               labelAlign="left"
-              name="FEV1%"
+              name="FEV1_"
               label="（4） FEV1(%)"
             >
               <Input />
@@ -464,7 +466,7 @@ class App extends React.Component {
             <Form.Item
               {...layout2}
               labelAlign="left"
-              name="FEV1/FVC"
+              name="FEV1_FVC"
               label="（6） FEV1/FVC"
             >
               <Input />
@@ -473,7 +475,7 @@ class App extends React.Component {
             <Form.Item
               {...layout2}
               labelAlign="left"
-              name="6MWD"
+              name="MWD6"
               label="（1） 6MWD(m)"
             >
               <Input />
@@ -528,10 +530,10 @@ class App extends React.Component {
               label="1.当您做费力的动作，如提沉重的购物袋或行李箱时，您是否感到困难？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -541,10 +543,10 @@ class App extends React.Component {
               label="2.长距离步行时，您是否感到困难？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -554,10 +556,10 @@ class App extends React.Component {
               label="3.在户外短距离散步时，您是否感到困难？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -567,10 +569,10 @@ class App extends React.Component {
               label="4.在白天，您是否必须卧床或坐在椅子上？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -580,10 +582,10 @@ class App extends React.Component {
               label="5.您是否需要别人协助进食、穿衣、洗漱或上厕所？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -593,10 +595,10 @@ class App extends React.Component {
               label="6.在过去的一周中，您的工作或者日常活动是否受到体能限制？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -606,10 +608,10 @@ class App extends React.Component {
               label="7.在过去的一周中，您的业余爱好和休闲活动是否受到体能限制？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -619,10 +621,10 @@ class App extends React.Component {
               label="8.在过去的一周中，您曾感到气短吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -632,10 +634,10 @@ class App extends React.Component {
               label="9.在过去的一周中，您有过疼痛吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -645,10 +647,10 @@ class App extends React.Component {
               label="10.在过去的一周中，您曾需要休息吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -658,10 +660,10 @@ class App extends React.Component {
               label="11.在过去的一周中，您曾感到睡眠不好吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -671,10 +673,10 @@ class App extends React.Component {
               label="12.在过去的一周中，您曾感到虚弱吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -684,10 +686,10 @@ class App extends React.Component {
               label="13.在过去的一周中，您曾感到没有胃口吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -697,10 +699,10 @@ class App extends React.Component {
               label="14.在过去的一周中，您曾感受到恶心想吐吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -710,10 +712,10 @@ class App extends React.Component {
               label="15.在过去的一周中，您曾呕吐过吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -723,10 +725,10 @@ class App extends React.Component {
               label="16.在过去的一周中，您曾有便秘吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -736,10 +738,10 @@ class App extends React.Component {
               label="17.在过去的一周中，您曾有过腹泻？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -749,10 +751,10 @@ class App extends React.Component {
               label="18.在过去的一周中，您曾感觉疲乏吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -762,10 +764,10 @@ class App extends React.Component {
               label="19.在过去的一周中，疼痛妨碍您的日常活动吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -775,10 +777,10 @@ class App extends React.Component {
               label="20.在过去的一周中，您是否很难集中注意力做事，例如读报或看电视？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -788,10 +790,10 @@ class App extends React.Component {
               label="21.在过去的一周中，您曾感到紧张吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -801,10 +803,10 @@ class App extends React.Component {
               label="22.在过去的一周中，您曾感到担心吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -814,10 +816,10 @@ class App extends React.Component {
               label="23.在过去的一周中，您曾感到容易动怒吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -827,10 +829,10 @@ class App extends React.Component {
               label="24.在过去的一周中，您曾感到情绪低落吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -840,10 +842,10 @@ class App extends React.Component {
               label="25.在过去的一周中，您曾经感到记事困难吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -853,10 +855,10 @@ class App extends React.Component {
               label="26.在过去的一周中，您的身体状况或治疗过程，妨碍了您的家庭生活吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -866,10 +868,10 @@ class App extends React.Component {
               label="27.在过去的一周中，您的身体状况或治疗过程，妨碍了您的社交活动吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -879,10 +881,10 @@ class App extends React.Component {
               label="28.在过去的一周中，您的身体状况或治疗过程，造成了您的经济困难吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -896,13 +898,13 @@ class App extends React.Component {
               label="29.您如何评定过去一周你的整体健康状况？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
-                <Radio value="5">5&emsp;</Radio>
-                <Radio value="6">6&emsp;</Radio>
-                <Radio value="7">7&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
+                <Radio value={5}>5&emsp;</Radio>
+                <Radio value={6}>6&emsp;</Radio>
+                <Radio value={7}>7&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -912,13 +914,13 @@ class App extends React.Component {
               label="30.您如何评定过去一周你的整体生活质量？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;</Radio>
-                <Radio value="2">2&emsp;</Radio>
-                <Radio value="3">3&emsp;</Radio>
-                <Radio value="4">4&emsp;</Radio>
-                <Radio value="5">5&emsp;</Radio>
-                <Radio value="6">6&emsp;</Radio>
-                <Radio value="7">7&emsp;</Radio>
+                <Radio value={1}>1&emsp;</Radio>
+                <Radio value={2}>2&emsp;</Radio>
+                <Radio value={3}>3&emsp;</Radio>
+                <Radio value={4}>4&emsp;</Radio>
+                <Radio value={5}>5&emsp;</Radio>
+                <Radio value={6}>6&emsp;</Radio>
+                <Radio value={7}>7&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -936,10 +938,10 @@ class App extends React.Component {
               label="31.您经常咳嗽吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -949,10 +951,10 @@ class App extends React.Component {
               label="32.您咳血吗（痰中带血）？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -962,10 +964,10 @@ class App extends React.Component {
               label="33.您休息时感到气短吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -975,10 +977,10 @@ class App extends React.Component {
               label="34.您散步时感到气短吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -988,10 +990,10 @@ class App extends React.Component {
               label="35.您爬楼梯时感到气短吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -1001,10 +1003,10 @@ class App extends React.Component {
               label="36.您有过口腔或舌头疼痛吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -1014,10 +1016,10 @@ class App extends React.Component {
               label="37.您有过吞咽困难吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -1027,10 +1029,10 @@ class App extends React.Component {
               label="38.您有过手脚发麻/刺痛吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -1040,10 +1042,10 @@ class App extends React.Component {
               label="39.您有过脱发吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -1053,10 +1055,10 @@ class App extends React.Component {
               label="40.您有过胸痛吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -1066,10 +1068,10 @@ class App extends React.Component {
               label="41.您有过手臂或肩膀疼痛吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -1079,10 +1081,10 @@ class App extends React.Component {
               label="42.您有过身体其他部位的疼痛吗？"
             >
               <Radio.Group>
-                <Radio value="1">1&emsp;&emsp;</Radio>
-                <Radio value="2">2&emsp;&emsp;</Radio>
-                <Radio value="3">3&emsp;&emsp;</Radio>
-                <Radio value="4">4&emsp;&emsp;</Radio>
+                <Radio value={1}>1&emsp;&emsp;</Radio>
+                <Radio value={2}>2&emsp;&emsp;</Radio>
+                <Radio value={3}>3&emsp;&emsp;</Radio>
+                <Radio value={4}>4&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -1102,8 +1104,8 @@ class App extends React.Component {
               label="43、您服用过止疼药吗？"
             >
               <Radio.Group>
-                <Radio value="1">1、没有&emsp;&emsp;</Radio>
-                <Radio value="2">2、有</Radio>
+                <Radio value={1}>1、没有&emsp;&emsp;</Radio>
+                <Radio value={2}>2、有</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -1116,10 +1118,10 @@ class App extends React.Component {
               label="&nbsp;"
             >
               <Radio.Group>
-                <Radio value="1">1、经常&emsp;&emsp;&emsp;&emsp;</Radio>
-                <Radio value="2">2、偶尔&emsp;&emsp;&emsp;&emsp;</Radio>
-                <Radio value="3">3、很少&emsp;&emsp;&emsp;&emsp;</Radio>
-                <Radio value="4">4、没有&emsp;&emsp;</Radio>
+                <Radio value={1}>1、经常&emsp;&emsp;&emsp;&emsp;</Radio>
+                <Radio value={2}>2、偶尔&emsp;&emsp;&emsp;&emsp;</Radio>
+                <Radio value={3}>3、很少&emsp;&emsp;&emsp;&emsp;</Radio>
+                <Radio value={4}>4、没有&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <div className={styles.Checkboxlabel}>
@@ -1135,19 +1137,19 @@ class App extends React.Component {
               <Checkbox.Group>
                 <Row>
                   <Col span={8}>
-                    <Checkbox value="1">1、自我激励&emsp;&emsp;</Checkbox>
+                    <Checkbox value={1}>1、自我激励&emsp;&emsp;</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value="2">2、自我放松&emsp;&emsp;</Checkbox>
+                    <Checkbox value={2}>2、自我放松&emsp;&emsp;</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value="3">3、帮助睡眠&emsp;&emsp;</Checkbox>
+                    <Checkbox value={3}>3、帮助睡眠&emsp;&emsp;</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value="4">4、怀旧&emsp;&emsp;&emsp;</Checkbox>
+                    <Checkbox value={4}>4、怀旧&emsp;&emsp;&emsp;</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value="5">5、提升记忆&emsp;&emsp;</Checkbox>
+                    <Checkbox value={5}>5、提升记忆&emsp;&emsp;</Checkbox>
                   </Col>
                 </Row>
               </Checkbox.Group>
@@ -1161,10 +1163,10 @@ class App extends React.Component {
               label="&nbsp;"
             >
               <Radio.Group>
-                <Radio value="1">1、从未听过&emsp;&emsp;</Radio>
-                <Radio value="2">2、仅听过&emsp;&emsp;</Radio>
-                <Radio value="3">3、有一定了解&emsp;&emsp;</Radio>
-                <Radio value="4">4、非常了解&emsp;</Radio>
+                <Radio value={1}>1、从未听过&emsp;&emsp;</Radio>
+                <Radio value={2}>2、仅听过&emsp;&emsp;</Radio>
+                <Radio value={3}>3、有一定了解&emsp;&emsp;</Radio>
+                <Radio value={4}>4、非常了解&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -1180,28 +1182,28 @@ class App extends React.Component {
               <Checkbox.Group>
                 <Row>
                   <Col span={6}>
-                    <Checkbox value="1">1、肺部功能恢复</Checkbox>
+                    <Checkbox value={1}>1、肺部功能恢复</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value="2">2、失眠</Checkbox>
+                    <Checkbox value={2}>2、失眠</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value="3">3、记忆力衰退</Checkbox>
+                    <Checkbox value={3}>3、记忆力衰退</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value="4">4、心理困扰</Checkbox>
+                    <Checkbox value={4}>4、心理困扰</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value="5">5、自闭</Checkbox>
+                    <Checkbox value={5}>5、自闭</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value="6">6、焦虑症</Checkbox>
+                    <Checkbox value={6}>6、焦虑症</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value="7">7、抑郁症等</Checkbox>
+                    <Checkbox value={7}>7、抑郁症等</Checkbox>
                   </Col>
                   <Col span={6}>
-                    <Checkbox value="8">8、其他</Checkbox>
+                    <Checkbox value={8}>8、其他</Checkbox>
                   </Col>
                 </Row>
               </Checkbox.Group>
@@ -1214,10 +1216,10 @@ class App extends React.Component {
               label="&nbsp;"
             >
               <Radio.Group>
-                <Radio value="1">1、愿意&emsp;&emsp;</Radio>
-                <Radio value="2">2、随意&emsp;&emsp;</Radio>
-                <Radio value="3">3、都可以&emsp;&emsp;</Radio>
-                <Radio value="4">4、不知道&emsp;</Radio>
+                <Radio value={1}>1、愿意&emsp;&emsp;</Radio>
+                <Radio value={2}>2、随意&emsp;&emsp;</Radio>
+                <Radio value={3}>3、都可以&emsp;&emsp;</Radio>
+                <Radio value={4}>4、不知道&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <div className={styles.Checkboxlabel}>
@@ -1230,10 +1232,10 @@ class App extends React.Component {
               label="&emsp;"
             >
               <Radio.Group>
-                <Radio value="1">1、每天&emsp;&emsp;</Radio>
-                <Radio value="2">2、每周三次&emsp;&emsp;</Radio>
-                <Radio value="3">3、偶尔&emsp;&emsp;</Radio>
-                <Radio value="4">4、不知道&emsp;&emsp;</Radio>
+                <Radio value={1}>1、每天&emsp;&emsp;</Radio>
+                <Radio value={2}>2、每周三次&emsp;&emsp;</Radio>
+                <Radio value={3}>3、偶尔&emsp;&emsp;</Radio>
+                <Radio value={4}>4、不知道&emsp;&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
             <div className={styles.Checkboxlabel}>
@@ -1246,10 +1248,10 @@ class App extends React.Component {
               label="&nbsp;"
             >
               <Radio.Group>
-                <Radio value="1">1、与病友一起做&emsp;</Radio>
-                <Radio value="2">2、单独&emsp;&emsp;</Radio>
-                <Radio value="3">3、都可以&emsp;&emsp;</Radio>
-                <Radio value="4">4、不知道&emsp;</Radio>
+                <Radio value={1}>1、与病友一起做&emsp;</Radio>
+                <Radio value={2}>2、单独&emsp;&emsp;</Radio>
+                <Radio value={3}>3、都可以&emsp;&emsp;</Radio>
+                <Radio value={4}>4、不知道&emsp;</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -1266,19 +1268,19 @@ class App extends React.Component {
               <Checkbox.Group>
                 <Row>
                   <Col span={8}>
-                    <Checkbox value="1">1、胸闷气短可以有疗效</Checkbox>
+                    <Checkbox value={1}>1、胸闷气短可以有疗效</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value="2">2、失眠、抑郁可以有疗效</Checkbox>
+                    <Checkbox value={2}>2、失眠、抑郁可以有疗效</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value="3">3、调节心理有疗效</Checkbox>
+                    <Checkbox value={3}>3、调节心理有疗效</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value="4">4、多半不会有明显差异</Checkbox>
+                    <Checkbox value={4}>4、多半不会有明显差异</Checkbox>
                   </Col>
                   <Col span={8}>
-                    <Checkbox value="5">5、不知道</Checkbox>
+                    <Checkbox value={5}>5、不知道</Checkbox>
                   </Col>
                 </Row>
               </Checkbox.Group>

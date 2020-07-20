@@ -74,7 +74,7 @@ class QuestionnaireTable extends React.Component {
     let url = '/api/Questionnaire/list';
     axios.post(url, { current: 1, pageSize: this.state.pageSize }).then(res => {
       let dataSource = [...this.state.data];
-      dataSource = res.data.list1;
+      dataSource = res.data.data;
       this.setState({ data: dataSource });
       this.setState({ total: res.data.total });
     });
@@ -98,9 +98,9 @@ class QuestionnaireTable extends React.Component {
     //查找函数
     let url = '/api/Questionnaire/find';
     let Requestdata = {};
-    if (this.state.select === 1) Requestdata = { find_id: 1, name: value };
-    if (this.state.select === 2) Requestdata = { find_id: 1, idNum: value };
-    if (this.state.select === 1) Requestdata = { find_id: 1, hosNum: value };
+    if (this.state.select === 1) Requestdata = { find_id: 1, idNum: value };
+    if (this.state.select === 2) Requestdata = { find_id: 2, name: value };
+    if (this.state.select === 3) Requestdata = { find_id: 3, hosNum: value };
 
     axios.post(url, Requestdata).then(res => {
       //res指所有信息，res.data指其中的数据部分，res.data.data指其中key为data的
@@ -145,8 +145,8 @@ class QuestionnaireTable extends React.Component {
               this.setState({ select: value });
             }}
           >
-            <Option value={1}>姓名</Option>
-            <Option value={2}>身份证号</Option>
+            <Option value={1}>请选择</Option>
+            <Option value={2}>姓名</Option>
             <Option value={3}>住院号</Option>
           </Select>
           <Search
