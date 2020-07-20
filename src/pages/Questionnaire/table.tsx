@@ -82,9 +82,8 @@ class QuestionnaireTable extends React.Component {
 
   handleDelete = (key: number) => {
     //删除项
-    let url = '/api/Questionnaire/delete/';
-    console.log(url + key);
-    axios.delete(url + key).then(res => {
+    let deleteurl = '/api/Questionnaire/delete';
+    axios.delete(deleteurl, { data: { id: key } }).then(res => {
       //res指所有信息，res.data指其中的数据部分，res.data.data指其中key为data的
       if (res.data.code === 200) {
         const dataSource = [...this.state.data]; //删除并渲染必须进行的操作
