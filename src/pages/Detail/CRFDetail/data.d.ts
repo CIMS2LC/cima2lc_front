@@ -23,3 +23,20 @@ export interface PatientItem {
   psScore: number;
   updateTime: Date;
 }
+
+export interface PastHisItem {
+  pid: number;
+  CliniManifest: string;
+  BasDisHis: string;
+  infDisHis: string;
+  tumHis: string;
+  tumFamHis: string;
+  smoke: boolean;
+  smokingHis: string;
+  drink: boolean;
+  drinkingHis: string;
+  hormone: boolean;
+  hormoneUseHis: string;
+  drug: boolean;
+  drugUseHis: string;
+}

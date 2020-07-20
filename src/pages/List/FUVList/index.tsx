@@ -172,8 +172,8 @@ const TableList: React.FC<{}> = () => {
       >
         <Option value="all">全部</Option>
         <Option value="name">姓名</Option>
-        <Option value="id">身份证号</Option>
-        <Option value="ad">住院号</Option>
+        <Option value="idNumber">身份证号</Option>
+        <Option value="hospitalNumber">住院号</Option>
       </Select>
       <Search
         placeholder="input search text"

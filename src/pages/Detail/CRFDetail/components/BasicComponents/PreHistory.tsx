@@ -10,6 +10,7 @@ import {
 } from 'antd';
 import Hormone from './Hormone';
 import Medicine from './Medicine';
+import { PastHissave } from '../../service';
 
 const layout = {
   labelCol: {
@@ -22,12 +23,15 @@ const layout = {
 
 class PreHistory extends React.Component {
   state = {
+    id: this.props.id,
     is_smoke: 0,
     stop_smoke: 0,
     is_drink: 0,
     stop_drink: 0,
     is_hormone: 0,
     is_medicine: 0,
+    is_tumHis: 0,
+    is_tumFamHis: 0,
   };
 
   onChange_smoke = (e: any) => {
@@ -68,6 +72,11 @@ class PreHistory extends React.Component {
       is_medicine: e.target.value,
     });
   };
+  onChange_state_value = (key: string, value: string) => {
+    this.setState({
+      [key]: value,
+    });
+  };
   clinical_manifestation_Options = [
     '无',
     '体检',
@@ -84,7 +93,6 @@ class PreHistory extends React.Component {
     '其他',
     '不详',
   ];
-  clinical_manifestation_onChange = () => {};
   underlying_disease_history_Options = [
     '无',
     '高血压',
@@ -101,7 +109,6 @@ class PreHistory extends React.Component {
     '其他',
     '不详',
   ];
-  underlying_disease_history_onChange = () => {};
   infectious_disease_history_Options = [
     '无',
     '肺结核',
@@ -110,47 +117,105 @@ class PreHistory extends React.Component {
     '其他',
     '不详',
   ];
-  infectious_disease_history_onChange = () => {};
-
+  tumor_Options = [
+    '大肠癌',
+    '鼻咽癌及头颈部肿瘤',
+    '乳腺癌',
+    '胃癌',
+    '肺癌',
+    '食管癌',
+    '结直肠癌',
+    '小肠癌',
+    '肝癌',
+    '胰腺癌',
+    '妇科肿瘤',
+    '泌尿系统瘤',
+    '血液淋巴系统瘤',
+    '神经系统瘤',
+    '软组织肉瘤',
+    '其他',
+    '不详',
+  ];
+  tumorFam_Options = [
+    '大肠癌',
+    '鼻咽癌及头颈部肿瘤',
+    '乳腺癌',
+    '胃癌',
+    '肺癌',
+    '食管癌',
+    '结直肠癌',
+    '小肠癌',
+    '肝癌',
+    '胰腺癌',
+    '妇科肿瘤',
+    '泌尿系统瘤',
+    '血液淋巴系统瘤',
+    '神经系统瘤',
+    '软组织肉瘤',
+    '其他',
+    '不详',
+  ];
   render() {
     return (
-      <Form name="pre_history" {...layout}>
-        <Form.Item label="临床表现" name="clinical_manifestation">
-          <Checkbox.Group
-            options={this.clinical_manifestation_Options}
-            onChange={this.clinical_manifestation_onChange}
-          />
+      <Form
+        name="pre_history"
+        {...layout}
+        onFinish={values => {
+          values.CliniManifest = values['CliniManifest'].toString();
+          values.BasDisHis = values['BasDisHis'].toString();
+          values.infDisHis = values['infDisHis'].toString();
+          values.infDisHis = values['tumHis'].toString();
+          values.infDisHis = values['tumFamHis'].toString();
+          PastHissave({ id: this.state.id, ...values });
+        }}
+      >
+        <Form.Item label="临床表现" name="CliniManifest">
+          <Checkbox.Group options={this.clinical_manifestation_Options} />
         </Form.Item>
 
-        <Form.Item label="基础疾病史" name="underlying_disease_history">
-          <Checkbox.Group
-            options={this.underlying_disease_history_Options}
-            onChange={this.underlying_disease_history_onChange}
-          />
+        <Form.Item label="基础疾病史" name="BasDisHis">
+          <Checkbox.Group options={this.underlying_disease_history_Options} />
         </Form.Item>
 
-        <Form.Item label="传染疾病史" name="infectious_disease_history">
-          <Checkbox.Group
-            options={this.infectious_disease_history_Options}
-            onChange={this.infectious_disease_history_onChange}
-          />
+        <Form.Item label="传染疾病史" name="infDisHis">
+          <Checkbox.Group options={this.infectious_disease_history_Options} />
         </Form.Item>
 
-        <Form.Item label="肿瘤史" name="tumor_history">
-          <Radio.Group>
+        <Form.Item label="肿瘤史" name="tumor">
+          <Radio.Group
+            onChange={e => {
+              this.onChange_state_value('is_tumHis', e.target.value);
+            }}
+            value={this.state.is_tumHis}
+          >
+            <Radio value={true}>有</Radio>
+            <Radio value={false}>无</Radio>
+          </Radio.Group>
+        </Form.Item>
+        {this.state.is_tumHis ? (
+          <Form.Item name="tumHis">
+            <Checkbox.Group options={this.tumor_Options} />
+          </Form.Item>
+        ) : null}
+
+        <Form.Item label="肿瘤家族史" name="tumorFam">
+          <Radio.Group
+            onChange={e => {
+              this.onChange_state_value('is_tumFamHis', e.target.value);
+            }}
+            value={this.state.is_tumFamHis}
+          >
             <Radio value={1}>有</Radio>
             <Radio value={0}>无</Radio>
           </Radio.Group>
         </Form.Item>
+        {this.state.is_tumFamHis ? (
+          <Form.Item name="tumFamHis">
+            <Checkbox.Group options={this.tumorFam_Options} />
+          </Form.Item>
+        ) : null}
 
-        <Form.Item label="肿瘤家族史" name="tumor_family_history">
-          <Radio.Group>
-            <Radio value={1}>有</Radio>
-            <Radio value={0}>无</Radio>
-          </Radio.Group>
-        </Form.Item>
-
-        <Form.Item label="是否吸烟" name="smoking">
+        <Form.Item label="是否吸烟" name="smoke">
           <Radio.Group
             onChange={this.onChange_smoke}
             value={this.state.is_smoke}
@@ -182,7 +247,7 @@ class PreHistory extends React.Component {
           ) : null}
         </Form.Item>
 
-        <Form.Item label="是否饮酒" name="drinking">
+        <Form.Item label="是否饮酒" name="drink">
           <Radio.Group
             onChange={this.onChange_drink}
             value={this.state.is_drink}
@@ -227,7 +292,7 @@ class PreHistory extends React.Component {
             </div>
           ) : null}
         </Form.Item>
-        <Form.Item label="是否长期使用其他药物" name="medicine">
+        <Form.Item label="是否长期使用其他药物" name="drug">
           <Radio.Group
             onChange={this.onChange_medicine}
             value={this.state.is_medicine}
@@ -251,4 +316,4 @@ class PreHistory extends React.Component {
   }
 }
 
-export default () => <PreHistory />;
+export default PreHistory;

@@ -36,10 +36,16 @@ const layout = {
 class CRFSlidingTabs extends React.Component {
   // constructor(props) {
   //   super(props);
+  //   console.log(props.location);
   //   this.state = {
-  //     mode: 'top',
+  //     id: -1,
+  //     value: 1,
   //   };
   // }
+  formRef = React.createRef();
+  componentDidMount = () => {
+    console.log(this.props);
+  };
   // handleModeChange = e => {
   //   const mode = e.target.value;
   //   this.setState({ mode });
@@ -57,98 +63,9 @@ class CRFSlidingTabs extends React.Component {
       value: e.target.value,
     });
   };
-  birthday_onChange = (date: any, dateString: any) => {
-    console.log(date, dateString);
-  };
 
   render() {
     return (
-      <div>
-        <Tabs defaultActiveKey="1" tabPosition="left">
-          <TabPane tab="基线资料" key="baseline_info">
-            <Tabs tabPosition="top">
-              <TabPane tab="基本信息" key="basic_info">
-                <Form
-                  name="basic_info"
-                  {...layout}
-                  onFinish={values => {
-                    console.log();
-                    Patientsave({ id: this.state.id, ...values });
-                  }}
-                >
-                  <Form.Item label="身份证号" name="idNumber">
-                    <Input maxLength={18} />
-                  </Form.Item>
-
-                  <Form.Item label="住院号/就诊号" name="hospitalNumber">
-                    <Input />
-                  </Form.Item>
-
-                  <Form.Item label="姓名" name="patientName">
-                    <Input />
-                  </Form.Item>
-
-                  <Form.Item label="性别" name="gender">
-                    <Radio.Group
-                      onChange={this.sex_onChange}
-                      value={this.state.value}
-                    >
-                      <Radio value={true}>男</Radio>
-                      <Radio value={false}>女</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-
-                  <Form.Item label="出生日期" name="birthday">
-                    <DatePicker onChange={this.birthday_onChange} />
-                  </Form.Item>
-
-                  <Form.Item label="电话号码（必填）" name="phoneNumber1">
-                    <Input />
-                  </Form.Item>
-
-                  <Form.Item label="电话号码（选填）" name="phoneNumber2">
-                    <Input />
-                  </Form.Item>
-
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      保存
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </TabPane>
-              <TabPane tab="既往史" key="pre_history">
-                <PreHistory />
-              </TabPane>
-              <TabPane tab="初诊过程" key="diag_procedure">
-                <InitialDiagnosisProcess />
-              </TabPane>
-              <TabPane tab="实验室检查" key="labor_inspect">
-                <LaborInspect />
-              </TabPane>
-              <TabPane tab="免疫组化" key="immunohistochemical">
-                <Immunohistochemical />
-              </TabPane>
-              <TabPane tab="分子检测" key="molecular_detection">
-                <MolecularDetection />
-              </TabPane>
-            </Tabs>
-          </TabPane>
-          <TabPane tab="随访信息" key="followUp_info">
-            <FollowUpInfo />
-          </TabPane>
-          <TabPane tab="治疗信息" key="treatment_info">
-            <TreatmentInfo />
-          </TabPane>
-        </Tabs>
-      </div>
-    );
-  }
-}
-
-export default () => {
-  return (
-    <>
       <Layout>
         <Header
           style={{
@@ -164,8 +81,6 @@ export default () => {
               className={styles.btn_return}
               id="btn_return"
               onClick={() => {
-                // handleUpdateModalVisible(true);
-                // setStepFormValues(record);
                 history.push('/list/fuv_list');
               }}
             >
@@ -179,11 +94,87 @@ export default () => {
             marginTop: 64,
           }}
         >
-          <div>
-            <CRFSlidingTabs />
-          </div>
+          <Tabs defaultActiveKey="1" tabPosition="left">
+            <TabPane tab="基线资料" key="baseline_info">
+              <Tabs tabPosition="top">
+                <TabPane tab="基本信息" key="basic_info">
+                  <Form
+                    name="basic_info"
+                    {...layout}
+                    onFinish={values => {
+                      values.birthday = values['birthday'].format('YYYY-MM-DD');
+                      Patientsave({ id: this.state.id, ...values });
+                    }}
+                  >
+                    <Form.Item label="身份证号" name="idNumber">
+                      <Input maxLength={18} />
+                    </Form.Item>
+
+                    <Form.Item label="住院号/就诊号" name="hospitalNumber">
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item label="姓名" name="patientName">
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item label="性别" name="gender">
+                      <Radio.Group
+                        onChange={this.sex_onChange}
+                        value={this.state.value}
+                      >
+                        <Radio value={true}>男</Radio>
+                        <Radio value={false}>女</Radio>
+                      </Radio.Group>
+                    </Form.Item>
+
+                    <Form.Item label="出生日期" name="birthday">
+                      <DatePicker />
+                    </Form.Item>
+
+                    <Form.Item label="电话号码（必填）" name="phoneNumber1">
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item label="电话号码（选填）" name="phoneNumber2">
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        保存
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </TabPane>
+                <TabPane tab="既往史" key="pre_history">
+                  <PreHistory id={this.state.id} />
+                </TabPane>
+                <TabPane tab="初诊过程" key="diag_procedure">
+                  <InitialDiagnosisProcess />
+                </TabPane>
+                <TabPane tab="实验室检查" key="labor_inspect">
+                  <LaborInspect />
+                </TabPane>
+                <TabPane tab="免疫组化" key="immunohistochemical">
+                  <Immunohistochemical />
+                </TabPane>
+                <TabPane tab="分子检测" key="molecular_detection">
+                  <MolecularDetection />
+                </TabPane>
+              </Tabs>
+            </TabPane>
+            <TabPane tab="随访信息" key="followUp_info">
+              <FollowUpInfo />
+            </TabPane>
+            <TabPane tab="治疗信息" key="treatment_info">
+              <TreatmentInfo />
+            </TabPane>
+          </Tabs>
         </Content>
       </Layout>
-    </>
-  );
-};
+    );
+  }
+}
+
+export default CRFSlidingTabs;
