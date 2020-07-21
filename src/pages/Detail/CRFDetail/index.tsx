@@ -34,24 +34,18 @@ const layout = {
 };
 
 class CRFSlidingTabs extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   console.log(props.location);
-  //   this.state = {
-  //     id: -1,
-  //     value: 1,
-  //   };
-  // }
+  constructor(props) {
+    super(props);
+    this.id = props.location.query.id;
+    this.pid = props.location.query.id;
+  }
+  id = -1;
+  pid = -1;
   formRef = React.createRef();
   componentDidMount = () => {
     console.log(this.props);
   };
-  // handleModeChange = e => {
-  //   const mode = e.target.value;
-  //   this.setState({ mode });
-  // };
   state = {
-    id: -1,
     value: 1,
   };
   idNumber_onChange = (value: any) => {
@@ -101,9 +95,18 @@ class CRFSlidingTabs extends React.Component {
                   <Form
                     name="basic_info"
                     {...layout}
-                    onFinish={values => {
-                      values.birthday = values['birthday'].format('YYYY-MM-DD');
-                      Patientsave({ id: this.state.id, ...values });
+                    onFinish={async values => {
+                      if (values.birthday)
+                        values.birthday = values['birthday'].format(
+                          'YYYY-MM-DD',
+                        );
+                      const res = await Patientsave({ id: this.id, ...values });
+                      if (res.code == 200) {
+                        this.pid = res.id;
+                        console.log('提交成功');
+                      } else {
+                        console.log('提交失败');
+                      }
                     }}
                   >
                     <Form.Item label="身份证号" name="idNumber">
@@ -148,19 +151,19 @@ class CRFSlidingTabs extends React.Component {
                   </Form>
                 </TabPane>
                 <TabPane tab="既往史" key="pre_history">
-                  <PreHistory id={this.state.id} />
+                  <PreHistory pid={this.pid} />
                 </TabPane>
                 <TabPane tab="初诊过程" key="diag_procedure">
-                  <InitialDiagnosisProcess />
+                  <InitialDiagnosisProcess pid={this.pid} />
                 </TabPane>
                 <TabPane tab="实验室检查" key="labor_inspect">
-                  <LaborInspect />
+                  <LaborInspect pid={this.pid} />
                 </TabPane>
                 <TabPane tab="免疫组化" key="immunohistochemical">
-                  <Immunohistochemical />
+                  <Immunohistochemical pid={this.pid} />
                 </TabPane>
                 <TabPane tab="分子检测" key="molecular_detection">
-                  <MolecularDetection />
+                  <MolecularDetection pid={this.pid} />
                 </TabPane>
               </Tabs>
             </TabPane>

@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import request from '../../BasicComponents/request';
 
 export interface LoginParamsType {
   account: string;

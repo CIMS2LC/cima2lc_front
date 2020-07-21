@@ -1,5 +1,11 @@
-import request from 'umi-request';
-import { PatientItem, PastHisItem, TableListParams } from './data.d';
+import request from '../../BasicComponents/request';
+import {
+  PatientItem,
+  PastHisItem,
+  TableListParams,
+  ImmunohisItem,
+  MoleDetecItem,
+} from './data.d';
 
 export async function Patientsave(params?: PatientItem) {
   return request('/api/Patient/add', {
@@ -17,6 +23,31 @@ export async function PastHissave(params?: PastHisItem) {
     },
   });
 }
+export async function PastHisupdate(params?: PastHisItem) {
+  return request('/api/PastHis/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function Immunohissave(params?: ImmunohisItem) {
+  return request('/api/Immunohis/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function MoleDetecsave(params?: MoleDetecItem) {
+  return request('/api/MoleDetec/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
 export async function querydetail(params?: TableListParams) {
   return request('/api/illCase/allinfo/find', {
     params,

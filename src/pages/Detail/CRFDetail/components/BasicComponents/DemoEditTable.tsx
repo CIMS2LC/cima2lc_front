@@ -2,7 +2,7 @@ import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 
 class XXX extends React.Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
   }
   state = {};

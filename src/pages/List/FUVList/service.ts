@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import request from '../../BasicComponents/request';
 import { QueryListItem, TableListParams } from './data.d';
 
 export async function query(params?: QueryListItem) {
@@ -8,7 +8,7 @@ export async function query(params?: QueryListItem) {
 }
 
 export async function queryRule(params?: TableListParams) {
-  return request('/api/rule', {
+  return request('/api/list', {
     params,
   });
 }

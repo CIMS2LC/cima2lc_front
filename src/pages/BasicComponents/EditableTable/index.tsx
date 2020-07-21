@@ -85,6 +85,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
+var DataSource = [];
 class EditableTable extends React.Component {
   constructor(props: EditableColumnProps) {
     super(props);
@@ -97,7 +98,6 @@ class EditableTable extends React.Component {
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <span>
-              {/* <a style={{ marginRight: 8 }}>编辑</a> */}
               <Popconfirm
                 title="确认删除（不可恢复）？"
                 onConfirm={() => this.handleDelete(record.key)}
@@ -143,6 +143,10 @@ class EditableTable extends React.Component {
       ...row,
     });
     this.setState({ dataSource: newData });
+  };
+
+  public handleGet = () => {
+    return this.state.dataSource;
   };
 
   render() {
