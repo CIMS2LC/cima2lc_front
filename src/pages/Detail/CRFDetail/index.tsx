@@ -95,12 +95,12 @@ class CRFSlidingTabs extends React.Component {
                   <Form
                     name="basic_info"
                     {...layout}
-                    onFinish={values => {
+                    onFinish={async values => {
                       if (values.birthday)
                         values.birthday = values['birthday'].format(
                           'YYYY-MM-DD',
                         );
-                      const res = Patientsave({ id: this.id, ...values });
+                      const res = await Patientsave({ id: this.id, ...values });
                       if (res.code == 200) {
                         this.pid = res.id;
                         console.log('提交成功');

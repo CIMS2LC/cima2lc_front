@@ -166,7 +166,7 @@ class PreHistory extends React.Component {
         name="pre_history"
         {...layout}
         onFinish={values => {
-          values.BasDisHis = (values['BasDisHis'] || []).toString();
+          values.BasDisHis = (values['basDisHis'] || []).toString();
           values.infDisHis = (values['infDisHis'] || []).toString();
           values.tumHis = (values['tumHis'] || []).toString();
           values.tumFamHis = (values['tumFamHis'] || []).toString();
@@ -179,11 +179,7 @@ class PreHistory extends React.Component {
           }
         }}
       >
-        {/* <Form.Item label="临床表现" name="CliniManifest">
-          <Checkbox.Group options={this.clinical_manifestation_Options} />
-        </Form.Item> */}
-
-        <Form.Item label="基础疾病史" name="BasDisHis">
+        <Form.Item label="基础疾病史" name="basDisHis">
           <Checkbox.Group options={this.underlying_disease_history_Options} />
         </Form.Item>
 

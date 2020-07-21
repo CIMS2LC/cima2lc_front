@@ -28,7 +28,7 @@ export interface PastHisItem {
   id: number;
   pid: number;
   CliniManifest: string;
-  BasDisHis: string;
+  basDisHis: string;
   infDisHis: string;
   tumHis: string;
   tumFamHis: string;
