@@ -66,7 +66,7 @@ class Immunohistochemical extends React.Component {
         name="immunohistochemical"
         {...layout}
         onFinish={async values => {
-          if (this.state.id) {
+          if (this.id != -1) {
           } else {
             const res = await Immunohissave({ pid: this.pid, ...values });
             if (res.code == 200) {
