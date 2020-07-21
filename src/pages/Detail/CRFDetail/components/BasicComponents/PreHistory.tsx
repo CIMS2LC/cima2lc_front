@@ -166,14 +166,10 @@ class PreHistory extends React.Component {
         name="pre_history"
         {...layout}
         onFinish={values => {
-          values.CliniManifest = values['CliniManifest'].toString();
-          values.BasDisHis = values['BasDisHis'].toString();
-          values.infDisHis = values['infDisHis'].toString();
-          if (values.tumHis) values.tumHis = values['tumHis'].toString();
-          if (values.tumFamHis)
-            values.tumFamHis = values['tumFamHis'].toString();
-          if (values.smokingHis)
-            values.smokingHis = JSON.stringify(values['smokingHis']);
+          values.BasDisHis = (values['BasDisHis'] || []).toString();
+          values.infDisHis = (values['infDisHis'] || []).toString();
+          values.tumHis = (values['tumHis'] || []).toString();
+          values.tumFamHis = (values['tumFamHis'] || []).toString();
           const res = PastHissave({ pid: this.pid, ...values });
           if (res.code == 200) {
             this.id = res.id;
