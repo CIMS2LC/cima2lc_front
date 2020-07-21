@@ -5,6 +5,7 @@ import {
   TableListParams,
   ImmunohisItem,
   MoleDetecItem,
+  QueryParams,
 } from './data.d';
 
 export async function Patientsave(params?: PatientItem) {
@@ -48,7 +49,7 @@ export async function MoleDetecsave(params?: MoleDetecItem) {
   });
 }
 
-export async function querydetail(params?: TableListParams) {
+export async function querydetail(params?: QueryParams) {
   return request('/api/illCase/allinfo/find', {
     params,
   });

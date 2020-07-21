@@ -20,7 +20,7 @@ import Immunohistochemical from './components/BasicComponents/Immunohistochemica
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
 import PreHistory from './components/BasicComponents/PreHistory';
 import InitialDiagnosisProcess from './components/BasicComponents/InitialDiagnosisProcess';
-import { Patientsave } from './service';
+import { Patientsave, querydetail } from './service';
 import { PatientItem } from './data';
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
@@ -38,6 +38,8 @@ class CRFSlidingTabs extends React.Component {
     super(props);
     this.id = props.location.query.id;
     this.pid = props.location.query.id;
+    const detail = await querydetail({ id: this.id });
+    console.log(detail);
   }
   id = -1;
   pid = -1;
