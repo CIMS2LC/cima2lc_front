@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import Hormone from './Hormone';
 import Medicine from './Medicine';
-import { PastHissave } from '../../service';
+import { PastHissave, PastHisupdate } from '../../service';
 
 const layout = {
   labelCol: {
@@ -155,7 +155,7 @@ class PreHistory extends React.Component {
           values.tumHis = (values['tumHis'] || []).toString();
           values.tumFamHis = (values['tumFamHis'] || []).toString();
           if (this.id != -1) {
-            const res = await PastHissave({
+            const res = await PastHisupdate({
               id: this.id,
               pid: this.pid,
               ...values,
