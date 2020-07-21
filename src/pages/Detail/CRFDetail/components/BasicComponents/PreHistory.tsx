@@ -165,12 +165,12 @@ class PreHistory extends React.Component {
       <Form
         name="pre_history"
         {...layout}
-        onFinish={values => {
+        onFinish={async values => {
           values.BasDisHis = (values['basDisHis'] || []).toString();
           values.infDisHis = (values['infDisHis'] || []).toString();
           values.tumHis = (values['tumHis'] || []).toString();
           values.tumFamHis = (values['tumFamHis'] || []).toString();
-          const res = PastHissave({ pid: this.pid, ...values });
+          const res = await PastHissave({ pid: this.pid, ...values });
           if (res.code == 200) {
             this.id = res.id;
             console.log('提交成功');

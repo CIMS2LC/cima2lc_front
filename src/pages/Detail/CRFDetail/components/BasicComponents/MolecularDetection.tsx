@@ -54,9 +54,9 @@ class MolecularDetection extends React.Component {
       <Form
         name="molecular_detection"
         {...layout}
-        onFinish={values => {
+        onFinish={async values => {
           values.path = this.state.file_list.toString();
-          const res = MoleDetecsave({ pid: this.pid, ...values });
+          const res = await MoleDetecsave({ pid: this.pid, ...values });
           if (res.code == 200) {
             this.id = res.id;
             console.log('提交成功');
