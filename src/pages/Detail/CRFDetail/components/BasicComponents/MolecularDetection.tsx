@@ -100,6 +100,16 @@ class MolecularDetection extends React.Component {
             <Radio value={2}>MSIL</Radio>
           </Radio.Group>
         </Form.Item>
+        <Form.Item label="PD-L1表达" name="PDL1">
+          <Radio.Group>
+            <Radio value={0}>未测</Radio>
+            <Radio value={1}>不详</Radio>
+            <Radio value={2}>{'>50%'}</Radio>
+            <Radio value={3}>{'1%~50%'}</Radio>
+            <Radio value={4}>{'<1%'}</Radio>
+            <Radio value={5}>阴性</Radio>
+          </Radio.Group>
+        </Form.Item>
         <Form.Item label="TMB(/Mb)">
           <Form.Item name="TMB">
             <Input disabled={this.state.TMB_value} />
