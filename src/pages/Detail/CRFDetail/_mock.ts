@@ -9,5 +9,5 @@ function getillCase(req: Request, res: Response, u: string) {
 }
 
 export default {
-  'GET /api/illCase/allinfo/find': getillCase,
+  'GET /api/illCase/allinfo/find': { code: 200, data: { name: 123 } },
 };
