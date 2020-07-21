@@ -32,16 +32,11 @@ const Model: ModelType = {
         type: 'getDetail',
         payload: response,
       });
-      console.log(response);
     },
   },
-
   reducers: {
     getDetail(state, { payload }) {
-      return {
-        ...state,
-        data: payload.data,
-      };
+      return { ...state, data: payload.data };
     },
   },
 };

@@ -10,8 +10,7 @@ import {
   Radio,
   DatePicker,
 } from 'antd';
-import { history, Dispatch } from 'umi';
-import { connect } from 'dva';
+import { history, Dispatch, connect } from 'umi';
 
 import styles from './style.less';
 import FollowUpInfo from './components/BasicComponents/FollowUpInfo';
@@ -35,9 +34,9 @@ const layout = {
   },
 };
 
-const mapStateToProps = (values: StateType) => ({
-  values,
-});
+const mapStateToProps = (values: StateType) => {
+  return { ...values };
+};
 
 class CRFDetail extends React.Component {
   constructor(props) {
@@ -52,10 +51,11 @@ class CRFDetail extends React.Component {
         id,
       },
     });
-    console.log(this.props.values);
+    console.log(this.props);
   }
   id = -1;
   pid = -1;
+  data = {};
   state = {
     value: 1,
   };
@@ -106,6 +106,11 @@ class CRFDetail extends React.Component {
                   <Form
                     name="basic_info"
                     {...layout}
+                    initialValues={
+                      this.props.crfDetail
+                        ? this.props.crfDetail.data.Patient[0]
+                        : undefined
+                    }
                     onFinish={async values => {
                       if (values.birthday)
                         values.birthday = values['birthday'].format(
