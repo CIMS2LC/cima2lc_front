@@ -85,3 +85,57 @@ export interface ImmunohisItem {
   VIM: number;
   其他: string;
 }
+
+export interface MoleDetecItem {
+  id: number;
+  pid: number;
+  treNum: number;
+  ALK: number;
+  BIM: number;
+  BRAF: number;
+  cMET: number;
+  EGFR: number;
+  HER_2: number;
+  HER_2_co: number;
+  PIK3CA: number;
+  ROS1: number;
+  RET: number;
+  UGT1A1: number;
+  ALKSam: string;
+  BIMSam: string;
+  BRAFSam: string;
+  cMETSam: string;
+  EGFRSam: string;
+  HER_2Sam: string;
+  HER_2_coSam: string;
+  PIK3CASam: string;
+  ROS1Sam: string;
+  RETSam: string;
+  UGT1A1Sam: string;
+  ALKDetMed: number;
+  BIMDetMed: number;
+  BRAFDetMed: number;
+  cMETDetMed: number;
+  EGFRDetMed: number;
+  HER_2DetMed: number;
+  HER_2_coDetMed: number;
+  PIK3CADetMed: number;
+  ROS1DetMed: number;
+  RETDetMed: number;
+  UGT1A1DetMed: number;
+  ALKDesc: string;
+  BIMDesc: string;
+  BRAFDesc: string;
+  cMETDesc: string;
+  EGFRDesc: string;
+  HER_2Desc: string;
+  HER_2_coDesc: string;
+  PIK3CADesc: string;
+  ROS1Desc: string;
+  RETDesc: string;
+  UGT1A1Desc: string;
+  path: string;
+  MSI: number;
+  PDL1: number;
+  TMB: string;
+}

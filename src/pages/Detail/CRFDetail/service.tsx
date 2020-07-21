@@ -4,6 +4,7 @@ import {
   PastHisItem,
   TableListParams,
   ImmunohisItem,
+  MoleDetecItem,
 } from './data.d';
 
 export async function Patientsave(params?: PatientItem) {
@@ -30,6 +31,15 @@ export async function Immunohissave(params?: ImmunohisItem) {
     },
   });
 }
+export async function MoleDetecsave(params?: MoleDetecItem) {
+  return request('/api/MoleDetec/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
 export async function querydetail(params?: TableListParams) {
   return request('/api/illCase/allinfo/find', {
     params,

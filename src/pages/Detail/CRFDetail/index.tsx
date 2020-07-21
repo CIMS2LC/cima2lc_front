@@ -37,6 +37,7 @@ class CRFSlidingTabs extends React.Component {
   constructor(props) {
     super(props);
     this.id = props.location.query.id;
+    this.pid = props.location.query.id;
   }
   formRef = React.createRef();
   componentDidMount = () => {
@@ -146,7 +147,7 @@ class CRFSlidingTabs extends React.Component {
                   </Form>
                 </TabPane>
                 <TabPane tab="既往史" key="pre_history">
-                  <PreHistory id={this.id} />
+                  <PreHistory pid={this.pid} />
                 </TabPane>
                 <TabPane tab="初诊过程" key="diag_procedure">
                   <InitialDiagnosisProcess />
@@ -155,10 +156,10 @@ class CRFSlidingTabs extends React.Component {
                   <LaborInspect />
                 </TabPane>
                 <TabPane tab="免疫组化" key="immunohistochemical">
-                  <Immunohistochemical id={this.id} />
+                  <Immunohistochemical pid={this.pid} />
                 </TabPane>
                 <TabPane tab="分子检测" key="molecular_detection">
-                  <MolecularDetection />
+                  <MolecularDetection pid={this.pid} />
                 </TabPane>
               </Tabs>
             </TabPane>

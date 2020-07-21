@@ -55,6 +55,7 @@ const immunohistochemical_labels = [
 class Immunohistochemical extends React.Component {
   state = {
     id: this.props.id,
+    pid: this.props.pid,
   };
   render() {
     return (
@@ -62,7 +63,10 @@ class Immunohistochemical extends React.Component {
         name="immunohistochemical"
         {...layout}
         onFinish={values => {
-          Immunohissave({ pid: this.state.id, ...values });
+          if (this.state.id) {
+          } else {
+            Immunohissave({ pid: this.state.pid, ...values });
+          }
         }}
       >
         {immunohistochemical_labels.map(item => (
