@@ -10,7 +10,8 @@ import {
   Radio,
   DatePicker,
 } from 'antd';
-import { history } from 'umi';
+import { history, Dispatch } from 'umi';
+import { connect } from 'dva';
 
 import styles from './style.less';
 import FollowUpInfo from './components/BasicComponents/FollowUpInfo';
@@ -20,8 +21,9 @@ import Immunohistochemical from './components/BasicComponents/Immunohistochemica
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
 import PreHistory from './components/BasicComponents/PreHistory';
 import InitialDiagnosisProcess from './components/BasicComponents/InitialDiagnosisProcess';
-import { Patientsave, querydetail } from './service';
-import { PatientItem } from './data';
+import { Patientsave } from './service';
+import { StateType } from './model';
+
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const layout = {
@@ -33,20 +35,27 @@ const layout = {
   },
 };
 
-class CRFSlidingTabs extends React.Component {
+const mapStateToProps = (values: StateType) => ({
+  values,
+});
+
+class CRFDetail extends React.Component {
   constructor(props) {
     super(props);
     this.id = props.location.query.id;
     this.pid = props.location.query.id;
-    const detail = await querydetail({ id: this.id });
-    console.log(detail);
+    const id = this.id;
+    const { dispatch } = props;
+    dispatch({
+      type: 'crfDetail/detail',
+      payload: {
+        id,
+      },
+    });
+    console.log(this.props.values);
   }
   id = -1;
   pid = -1;
-  formRef = React.createRef();
-  componentDidMount = () => {
-    console.log(this.props);
-  };
   state = {
     value: 1,
   };
@@ -182,4 +191,4 @@ class CRFSlidingTabs extends React.Component {
   }
 }
 
-export default CRFSlidingTabs;
+export default connect(mapStateToProps)(CRFDetail);
