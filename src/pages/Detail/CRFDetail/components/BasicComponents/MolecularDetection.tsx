@@ -93,9 +93,9 @@ class MolecularDetection extends React.Component {
                   </Form.Item>
                   <Form.Item label="检测方法" name={`${item}DetMed`}>
                     <Select style={{ width: 120 }} onChange={() => {}}>
-                      <Option value="ARMS">ARMS</Option>
-                      <Option value="FISH">FISH</Option>
-                      <Option value="NGS">NGS</Option>
+                      <Option value={1}>ARMS</Option>
+                      <Option value={2}>FISH</Option>
+                      <Option value={3}>NGS</Option>
                     </Select>
                   </Form.Item>
                   <Form.Item label="检测描述" name={`${item}Desc`}>
