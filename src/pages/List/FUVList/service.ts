@@ -8,7 +8,7 @@ export async function query(params?: QueryListItem) {
 }
 
 export async function queryRule(params?: TableListParams) {
-  return request('/api/rule', {
+  return request('/api/list', {
     params,
   });
 }
