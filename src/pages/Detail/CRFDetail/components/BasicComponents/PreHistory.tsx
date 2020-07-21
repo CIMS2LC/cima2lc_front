@@ -82,22 +82,6 @@ class PreHistory extends React.Component {
       [key]: value,
     });
   };
-  // clinical_manifestation_Options = [
-  //   '无',
-  //   '体检',
-  //   '咳嗽',
-  //   '咳痰',
-  //   '痰中带血',
-  //   '咳血',
-  //   '胸闷',
-  //   '胸痛',
-  //   '气促',
-  //   '发热',
-  //   '食欲不佳',
-  //   '体重减轻',
-  //   '其他',
-  //   '不详',
-  // ];
   underlying_disease_history_Options = [
     '无',
     '高血压',
@@ -170,12 +154,25 @@ class PreHistory extends React.Component {
           values.infDisHis = (values['infDisHis'] || []).toString();
           values.tumHis = (values['tumHis'] || []).toString();
           values.tumFamHis = (values['tumFamHis'] || []).toString();
-          const res = await PastHissave({ pid: this.pid, ...values });
-          if (res.code == 200) {
-            this.id = res.id;
-            console.log('提交成功');
+          if (this.id != -1) {
+            const res = await PastHissave({
+              id: this.id,
+              pid: this.pid,
+              ...values,
+            });
+            if (res.code == 200) {
+              console.log('更新成功');
+            } else {
+              console.log('更新失败');
+            }
           } else {
-            console.log('提交失败');
+            const res = await PastHissave({ pid: this.pid, ...values });
+            if (res.code == 200) {
+              this.id = res.id;
+              console.log('提交成功');
+            } else {
+              console.log('提交失败');
+            }
           }
         }}
       >

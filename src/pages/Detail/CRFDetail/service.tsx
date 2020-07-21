@@ -23,6 +23,14 @@ export async function PastHissave(params?: PastHisItem) {
     },
   });
 }
+export async function PastHisupdate(params?: PastHisItem) {
+  return request('/api/PastHis/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function Immunohissave(params?: ImmunohisItem) {
   return request('/api/Immunohis/add', {
     method: 'POST',
