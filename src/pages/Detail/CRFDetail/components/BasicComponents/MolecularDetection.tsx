@@ -56,12 +56,15 @@ class MolecularDetection extends React.Component {
         {...layout}
         onFinish={async values => {
           values.path = this.state.file_list.toString();
-          const res = await MoleDetecsave({ pid: this.pid, ...values });
-          if (res.code == 200) {
-            this.id = res.id;
-            console.log('提交成功');
+          if (this.id != -1) {
           } else {
-            console.log('提交失败');
+            const res = await MoleDetecsave({ pid: this.pid, ...values });
+            if (res.code == 200) {
+              this.id = res.id;
+              console.log('提交成功');
+            } else {
+              console.log('提交失败');
+            }
           }
         }}
       >
@@ -170,4 +173,4 @@ class MolecularDetection extends React.Component {
   }
 }
 
-export default () => <MolecularDetection />;
+export default MolecularDetection;

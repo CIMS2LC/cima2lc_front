@@ -68,7 +68,11 @@ class Immunohistochemical extends React.Component {
         onFinish={async values => {
           if (this.id != -1) {
           } else {
-            const res = await Immunohissave({ pid: this.pid, ...values });
+            const res = await Immunohissave({
+              pid: this.pid,
+              treNum: 0,
+              ...values,
+            });
             if (res.code == 200) {
               this.id = res.id;
               console.log('提交成功');
@@ -102,4 +106,4 @@ class Immunohistochemical extends React.Component {
   }
 }
 
-export default () => <Immunohistochemical />;
+export default Immunohistochemical;
