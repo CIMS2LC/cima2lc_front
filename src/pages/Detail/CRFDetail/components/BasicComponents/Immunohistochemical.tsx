@@ -13,50 +13,53 @@ const layout = {
 };
 const immunohistochemical_labels = [
   'ALKD5F3',
-  'ALKD5F3-N',
+  'ALKD5F3N',
   'CAIX',
-  'CAM5.2',
+  'CAM52',
   'CD10',
   'CD34',
   'CD56',
   'CD117',
-  'CDX-2',
+  'CDX2',
   'CEA',
   'CgA',
   'CK',
-  'CK5/6',
+  'CK56',
   'CK7',
-  'CK8/18',
+  'CK818',
   'CK19',
   'CK20',
   'Cyn',
   'DLL3',
   'EMA',
-  'ERCC-1',
+  'ERCC1',
   'LCA',
   'MCM2',
-  'Napsin A',
+  'NapsinA',
   'P16',
   'P40',
   'p53',
   'P63',
-  'PAX-2',
-  'PAX-8',
+  'PAX2',
+  'PAX8',
   'PCK',
-  'PD-L1',
+  'PDL1',
+  'RRM1',
   'SATB2',
   'Syn',
   'TTF1',
-  'VEGF-C',
+  'VEGFC',
   'Villin',
-  'VIM',
+  'Villinco',
 ];
 
 class Immunohistochemical extends React.Component {
-  state = {
-    id: this.props.id,
-    pid: this.props.pid,
-  };
+  constructor(props: any) {
+    super(props);
+    this.pid = props.pid;
+  }
+  id = -1;
+  pid = -1;
   render() {
     return (
       <Form
@@ -65,7 +68,13 @@ class Immunohistochemical extends React.Component {
         onFinish={values => {
           if (this.state.id) {
           } else {
-            Immunohissave({ pid: this.state.pid, ...values });
+            const res = Immunohissave({ pid: this.pid, ...values });
+            if (res.code == 200) {
+              this.id = res.id;
+              console.log('提交成功');
+            } else {
+              console.log('提交失败');
+            }
           }
         }}
       >

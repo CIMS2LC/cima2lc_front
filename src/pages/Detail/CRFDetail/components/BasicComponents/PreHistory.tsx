@@ -22,8 +22,13 @@ const layout = {
 };
 
 class PreHistory extends React.Component {
+  constructor(props: any) {
+    super(props);
+    this.pid = props.pid;
+  }
+  id = -1;
+  pid = -1;
   state = {
-    id: this.props.id,
     is_smoke: 0,
     stop_smoke: 0,
     is_drink: 0,
@@ -169,7 +174,13 @@ class PreHistory extends React.Component {
             values.tumFamHis = values['tumFamHis'].toString();
           if (values.smokingHis)
             values.smokingHis = JSON.stringify(values['smokingHis']);
-          PastHissave({ id: this.state.id, ...values });
+          const res = PastHissave({ pid: this.pid, ...values });
+          if (res.code == 200) {
+            this.id = res.id;
+            console.log('提交成功');
+          } else {
+            console.log('提交失败');
+          }
         }}
       >
         {/* <Form.Item label="临床表现" name="CliniManifest">

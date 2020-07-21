@@ -39,14 +39,12 @@ class CRFSlidingTabs extends React.Component {
     this.id = props.location.query.id;
     this.pid = props.location.query.id;
   }
+  id = -1;
+  pid = -1;
   formRef = React.createRef();
   componentDidMount = () => {
     console.log(this.props);
   };
-  // handleModeChange = e => {
-  //   const mode = e.target.value;
-  //   this.setState({ mode });
-  // };
   state = {
     value: 1,
   };
@@ -102,7 +100,13 @@ class CRFSlidingTabs extends React.Component {
                         values.birthday = values['birthday'].format(
                           'YYYY-MM-DD',
                         );
-                      Patientsave({ id: this.state.id, ...values });
+                      const res = Patientsave({ id: this.id, ...values });
+                      if (res.code == 200) {
+                        this.pid = res.id;
+                        console.log('提交成功');
+                      } else {
+                        console.log('提交失败');
+                      }
                     }}
                   >
                     <Form.Item label="身份证号" name="idNumber">
@@ -150,10 +154,10 @@ class CRFSlidingTabs extends React.Component {
                   <PreHistory pid={this.pid} />
                 </TabPane>
                 <TabPane tab="初诊过程" key="diag_procedure">
-                  <InitialDiagnosisProcess />
+                  <InitialDiagnosisProcess pid={this.pid} />
                 </TabPane>
                 <TabPane tab="实验室检查" key="labor_inspect">
-                  <LaborInspect />
+                  <LaborInspect pid={this.pid} />
                 </TabPane>
                 <TabPane tab="免疫组化" key="immunohistochemical">
                   <Immunohistochemical pid={this.pid} />

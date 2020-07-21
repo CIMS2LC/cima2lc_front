@@ -25,9 +25,13 @@ const layout = {
 };
 
 class MolecularDetection extends React.Component {
+  constructor(props: any) {
+    super(props);
+    this.pid = props.pid;
+  }
+  id = -1;
+  pid = -1;
   state = {
-    id: this.props.id,
-    pid: this.props.pid,
     file_list: [],
     TMB_value: false,
     molecular_detection_labels: {
@@ -52,7 +56,13 @@ class MolecularDetection extends React.Component {
         {...layout}
         onFinish={values => {
           values.path = this.state.file_list.toString();
-          MoleDetecsave({ pid: this.state.pid, ...values });
+          const res = MoleDetecsave({ pid: this.pid, ...values });
+          if (res.code == 200) {
+            this.id = res.id;
+            console.log('提交成功');
+          } else {
+            console.log('提交失败');
+          }
         }}
       >
         {Object.keys(this.state.molecular_detection_labels).map(
