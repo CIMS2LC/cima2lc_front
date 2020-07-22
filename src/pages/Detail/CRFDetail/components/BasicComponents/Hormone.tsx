@@ -1,6 +1,5 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
-import { Input, InputNumber } from 'antd';
 
 const Hormone = props => {
   const passData = data => {
