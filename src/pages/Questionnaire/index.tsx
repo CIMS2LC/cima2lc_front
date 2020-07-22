@@ -125,7 +125,7 @@ class App extends React.Component {
               ',',
             );
             this.setState({ data: res.data.data });
-            this.formRef.current.setFieldsValue(this.state.data);
+            this.formRef.current.setFieldsValue(this.state.data); //初始化表单
 
             if (res.data.data.isLunSur) this.setState({ display4: 'block' });
             if (res.data.data.isChem) this.setState({ display5: 'block' });
