@@ -41,8 +41,8 @@ const mapStateToProps = (values: StateType) => {
 class CRFDetail extends React.Component {
   constructor(props) {
     super(props);
-    this.state.id = props.location.query.id;
-    this.state.pid = props.location.query.id;
+    this.state.id = props.location.query.id || -1;
+    this.state.pid = props.location.query.id || -1;
     const id = this.state.id;
     const { dispatch } = this.props;
     dispatch({

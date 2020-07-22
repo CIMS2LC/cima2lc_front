@@ -1,15 +1,24 @@
 import { Request, Response } from 'express';
+import { parse } from 'qs';
 
 function getillCase(req: Request, res: Response, u: string) {
-  const result = {
-    code: 200,
-    data: { name: 123 },
-  };
-  return res.json(result);
-}
+  let realUrl = u;
+  if (
+    !realUrl ||
+    Object.prototype.toString.call(realUrl) !== '[object String]'
+  ) {
+    realUrl = req.url;
+  }
+  const { id = -1 } = req.query;
+  const params = parse(realUrl, true).query as unknown;
+  if (id == -1) {
+    const result = {
+      code: 4056,
+    };
+    return res.json(result);
+  }
 
-export default {
-  'GET /api/illCase/allinfo/find': {
+  const result = {
     code: 200,
     data: {
       BloodBio: [],
@@ -86,5 +95,10 @@ export default {
       ],
     },
     msg: '病例的全部信息',
-  },
+  };
+  return res.json(result);
+}
+
+export default {
+  'GET /api/illCase/allinfo/find': getillCase,
 };
