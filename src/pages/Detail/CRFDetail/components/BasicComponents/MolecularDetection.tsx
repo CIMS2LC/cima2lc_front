@@ -168,6 +168,7 @@ class MolecularDetection extends React.Component {
               authorization: 'authorization-text',
               token: getCookie('token'),
             }}
+            multiple={true}
             data={{ pid: this.state.pid }}
             onChange={info => {
               if (info.file.status !== 'uploading') {
