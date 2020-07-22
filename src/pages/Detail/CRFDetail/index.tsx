@@ -43,7 +43,7 @@ class CRFDetail extends React.Component {
     super(props);
     this.state.id = props.location.query.id;
     this.state.pid = props.location.query.id;
-    const id = this.id;
+    const id = this.state.id;
     const { dispatch } = this.props;
     dispatch({
       type: 'crfDetail/detail',
