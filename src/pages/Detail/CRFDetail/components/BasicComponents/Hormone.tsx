@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 import { Input, InputNumber } from 'antd';
 
