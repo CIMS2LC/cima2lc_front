@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Radio, Button, Input } from 'antd';
 import { ImmunohisItem } from '../../data';
-import { Immunohissave } from '../../service';
+import { Immunohissave, Immunohisupdate } from '../../service';
 
 const layout = {
   labelCol: {
@@ -58,7 +58,10 @@ class Immunohistochemical extends React.Component {
     super(props);
     this.pid = props.pid;
     this.initialValues = props.initialValues;
-    console.log(this.initialValues);
+    if (this.initialValues) {
+      this.id = this.initialValues['id'];
+      this.pid = this.initialValues['pid'];
+    }
   }
   id = -1;
   pid = -1;
@@ -70,6 +73,16 @@ class Immunohistochemical extends React.Component {
         initialValues={this.initialValues}
         onFinish={async values => {
           if (this.id != -1) {
+            const res = await Immunohisupdate({
+              id: this.id,
+              pid: this.pid,
+              ...values,
+            });
+            if (res.code == 200) {
+              console.log('更新成功');
+            } else {
+              console.log('更新失败');
+            }
           } else {
             const res = await Immunohissave({
               pid: this.pid,

@@ -11,7 +11,7 @@ import {
   message,
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { MoleDetecsave } from '../../service';
+import { MoleDetecsave, MoleDetecupdate } from '../../service';
 import { getCookie } from '@/pages/BasicComponents/request';
 
 const { Option } = Select;
@@ -30,7 +30,10 @@ class MolecularDetection extends React.Component {
     super(props);
     this.pid = props.pid;
     this.initialValues = props.initialValues;
-    console.log(this.initialValues);
+    if (this.initialValues) {
+      this.id = this.initialValues['id'];
+      this.pid = this.initialValues['pid'];
+    }
   }
   id = -1;
   pid = -1;
@@ -61,6 +64,16 @@ class MolecularDetection extends React.Component {
         onFinish={async values => {
           values.path = this.state.file_list.toString();
           if (this.id != -1) {
+            const res = await MoleDetecupdate({
+              id: this.id,
+              pid: this.pid,
+              ...values,
+            });
+            if (res.code == 200) {
+              console.log('更新成功');
+            } else {
+              console.log('更新失败');
+            }
           } else {
             const res = await MoleDetecsave({ pid: this.pid, ...values });
             if (res.code == 200) {
