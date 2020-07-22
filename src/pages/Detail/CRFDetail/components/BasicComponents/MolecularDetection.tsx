@@ -32,7 +32,7 @@ class MolecularDetection extends React.Component {
     this.initialValues = props.initialValues;
     if (this.initialValues) {
       this.id = this.initialValues['id'];
-      this.pid = this.initialValues['pid'];
+      this.pid = this.initialValues['pid'] || this.props.pid;
       var molecular_detection_state = {};
       Object.keys(this.state.molecular_detection_labels).map((item: string) => {
         molecular_detection_state[item] = this.initialValues[item];
@@ -71,7 +71,7 @@ class MolecularDetection extends React.Component {
           if (this.id != -1) {
             const res = await MoleDetecupdate({
               id: this.id,
-              pid: this.pid,
+              pid: this.props.pid,
               ...values,
             });
             if (res.code == 200) {
@@ -80,7 +80,7 @@ class MolecularDetection extends React.Component {
               console.log('更新失败');
             }
           } else {
-            const res = await MoleDetecsave({ pid: this.pid, ...values });
+            const res = await MoleDetecsave({ pid: this.props.pid, ...values });
             if (res.code == 200) {
               this.id = res.id;
               console.log('提交成功');
@@ -168,14 +168,18 @@ class MolecularDetection extends React.Component {
               authorization: 'authorization-text',
               token: getCookie('token'),
             }}
-            data={{ pid: this.state.pid }}
+            multiple={true}
+            data={{ pid: this.props.pid }}
             onChange={info => {
               if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);
               }
               if (info.file.status === 'done') {
+                console.log(this.state.file_list);
+                console.log(info.file.response.path);
                 var fileList = this.state.file_list;
-                fileList.concat(info.file.response.path);
+                fileList = fileList.concat(info.file.response.path);
+                console.log(fileList);
                 this.setState({ file_list: fileList });
                 message.success(`${info.file.name} file uploaded successfully`);
               } else if (info.file.status === 'error') {

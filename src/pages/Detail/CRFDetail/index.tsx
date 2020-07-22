@@ -43,6 +43,9 @@ class CRFDetail extends React.Component {
     super(props);
     this.state.id = props.location.query.id || -1;
     this.state.pid = props.location.query.id || -1;
+    this.update_detail();
+  }
+  update_detail = () => {
     const id = this.state.id;
     const { dispatch } = this.props;
     dispatch({
@@ -51,7 +54,7 @@ class CRFDetail extends React.Component {
         id,
       },
     });
-  }
+  };
   data = {};
   state = {
     value: 1,
@@ -67,7 +70,6 @@ class CRFDetail extends React.Component {
       value: e.target.value,
     });
   };
-
   render() {
     return (
       <Layout>
@@ -122,6 +124,7 @@ class CRFDetail extends React.Component {
                             id: this.state.id,
                             ...values,
                           });
+                          this.update_detail();
                           if (res.code == 200) {
                             this.setState({ pid: res.id });
                             console.log('提交成功');

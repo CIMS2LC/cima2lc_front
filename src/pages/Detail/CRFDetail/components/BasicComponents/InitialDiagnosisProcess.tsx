@@ -18,6 +18,7 @@ import {
 import moment from 'moment';
 import { check } from 'prettier';
 import { RedEnvelopeFilled } from '@ant-design/icons';
+import { IniDiaProsave } from '../../service';
 //import { IniDiaProsave } from '../../service';
 const layout = {
   labelAlign: 'left',
@@ -543,7 +544,7 @@ class InitialDiagnosisProcess extends React.Component {
     P_M: '',
   };
 
-  onFinish = (values: any) => {
+  onFinish = async (values: any) => {
     //提交成功的操作函数
     //message.success('提交成功!');
     if (values.firVisDate)
@@ -566,7 +567,7 @@ class InitialDiagnosisProcess extends React.Component {
       pid: this.pid,
       patDia: this.state.patDia, //添加病理信息
     };
-    //const res = await IniDiaProsave({ pid: this.pid, ...values });  //传参
+    const res = await IniDiaProsave({ pid: this.pid, ...values }); //传参
     console.log(values); //需要传入后端的值
   };
 
