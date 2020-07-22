@@ -15,6 +15,9 @@ import {
   Row,
   Col,
 } from 'antd';
+import moment from 'moment';
+import { check } from 'prettier';
+import { RedEnvelopeFilled } from '@ant-design/icons';
 const layout = {
   labelAlign: 'left',
   labelCol: {
@@ -44,106 +47,86 @@ const treeData = [
   //病例诊断信息
   {
     title: '上皮型肿瘤',
-    value: '上皮型肿瘤',
     key: '0-0',
     children: [
       {
         title: '腺癌',
-        value: '腺癌',
         key: '0-0-0',
         children: [
           {
             title: '贴壁型',
-            value: '贴壁型',
             key: '0-0-0-0',
           },
           {
             title: '腺泡型',
-            value: '腺泡型',
             key: '0-0-0-1',
           },
           {
             title: '乳头型',
-            value: '乳头型',
             key: '0-0-0-2',
           },
           {
             title: '微乳头型',
-            value: '微乳头型',
             key: '0-0-0-3',
           },
           {
             title: '实体型',
-            value: '实体型',
             key: '0-0-0-4',
           },
           {
             title: '浸润性粘液腺癌',
-            value: '浸润性粘液腺癌',
             key: '0-0-0-5',
             children: [
               {
                 title: '浸润和非浸润性混合型粘液性腺癌',
-                value: '浸润和非浸润性混合型粘液性腺癌',
                 key: '0-0-0-5-0',
               },
             ],
           },
           {
             title: '胶质性腺癌',
-            value: '胶质性腺癌',
             key: '0-0-0-6',
           },
           {
             title: '胎儿型腺癌',
-            value: '胎儿型腺癌',
             key: '0-0-0-7',
           },
           {
             title: '肠型腺癌',
-            value: '肠型腺癌',
             key: '0-0-0-8',
           },
           {
             title: '微小浸润性腺癌',
-            value: '微小浸润性腺癌',
             key: '0-0-0-9',
             children: [
               {
                 title: '非粘液性腺癌',
-                value: '非粘液性腺癌',
                 key: '0-0-0-9-0',
               },
               {
                 title: '粘液癌',
-                value: '粘液癌',
                 key: '0-0-0-9-1',
               },
             ],
           },
           {
             title: '侵袭前病变',
-            value: '侵袭前病变',
             key: '0-0-0-10',
             children: [
               {
                 title: '非典型腺瘤样增生',
-                value: '非典型腺瘤样增生',
                 key: '0-0-0-10-0',
               },
               {
                 title: '原位腺癌',
-                value: '原位腺癌',
                 key: '0-0-0-10-1',
                 children: [
                   {
                     title: '非粘液性',
-                    value: '非粘液性',
                     key: '0-0-0-10-1-0',
                   },
                   {
                     title: '粘液性',
-                    value: '粘液性',
                     key: '0-0-0-10-1-1',
                   },
                 ],
@@ -154,33 +137,27 @@ const treeData = [
       },
       {
         title: '鳞癌',
-        value: '鳞癌',
         key: '0-0-1',
         children: [
           {
             title: '角化型鳞癌',
-            value: '角化型鳞癌',
             key: '0-0-1-0',
           },
           {
             title: '非角化型鳞癌',
-            value: '非角化型鳞癌',
             key: '0-0-1-1',
           },
           ,
           {
             title: '基底鳞状细胞癌',
-            value: '基底鳞状细胞癌',
             key: '0-0-1-2',
           },
           {
             title: '侵袭前病变',
-            value: '侵袭前病变',
             key: '0-0-1-3',
             children: [
               {
                 title: '鳞状细胞原位癌',
-                value: '鳞状细胞原位癌',
                 key: '0-0-1-3-0',
               },
             ],
@@ -192,210 +169,172 @@ const treeData = [
 
   {
     title: '神经内分泌肿瘤',
-    value: '0-1',
     key: '0-1',
     children: [
       {
         title: '小细胞癌',
-        value: '0-1-0',
         key: '0-1-0',
         children: [
           {
             title: '结合小细胞癌',
-            value: '0-1-0-0',
             key: '0-1-0-0',
           },
         ],
       },
       {
         title: '大细胞神经内分泌癌',
-        value: '0-1-1',
         key: '0-1-1',
         children: [
           {
             title: '结合大细胞神经内分泌癌',
-            value: '0-1-1-0',
             key: '0-1-1-0',
           },
         ],
       },
       {
         title: '类癌肿瘤',
-        value: '0-1-2',
         key: '0-1-2',
         children: [
           {
             title: '典型类癌肿瘤',
-            value: '0-1-2-0',
             key: '0-1-2-0',
           },
           {
             title: '非典型类癌肿瘤',
-            value: '0-1-2-1',
             key: '0-1-2-1',
           },
         ],
       },
       {
         title: '侵袭前的病变',
-        value: '0-1-3',
         key: '0-1-3',
         children: [
           {
             title: '弥漫性特发性肺神经内分泌细胞增生',
-            value: '0-1-3-0',
             key: '0-1-3-0',
           },
         ],
       },
       {
         title: '大细胞癌',
-        value: '0-1-4',
         key: '0-1-4',
       },
       {
         title: '腺鳞癌',
-        value: '0-1-5',
         key: '0-1-5',
       },
       {
         title: '癌肉瘤样癌',
-        value: '0-1-6',
         key: '0-1-6',
         children: [
           {
             title: '多形性癌',
-            value: '0-1-6-0',
             key: '0-1-6-0',
           },
           {
             title: '梭形细胞癌',
-            value: '0-1-6-1',
             key: '0-1-6-1',
           },
           {
             title: '巨细胞癌',
-            value: '0-1-6-2',
             key: '0-1-6-2',
           },
           {
             title: '癌肉瘤',
-            value: '0-1-6-3',
             key: '0-1-6-3',
           },
           {
             title: '肺胚细胞瘤',
-            value: '0-1-6-4',
             key: '0-1-6-4',
           },
         ],
       },
       {
         title: '其他未分类癌',
-        value: '0-1-7',
         key: '0-1-7',
         children: [
           {
             title: '淋巴上皮样癌',
-            value: '0-1-7-0',
             key: '0-1-7-0',
           },
           {
             title: 'NUT肿瘤',
-            value: '0-1-7-1',
             key: '0-1-7-1',
           },
         ],
       },
       {
         title: '唾液型肿瘤',
-        value: '0-1-8',
         key: '0-1-8',
         children: [
           {
             title: '粘液表皮样癌肿瘤',
-            value: '0-1-8-0',
             key: '0-1-8-0',
           },
           {
             title: '腺样囊性癌',
-            value: '0-1-8-1',
             key: '0-1-8-1',
           },
           {
             title: '上皮-肌上皮癌',
-            value: '0-1-8-2',
             key: '0-1-8-2',
           },
           {
             title: '多形性腺瘤',
-            value: '0-1-8-3',
             key: '0-1-8-3',
           },
         ],
       },
       {
         title: '乳头状瘤',
-        value: '0-1-9',
         key: '0-1-9',
         children: [
           {
             title: '鳞状细胞乳头状癌',
-            value: '0-1-9-0',
             key: '0-1-9-0',
             children: [
               {
                 title: '外生型',
-                value: '0-1-9-0-0',
                 key: '0-1-9-0-0',
               },
               {
                 title: '逆向生长',
-                value: '0-1-9-0-1',
                 key: '0-1-9-0-1',
               },
             ],
           },
           {
             title: '腺型状瘤',
-            value: '0-1-9-1',
             key: '0-1-9-1',
           },
           {
             title: '腺鳞混合型乳头状瘤',
-            value: '0-1-9-2',
             key: '0-1-9-2',
           },
         ],
       },
       {
         title: '腺瘤',
-        value: '0-1-10',
         key: '0-1-10',
         children: [
           {
             title: '良性硬化性肺细胞瘤',
-            value: '0-1-10-0',
             key: '0-1-10-0',
           },
           {
             title: '泡腺腺瘤',
-            value: '0-1-10-1',
             key: '0-1-10-1',
           },
           {
             title: '乳头状腺瘤',
-            value: '0-1-10-2',
             key: '0-1-10-2',
           },
           {
             title: '粘液性囊腺瘤腺瘤',
-            value: '0-1-10-3',
             key: '0-1-10-3',
           },
           {
             title: '粘液腺腺瘤',
-            value: '0-1-10-4',
             key: '0-1-10-4',
           },
         ],
@@ -404,191 +343,151 @@ const treeData = [
   },
   {
     title: '间叶性肿瘤',
-    value: '0-2',
     key: '0-2',
     children: [
       {
         title: '肺错构瘤',
-        value: '0-2-0',
         key: '0-2-0',
       },
       {
         title: '软骨瘤',
-        value: '0-2-1',
         key: '0-2-1',
       },
       {
         title: 'PEComatous肿瘤',
-        value: '0-2-2',
         key: '0-2-2',
         children: [
           {
             title: '淋巴管平滑肌瘤病',
-            value: '0-2-2-0',
             key: '0-2-2-0',
           },
           {
             title: 'PEComa-良性',
-            value: '0-2-2-1',
             key: '0-2-2-1',
             children: [
               {
                 title: '透明细胞瘤',
-                value: '0-2-1-1-0',
                 key: '0-2-1-1-0',
               },
             ],
           },
           {
             title: 'PEComa-恶性',
-            value: '0-2-2-2',
             key: '0-2-2-2',
           },
         ],
       },
       {
         title: '先天性支气管周肌纤维母细胞肿瘤',
-        value: '0-2-3',
         key: '0-2-3',
       },
       {
         title: '弥漫性肺淋巴管瘤病',
-        value: '0-2-4',
         key: '0-2-4',
       },
       {
         title: '炎症性肌纤维母细胞瘤',
-        value: '0-2-5',
         key: '0-2-5',
       },
       {
         title: '上皮样血管内皮瘤',
-        value: '0-2-6',
         key: '0-2-6',
       },
       {
         title: '胸膜肺母细胞瘤',
-        value: '0-2-7',
         key: '0-2-7',
       },
       {
         title: '滑膜肉瘤',
-        value: '0-2-8',
         key: '0-2-8',
       },
       {
         title: '肺动脉内膜肉瘤',
-        value: '0-2-9',
         key: '0-2-9',
       },
       {
         title: '肺黏液肉瘤伴EWSR1-CREB1易位',
-        value: '0-2-10',
         key: '0-2-10',
       },
       {
         title: '肌上皮肿瘤',
-        value: '0-2-11',
         key: '0-2-11',
         children: [
           {
             title: '肌上皮瘤',
-            value: '0-2-11-0',
             key: '0-2-11-0',
           },
           {
             title: '肌上皮癌',
-            value: '0-2-11-1',
             key: '0-2-11-1',
           },
         ],
       },
       {
         title: '淋巴细胞组织细胞肿瘤',
-        value: '0-2-12',
         key: '0-2-12',
       },
       {
         title: '结外边缘区黏膜相关淋巴组织淋巴瘤（MALT淋巴瘤）',
-        value: '0-2-13',
         key: '0-2-13',
       },
       {
         title: '弥漫性大细胞淋巴瘤',
-        value: '0-2-14',
         key: '0-2-14',
       },
       {
         title: '淋巴瘤样肉芽肿',
-        value: '0-2-15',
         key: '0-2-15',
       },
       {
         title: '血管内大B细胞淋巴瘤',
-        value: '0-2-16',
         key: '0-2-16',
       },
       {
         title: '肺朗格罕细胞组织细胞增生症',
-        value: '0-2-17',
         key: '0-2-17',
       },
       {
         title: 'Erdheim-Chester病',
-        value: '0-2-18',
         key: '0-2-18',
       },
     ],
   },
   {
     title: '异位肿瘤',
-    value: '0-3',
     key: '0-3',
     children: [
       {
         title: '生殖细胞肿瘤',
-        value: '0-3-0',
         key: '0-3-0',
         children: [
           {
             title: '畸胎瘤-成熟',
-            value: '0-3-0-0',
             key: '0-3-0-0',
           },
           {
             title: '畸胎瘤-不成熟',
-            value: '0-3-0-1',
             key: '0-3-0-1',
           },
         ],
       },
       {
         title: '肺内的胸腺瘤',
-        value: '0-3-1',
         key: '0-3-1',
       },
       {
         title: '黑色素瘤',
-        value: '0-3-2',
         key: '0-3-2',
       },
       {
         title: '脑膜瘤',
-        value: '0-3-3',
         key: '0-3-3',
       },
     ],
   },
   {
     title: '转移性肿瘤',
-    value: '0-4',
     key: '0-4',
-  },
-];
-const trdata = [
-  {
-    title: 'egte',
-    key: 'df',
   },
 ];
 const { Option } = Select;
@@ -597,17 +496,58 @@ class InitialDiagnosisProcess extends React.Component {
     value: 1,
     p_installment: 0,
     c_installment: 0,
+    patDia: '', //病例分析的值
+    C_T: '',
+    C_N: '',
+    C_M: '',
+    P_T: '',
+    P_N: '',
+    P_M: '',
+  };
+  componentDidMount = () => {
+    //初始化函数
+    //res.data为获取的数据
+    //     res.data.CliniManifest = (res.data.CliniManifest||'').split(","); //多选string分成数组
+    //     res.data.part = (res.data.part||'').split(",");
+    //     res.data.bioMet = (res.data.bioMet||'').split(",");
+    //     res.data.traSite = (res.data.traSite||'').split(",");
+    //     res.data.firVisDate = moment( res.data.firVisDate,'YYYY-MM-DD');   //日期格式
+    //     res.data.patReDate = moment( res.data.patReDate,'YYYY-MM-DD');
+    //     this.setState({patDia : res.data.patDia,
+    //                    C_T :  res.data.cStage.split(',')[0],
+    //                    C_N :  res.data.cStage.split(',')[1],
+    //                    C_M :  res.data.cStage.split(',')[2],
+    //                    P_T :  res.data.pStage.split(',')[0],
+    //                    P_N :  res.data.pStage.split(',')[1],
+    //                    P_M :  res.data.pStage.split(',')[2],
+    //                    });   //病理信息Tree
+    //      this.formRef.current.setFieldsValue(res.data.data);
   };
   onFinish = (values: any) => {
     //提交成功的操作函数
     //message.success('提交成功!');
-    const formvalues = {
+    if (values.firVisDate)
+      values.firVisDate = values.firVisDate.format('YYYY-MM-DD');
+    if (values.patReDate)
+      values.firVisDate = values.patReDate.format('YYYY-MM-DD');
+    if (values.C_T) {
+      values.cStage = values.C_T + ',' + values.C_N + ',' + values.C_M;
+    }
+    if (values.P_T) {
+      values.pStage = values.P_T + ',' + values.P_N + ',' + values.P_M;
+    }
+
+    values.CliniManifest = (values.CliniManifest || []).toString(); //临床表现
+    values.part = (values.part || []).toString();
+    values.bioMet = (values.bioMet || []).toString(); //多选转字符
+    values.traSite = (values.traSite || []).toString();
+    values = {
       ...values,
-      firVisDate: values['firVisDate'].format('YYYY-MM-DD'),
-      patReDate: values['patReDate'].format('YYYY-MM-DD'),
+      patDia: this.state.patDia, //添加病理信息
     };
-    console.log(formvalues); //需要传入后端的值
+    console.log(values); //需要传入后端的值
   };
+
   clinical_manifestation_Options = [
     //临床表现
     '颈部肿物',
@@ -650,13 +590,19 @@ class InitialDiagnosisProcess extends React.Component {
     '双肺',
     '其他',
   ];
+  onCheck = (checkedKeys: string) => {
+    //点击病例诊断，把数据格式改变传入state
+    let checkvalues = checkedKeys.toString();
+    this.setState({ patDia: checkvalues });
+  };
+  formRef = React.createRef();
   render() {
     return (
-      <Form name=" " {...layout} onFinish={this.onFinish}>
+      <Form {...layout} onFinish={this.onFinish} ref={this.formRef}>
         <Form.Item label="首诊PS评分" name="PSScore">
           <Radio.Group value={this.state.value}>
             {[...Array(5).keys()].map(i => (
-              <Radio value={i}>{i}</Radio>
+              <Radio value={'' + i}>{i}</Radio>
             ))}
           </Radio.Group>
         </Form.Item>
@@ -665,8 +611,8 @@ class InitialDiagnosisProcess extends React.Component {
         </Form.Item>
         <Form.Item label="影像学" name="videography">
           <Radio.Group>
-            <Radio value={0}>周围型</Radio>
-            <Radio value={1}>中央型</Radio>
+            <Radio value={false}>周围型</Radio>
+            <Radio value={true}>中央型</Radio>
           </Radio.Group>
         </Form.Item>
 
@@ -680,8 +626,8 @@ class InitialDiagnosisProcess extends React.Component {
 
         <Form.Item label="是否胸膜侵犯" name="pleInv">
           <Radio.Group>
-            <Radio value={1}>是</Radio>
-            <Radio value={0}>否</Radio>
+            <Radio value={true}>是</Radio>
+            <Radio value={false}>否</Radio>
           </Radio.Group>
         </Form.Item>
 
@@ -701,6 +647,8 @@ class InitialDiagnosisProcess extends React.Component {
         <Form.Item label="病理诊断" {...inputlayout} name="patDia">
           <Tree
             checkable
+            checkedKeys={(this.state.patDia || '').split(',')}
+            onCheck={this.onCheck}
             treeData={treeData} //在data里面放了value(正常是不需要的)，出了问题就把value删了
           />
         </Form.Item>
@@ -743,29 +691,28 @@ class InitialDiagnosisProcess extends React.Component {
         <Form.Item label="分期情况" name="stage">
           <Radio.Group
             onChange={v => {
-              if (v.target.value == 3) {
+              if (v.target.value === '3') {
                 this.setState({ c_installment: 1, p_installment: 0 });
-              } else if (v.target.value == 4)
+              } else if (v.target.value === '4')
                 this.setState({ p_installment: 1, c_installment: 0 });
-              else if (v.target.value == 5)
+              else if (v.target.value === '5')
                 this.setState({ c_installment: 1, p_installment: 1 });
               else this.setState({ c_installment: 0, p_installment: 0 });
             }}
           >
-            <Radio value={1}>无=未住院</Radio>
-            <Radio value={2}>无法分期=C/P/S均无法分期</Radio>
-            <Radio value={3}>仅C分期</Radio>
-            <Radio value={4}>仅P分期</Radio>
-            <Radio value={5}>c分期和P分期</Radio>
+            <Radio value="1">无=未住院</Radio>
+            <Radio value="2">无法分期=C/P/S均无法分期</Radio>
+            <Radio value="3">仅C分期</Radio>
+            <Radio value="4">仅P分期</Radio>
+            <Radio value="5">c分期和P分期</Radio>
           </Radio.Group>
         </Form.Item>
         {this.state.c_installment ? (
-          <Form.Item label="C分期" name="c-stage">
+          <Form.Item label="C分期" name="cStage">
             <Row>
               <Col span={6}>
                 <Form.Item label="T" name="C_T">
-                  <Select style={{ width: 100 }}>
-                    T:
+                  <Select style={{ width: 100 }} value={this.state.C_T}>
                     <Option value="1">1</Option>
                     <Option value="1a">1a</Option>
                     <Option value="1b">1b</Option>
@@ -780,7 +727,7 @@ class InitialDiagnosisProcess extends React.Component {
               </Col>
               <Col span={6}>
                 <Form.Item label="N" name="C_N">
-                  <Select style={{ width: 100 }}>
+                  <Select style={{ width: 100 }} value={this.state.C_N}>
                     <Option value="0">0</Option>
                     <Option value="1">1</Option>
                     <Option value="2">2</Option>
@@ -790,7 +737,7 @@ class InitialDiagnosisProcess extends React.Component {
               </Col>
               <Col span={6}>
                 <Form.Item label="M" name="C_M">
-                  <Select style={{ width: 100 }}>
+                  <Select style={{ width: 100 }} value={this.state.C_M}>
                     <Option value="0">0</Option>
                     <Option value="1">1</Option>
                     <Option value="1a">1a</Option>
@@ -800,7 +747,7 @@ class InitialDiagnosisProcess extends React.Component {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="临床分期" name="cli-stage">
+                <Form.Item label="临床分期" name="cliStage">
                   <Select style={{ width: 100 }}>
                     <Option value="I">I</Option>
                     <Option value="IA1">IA1</Option>
@@ -824,11 +771,11 @@ class InitialDiagnosisProcess extends React.Component {
           </Form.Item>
         ) : null}
         {this.state.p_installment ? (
-          <Form.Item label="P分期" name="p-stage">
+          <Form.Item label="P分期" name="pStage">
             <Row>
               <Col span={6}>
                 <Form.Item label="T" name="P_T">
-                  <Select style={{ width: 100 }}>
+                  <Select style={{ width: 100 }} value={this.state.P_T}>
                     T:
                     <Option value="1">1</Option>
                     <Option value="1a">1a</Option>
@@ -844,7 +791,7 @@ class InitialDiagnosisProcess extends React.Component {
               </Col>
               <Col span={6}>
                 <Form.Item label="N" name="P_N">
-                  <Select style={{ width: 100 }}>
+                  <Select style={{ width: 100 }} value={this.state.P_N}>
                     <Option value="0">0</Option>
                     <Option value="1">1</Option>
                     <Option value="2">2</Option>
@@ -854,7 +801,7 @@ class InitialDiagnosisProcess extends React.Component {
               </Col>
               <Col span={6}>
                 <Form.Item label="M" name="P_M">
-                  <Select style={{ width: 100 }}>
+                  <Select style={{ width: 100 }} value={this.state.P_M}>
                     <Option value="0">0</Option>
                     <Option value="1">1</Option>
                     <Option value="1a">1a</Option>
@@ -864,7 +811,7 @@ class InitialDiagnosisProcess extends React.Component {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="病理分期" name="pat-stage">
+                <Form.Item label="病理分期" name="patStage">
                   <Select style={{ width: 100 }}>
                     <Option value="I">I</Option>
                     <Option value="IA1">IA1</Option>
