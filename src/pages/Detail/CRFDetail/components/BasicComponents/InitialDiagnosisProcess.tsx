@@ -18,6 +18,7 @@ import {
 import moment from 'moment';
 import { check } from 'prettier';
 import { RedEnvelopeFilled } from '@ant-design/icons';
+//import { IniDiaProsave } from '../../service';
 const layout = {
   labelAlign: 'left',
   labelCol: {
@@ -492,6 +493,43 @@ const treeData = [
 ];
 const { Option } = Select;
 class InitialDiagnosisProcess extends React.Component {
+  constructor(props: any) {
+    super(props);
+    this.pid = props.pid;
+    this.initialValues = props.initialValues;
+    if (this.initialValues) {
+      this.initialValues.CliniManifest = (
+        this.initialValues.CliniManifest || ''
+      ).split(','); //多选string分成数组
+      this.initialValues.part = (this.initialValues.part || '').split(',');
+      this.initialValues.bioMet = (this.initialValues.bioMet || '').split(',');
+      this.initialValues.traSite = (this.initialValues.traSite || '').split(
+        ',',
+      );
+      this.initialValues.firVisDate = moment(
+        this.initialValues.firVisDate || '',
+        'YYYY-MM-DD',
+      ); //日期格式
+      this.initialValues.patReDate = moment(
+        this.initialValues.patReDate || '',
+        'YYYY-MM-DD',
+      );
+      this.setState({
+        patDia: this.initialValues.patDia,
+        C_T: this.initialValues.cStage.split(',')[0],
+        C_N: this.initialValues.cStage.split(',')[1],
+        C_M: this.initialValues.cStage.split(',')[2],
+        P_T: this.initialValues.pStage.split(',')[0],
+        P_N: this.initialValues.pStage.split(',')[1],
+        P_M: this.initialValues.pStage.split(',')[2],
+      }); //病理信息Tree
+      if (stage === '3') this.setState({ c_installment: 1, p_installment: 0 });
+      if (stage === '4') this.setState({ c_installment: 0, p_installment: 1 });
+      if (stage === '5') this.setState({ c_installment: 1, p_installment: 1 });
+    }
+  }
+  initialValues = {};
+  pid = -1;
   state = {
     value: 1,
     p_installment: 0,
@@ -504,25 +542,7 @@ class InitialDiagnosisProcess extends React.Component {
     P_N: '',
     P_M: '',
   };
-  componentDidMount = () => {
-    //初始化函数
-    //res.data为获取的数据
-    //     res.data.CliniManifest = (res.data.CliniManifest||'').split(","); //多选string分成数组
-    //     res.data.part = (res.data.part||'').split(",");
-    //     res.data.bioMet = (res.data.bioMet||'').split(",");
-    //     res.data.traSite = (res.data.traSite||'').split(",");
-    //     res.data.firVisDate = moment( res.data.firVisDate,'YYYY-MM-DD');   //日期格式
-    //     res.data.patReDate = moment( res.data.patReDate,'YYYY-MM-DD');
-    //     this.setState({patDia : res.data.patDia,
-    //                    C_T :  res.data.cStage.split(',')[0],
-    //                    C_N :  res.data.cStage.split(',')[1],
-    //                    C_M :  res.data.cStage.split(',')[2],
-    //                    P_T :  res.data.pStage.split(',')[0],
-    //                    P_N :  res.data.pStage.split(',')[1],
-    //                    P_M :  res.data.pStage.split(',')[2],
-    //                    });   //病理信息Tree
-    //      this.formRef.current.setFieldsValue(res.data.data);
-  };
+
   onFinish = (values: any) => {
     //提交成功的操作函数
     //message.success('提交成功!');
@@ -543,8 +563,10 @@ class InitialDiagnosisProcess extends React.Component {
     values.traSite = (values.traSite || []).toString();
     values = {
       ...values,
+      pid: this.pid,
       patDia: this.state.patDia, //添加病理信息
     };
+    //const res = await IniDiaProsave({ pid: this.pid, ...values });  //传参
     console.log(values); //需要传入后端的值
   };
 
@@ -844,4 +866,4 @@ class InitialDiagnosisProcess extends React.Component {
     );
   }
 }
-export default () => <InitialDiagnosisProcess />;
+export default InitialDiagnosisProcess;
