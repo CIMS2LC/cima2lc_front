@@ -20,7 +20,7 @@ import Immunohistochemical from './components/BasicComponents/Immunohistochemica
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
 import PreHistory from './components/BasicComponents/PreHistory';
 import InitialDiagnosisProcess from './components/BasicComponents/InitialDiagnosisProcess';
-import { Patientsave } from './service';
+import { Patientsave, Patientupdate } from './service';
 import { StateType } from './model';
 
 const { Header, Content } = Layout;
@@ -41,23 +41,22 @@ const mapStateToProps = (values: StateType) => {
 class CRFDetail extends React.Component {
   constructor(props) {
     super(props);
-    this.id = props.location.query.id;
-    this.pid = props.location.query.id;
-    const id = this.id;
-    const { dispatch } = props;
+    this.state.id = props.location.query.id || -1;
+    this.state.pid = props.location.query.id || -1;
+    const id = this.state.id;
+    const { dispatch } = this.props;
     dispatch({
       type: 'crfDetail/detail',
       payload: {
         id,
       },
     });
-    console.log(this.props);
   }
-  id = -1;
-  pid = -1;
   data = {};
   state = {
     value: 1,
+    id: -1,
+    pid: -1,
   };
   idNumber_onChange = (value: any) => {
     console.log('changed', value);
@@ -86,6 +85,7 @@ class CRFDetail extends React.Component {
               className={styles.btn_return}
               id="btn_return"
               onClick={() => {
+                this.props.crfDetail.data = undefined;
                 history.push('/list/fuv_list');
               }}
             >
@@ -99,104 +99,136 @@ class CRFDetail extends React.Component {
             marginTop: 64,
           }}
         >
-          <Tabs defaultActiveKey="1" tabPosition="left">
-            <TabPane tab="基线资料" key="baseline_info">
-              <Tabs tabPosition="top">
-                <TabPane tab="基本信息" key="basic_info">
-                  <Form
-                    name="basic_info"
-                    {...layout}
-                    initialValues={
-                      this.props.crfDetail.data
-                        ? this.props.crfDetail.data.Patient[0]
-                        : undefined
-                    }
-                    onFinish={async values => {
-                      if (values.birthday)
-                        values.birthday = values['birthday'].format(
-                          'YYYY-MM-DD',
-                        );
-                      const res = await Patientsave({ id: this.id, ...values });
-                      if (res.code == 200) {
-                        this.pid = res.id;
-                        console.log('提交成功');
-                      } else {
-                        console.log('提交失败');
+          {this.props.crfDetail.data || this.state.id == -1 ? (
+            <Tabs defaultActiveKey="1" tabPosition="left">
+              <TabPane tab="基线资料" key="baseline_info">
+                <Tabs tabPosition="top">
+                  <TabPane tab="基本信息" key="basic_info">
+                    <Form
+                      name="basic_info"
+                      {...layout}
+                      initialValues={
+                        this.props.crfDetail.data
+                          ? this.props.crfDetail.data.Patient
+                          : undefined
                       }
-                    }}
-                  >
-                    <Form.Item label="身份证号" name="idNumber">
-                      <Input maxLength={18} />
-                    </Form.Item>
+                      onFinish={async values => {
+                        if (values.birthday)
+                          values.birthday = values['birthday'].format(
+                            'YYYY-MM-DD',
+                          );
+                        if (this.state.id == -1) {
+                          const res = await Patientsave({
+                            id: this.state.id,
+                            ...values,
+                          });
+                          if (res.code == 200) {
+                            this.setState({ pid: res.id });
+                            console.log('提交成功');
+                          } else {
+                            console.log('提交失败');
+                          }
+                        } else {
+                          const res = await Patientupdate({
+                            id: this.state.id,
+                            pid: this.state.pid,
+                            ...values,
+                          });
+                          if (res.code == 200) {
+                            console.log('更新成功');
+                          } else {
+                            console.log('更新失败');
+                          }
+                        }
+                      }}
+                    >
+                      <Form.Item label="身份证号" name="idNumber">
+                        <Input maxLength={18} />
+                      </Form.Item>
 
-                    <Form.Item label="住院号/就诊号" name="hospitalNumber">
-                      <Input />
-                    </Form.Item>
+                      <Form.Item label="住院号/就诊号" name="hospitalNumber">
+                        <Input />
+                      </Form.Item>
 
-                    <Form.Item label="姓名" name="patientName">
-                      <Input />
-                    </Form.Item>
+                      <Form.Item label="姓名" name="patientName">
+                        <Input />
+                      </Form.Item>
 
-                    <Form.Item label="性别" name="gender">
-                      <Radio.Group
-                        onChange={this.sex_onChange}
-                        value={this.state.value}
-                      >
-                        <Radio value={true}>男</Radio>
-                        <Radio value={false}>女</Radio>
-                      </Radio.Group>
-                    </Form.Item>
+                      <Form.Item label="性别" name="gender">
+                        <Radio.Group
+                          onChange={this.sex_onChange}
+                          value={this.state.value}
+                        >
+                          <Radio value={true}>男</Radio>
+                          <Radio value={false}>女</Radio>
+                        </Radio.Group>
+                      </Form.Item>
 
-                    <Form.Item label="出生日期" name="birthday">
-                      <DatePicker />
-                    </Form.Item>
+                      <Form.Item label="出生日期" name="birthday">
+                        <DatePicker />
+                      </Form.Item>
 
-                    <Form.Item label="电话号码（必填）" name="phoneNumber1">
-                      <Input />
-                    </Form.Item>
+                      <Form.Item label="电话号码（必填）" name="phoneNumber1">
+                        <Input />
+                      </Form.Item>
 
-                    <Form.Item label="电话号码（选填）" name="phoneNumber2">
-                      <Input />
-                    </Form.Item>
+                      <Form.Item label="电话号码（选填）" name="phoneNumber2">
+                        <Input />
+                      </Form.Item>
 
-                    <Form.Item>
-                      <Button type="primary" htmlType="submit">
-                        保存
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                </TabPane>
-                <TabPane tab="既往史" key="pre_history">
-                  <PreHistory
-                    pid={this.pid}
-                    initialValues={
-                      this.props.crfDetail.data
-                        ? this.props.crfDetail.data.pastHis[0]
-                        : undefined
-                    }
-                  />
-                </TabPane>
-                <TabPane tab="初诊过程" key="diag_procedure">
-                  <InitialDiagnosisProcess pid={this.pid} />
-                </TabPane>
-                <TabPane tab="实验室检查" key="labor_inspect">
-                  <LaborInspect pid={this.pid} />
-                </TabPane>
-                <TabPane tab="免疫组化" key="immunohistochemical">
-                  <Immunohistochemical pid={this.pid} />
-                </TabPane>
-                <TabPane tab="分子检测" key="molecular_detection">
-                  <MolecularDetection pid={this.pid} />
-                </TabPane>
-              </Tabs>
-            </TabPane>
-            <TabPane tab="随访信息" key="followUp_info">
-              <FollowUpInfo />
-            </TabPane>
-            <TabPane tab="治疗信息" key="treatment_info">
-              <TreatmentInfo />
-            </TabPane>
-          </Tabs>
+                      <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                          保存
+                        </Button>
+                      </Form.Item>
+                    </Form>
+                  </TabPane>
+                  <TabPane tab="既往史" key="pre_history">
+                    <PreHistory
+                      pid={this.state.pid}
+                      initialValues={
+                        this.props.crfDetail.data
+                          ? this.props.crfDetail.data.pastHis[0]
+                          : undefined
+                      }
+                    />
+                  </TabPane>
+                  <TabPane tab="初诊过程" key="diag_procedure">
+                    <InitialDiagnosisProcess pid={this.state.pid} />
+                  </TabPane>
+                  <TabPane tab="实验室检查" key="labor_inspect">
+                    <LaborInspect pid={this.state.pid} />
+                  </TabPane>
+                  <TabPane tab="免疫组化" key="immunohistochemical">
+                    <Immunohistochemical
+                      pid={this.state.pid}
+                      initialValues={
+                        this.props.crfDetail.data
+                          ? this.props.crfDetail.data.Immunohis[0]
+                          : undefined
+                      }
+                    />
+                  </TabPane>
+                  <TabPane tab="分子检测" key="molecular_detection">
+                    <MolecularDetection
+                      pid={this.state.pid}
+                      initialValues={
+                        this.props.crfDetail.data
+                          ? this.props.crfDetail.data.MoleDetec[0]
+                          : undefined
+                      }
+                    />
+                  </TabPane>
+                </Tabs>
+              </TabPane>
+              <TabPane tab="随访信息" key="followUp_info">
+                <FollowUpInfo />
+              </TabPane>
+              <TabPane tab="治疗信息" key="treatment_info">
+                <TreatmentInfo />
+              </TabPane>
+            </Tabs>
+          ) : null}
         </Content>
       </Layout>
     );

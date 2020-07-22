@@ -16,6 +16,14 @@ export async function Patientsave(params?: PatientItem) {
     },
   });
 }
+export async function Patientupdate(params?: PatientItem) {
+  return request('/api/Patient/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function PastHissave(params?: PastHisItem) {
   return request('/api/PastHis/add', {
     method: 'POST',
@@ -40,6 +48,14 @@ export async function Immunohissave(params?: ImmunohisItem) {
     },
   });
 }
+export async function Immunohisupdate(params?: ImmunohisItem) {
+  return request('/api/Immunohis/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function MoleDetecsave(params?: MoleDetecItem) {
   return request('/api/MoleDetec/add', {
     method: 'POST',
@@ -48,7 +64,14 @@ export async function MoleDetecsave(params?: MoleDetecItem) {
     },
   });
 }
-
+export async function MoleDetecupdate(params?: MoleDetecItem) {
+  return request('/api/MoleDetec/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function querydetail(params?: QueryParams) {
   return request('/api/illCase/allinfo/find', {
     params,

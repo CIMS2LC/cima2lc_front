@@ -11,7 +11,7 @@ import {
   message,
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { MoleDetecsave } from '../../service';
+import { MoleDetecsave, MoleDetecupdate } from '../../service';
 import { getCookie } from '@/pages/BasicComponents/request';
 
 const { Option } = Select;
@@ -29,6 +29,16 @@ class MolecularDetection extends React.Component {
   constructor(props: any) {
     super(props);
     this.pid = props.pid;
+    this.initialValues = props.initialValues;
+    if (this.initialValues) {
+      this.id = this.initialValues['id'];
+      this.pid = this.initialValues['pid'];
+      var molecular_detection_state = {};
+      Object.keys(this.state.molecular_detection_labels).map((item: string) => {
+        molecular_detection_state[item] = this.initialValues[item];
+      });
+      this.state.molecular_detection_labels = molecular_detection_state;
+    }
   }
   id = -1;
   pid = -1;
@@ -55,9 +65,20 @@ class MolecularDetection extends React.Component {
       <Form
         name="molecular_detection"
         {...layout}
+        initialValues={this.initialValues}
         onFinish={async values => {
           values.path = this.state.file_list.toString();
           if (this.id != -1) {
+            const res = await MoleDetecupdate({
+              id: this.id,
+              pid: this.pid,
+              ...values,
+            });
+            if (res.code == 200) {
+              console.log('更新成功');
+            } else {
+              console.log('更新失败');
+            }
           } else {
             const res = await MoleDetecsave({ pid: this.pid, ...values });
             if (res.code == 200) {
