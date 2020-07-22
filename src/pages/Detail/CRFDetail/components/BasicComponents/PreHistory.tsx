@@ -60,6 +60,7 @@ class PreHistory extends React.Component {
     is_medicine: 0,
     is_tumHis: 0,
     is_tumFamHis: 0,
+    hormoneUseHis: {},
   };
 
   onChange_smoke = (e: any) => {
@@ -104,6 +105,9 @@ class PreHistory extends React.Component {
     this.setState({
       [key]: value,
     });
+  };
+  onChange_hormoneHis = (data: any) => {
+    this.setState({ hormoneUseHis: data });
   };
   underlying_disease_history_Options = [
     '无',
@@ -178,6 +182,7 @@ class PreHistory extends React.Component {
           values.infDisHis = (values['infDisHis'] || []).toString();
           values.tumHis = (values['tumHis'] || []).toString();
           values.tumFamHis = (values['tumFamHis'] || []).toString();
+          values.hormoneUseHis = this.state.hormoneUseHis;
           if (this.id != -1) {
             const res = await PastHisupdate({
               id: this.id,
@@ -338,7 +343,12 @@ class PreHistory extends React.Component {
         </Form.Item>
         {this.state.is_hormone ? (
           <Form.Item label="激素使用史" name="hormoneUseHis">
-            <Hormone />
+            <Hormone
+              passData={data => {
+                this.onChange_hormoneHis(data);
+              }}
+              value={this.state.hormoneUseHis}
+            />
           </Form.Item>
         ) : null}
         <Form.Item label="是否长期使用其他药物" name="drug">
