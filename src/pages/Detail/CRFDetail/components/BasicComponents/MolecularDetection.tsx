@@ -177,7 +177,8 @@ class MolecularDetection extends React.Component {
                 console.log(this.state.file_list);
                 console.log(info.file.response.path);
                 var fileList = this.state.file_list;
-                fileList.concat(info.file.response.path);
+                fileList = fileList.concat(info.file.response.path);
+                console.log(fileList);
                 this.setState({ file_list: fileList });
                 message.success(`${info.file.name} file uploaded successfully`);
               } else if (info.file.status === 'error') {
