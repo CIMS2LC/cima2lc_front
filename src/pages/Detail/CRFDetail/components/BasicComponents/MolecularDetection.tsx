@@ -29,6 +29,8 @@ class MolecularDetection extends React.Component {
   constructor(props: any) {
     super(props);
     this.pid = props.pid;
+    this.initialValues = props.initialValues;
+    console.log(this.initialValues);
   }
   id = -1;
   pid = -1;
@@ -55,6 +57,7 @@ class MolecularDetection extends React.Component {
       <Form
         name="molecular_detection"
         {...layout}
+        initialValues={this.initialValues}
         onFinish={async values => {
           values.path = this.state.file_list.toString();
           if (this.id != -1) {

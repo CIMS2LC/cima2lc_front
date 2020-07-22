@@ -41,8 +41,8 @@ const mapStateToProps = (values: StateType) => {
 class CRFDetail extends React.Component {
   constructor(props) {
     super(props);
-    this.id = props.location.query.id;
-    this.pid = props.location.query.id;
+    this.state.id = props.location.query.id;
+    this.state.pid = props.location.query.id;
     const id = this.id;
     const { dispatch } = props;
     dispatch({
@@ -53,11 +53,11 @@ class CRFDetail extends React.Component {
     });
     console.log(this.props);
   }
-  id = -1;
-  pid = -1;
   data = {};
   state = {
     value: 1,
+    id: -1,
+    pid: -1,
   };
   idNumber_onChange = (value: any) => {
     console.log('changed', value);
@@ -116,9 +116,12 @@ class CRFDetail extends React.Component {
                         values.birthday = values['birthday'].format(
                           'YYYY-MM-DD',
                         );
-                      const res = await Patientsave({ id: this.id, ...values });
+                      const res = await Patientsave({
+                        id: this.state.id,
+                        ...values,
+                      });
                       if (res.code == 200) {
-                        this.pid = res.id;
+                        this.setState({ pid: res.id });
                         console.log('提交成功');
                       } else {
                         console.log('提交失败');
@@ -168,7 +171,7 @@ class CRFDetail extends React.Component {
                 </TabPane>
                 <TabPane tab="既往史" key="pre_history">
                   <PreHistory
-                    pid={this.pid}
+                    pid={this.state.pid}
                     initialValues={
                       this.props.crfDetail.data
                         ? this.props.crfDetail.data.pastHis[0]
@@ -177,16 +180,30 @@ class CRFDetail extends React.Component {
                   />
                 </TabPane>
                 <TabPane tab="初诊过程" key="diag_procedure">
-                  <InitialDiagnosisProcess pid={this.pid} />
+                  <InitialDiagnosisProcess pid={this.state.pid} />
                 </TabPane>
                 <TabPane tab="实验室检查" key="labor_inspect">
-                  <LaborInspect pid={this.pid} />
+                  <LaborInspect pid={this.state.pid} />
                 </TabPane>
                 <TabPane tab="免疫组化" key="immunohistochemical">
-                  <Immunohistochemical pid={this.pid} />
+                  <Immunohistochemical
+                    pid={this.state.pid}
+                    initialValues={
+                      this.props.crfDetail.data
+                        ? this.props.crfDetail.data.Immunohis[0]
+                        : undefined
+                    }
+                  />
                 </TabPane>
                 <TabPane tab="分子检测" key="molecular_detection">
-                  <MolecularDetection pid={this.pid} />
+                  <MolecularDetection
+                    pid={this.state.pid}
+                    initialValues={
+                      this.props.crfDetail.data
+                        ? this.props.crfDetail.data.MoleDetec[0]
+                        : undefined
+                    }
+                  />
                 </TabPane>
               </Tabs>
             </TabPane>

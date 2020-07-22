@@ -19,11 +19,21 @@ export default {
       DetailTrePlan: [],
       FollInfo: [],
       ImageExams: [],
-      Immunohis: [],
+      Immunohis: [
+        {
+          ALKD5F3: 3,
+          ALKD5F3N: 3,
+        },
+      ],
       IniDiaPro: [],
       Lung: [],
       LymSubsets: [],
-      MoleDetec: [],
+      MoleDetec: [
+        {
+          ALK: 0,
+          BIM: 0,
+        },
+      ],
       MyocardialEnzyme: [],
       OneToFive: [],
       OtherExams: [],

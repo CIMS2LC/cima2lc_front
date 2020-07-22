@@ -57,6 +57,8 @@ class Immunohistochemical extends React.Component {
   constructor(props: any) {
     super(props);
     this.pid = props.pid;
+    this.initialValues = props.initialValues;
+    console.log(this.initialValues);
   }
   id = -1;
   pid = -1;
@@ -65,6 +67,7 @@ class Immunohistochemical extends React.Component {
       <Form
         name="immunohistochemical"
         {...layout}
+        initialValues={this.initialValues}
         onFinish={async values => {
           if (this.id != -1) {
           } else {
