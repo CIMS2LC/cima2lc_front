@@ -37,7 +37,6 @@ const Model: ModelType = {
   },
   reducers: {
     getDetail(state, { payload }) {
-      console.log(payload);
       if (payload.code == 200) {
         var patient = payload.data.Patient[0];
         patient['birthday'] = moment(patient['birthday']);
