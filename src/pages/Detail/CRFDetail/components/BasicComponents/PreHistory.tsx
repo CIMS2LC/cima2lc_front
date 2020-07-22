@@ -24,10 +24,10 @@ const layout = {
 class PreHistory extends React.Component {
   constructor(props: any) {
     super(props);
-    this.pid = props.pid;
     this.initialValues = props.initialValues;
     console.log(this.initialValues);
     if (this.initialValues) {
+      this.pid = this.initialValues['pid'];
       this.initialValues['basDisHis'] = (
         this.initialValues['basDisHis'] || ''
       ).split(',');
