@@ -45,7 +45,7 @@ const Model: ModelType = {
         payload.data['Patient'] = patient;
         return { ...state, data: payload.data };
       } else {
-        return { ...state };
+        return { ...state, data: undefined };
       }
     },
   },

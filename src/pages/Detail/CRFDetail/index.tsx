@@ -85,7 +85,6 @@ class CRFDetail extends React.Component {
               className={styles.btn_return}
               id="btn_return"
               onClick={() => {
-                this.props.crfDetail = undefined;
                 history.push('/list/fuv_list');
               }}
             >
