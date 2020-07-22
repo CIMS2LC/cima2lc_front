@@ -41,9 +41,17 @@ class PreHistory extends React.Component {
         this.initialValues['tumFamHis'] || ''
       ).split(',');
       if (this.initialValues['smoke']) this.state.is_smoke = 1;
-      //if(this.initialValues['tumor']) this.state.stop_smoke = 1;
+      if (
+        this.initialValues['smokingHis'] &&
+        this.initialValues['smokingHis']['stopSmoke']
+      )
+        this.state.stop_smoke = 1;
       if (this.initialValues['drink']) this.state.is_drink = 1;
-      //if(this.initialValues['tumor']) this.state.stop_drink = 1;
+      if (
+        this.initialValues['drinkingHis'] &&
+        this.initialValues['drinkingHis']['stopDrink']
+      )
+        this.state.stop_drink = 1;
       if (this.initialValues['tumor']) this.state.is_tumHis = 1;
       if (this.initialValues['tumorFam']) this.state.is_tumFamHis = 1;
       if (this.initialValues['drug']) this.state.is_medicine = 1;

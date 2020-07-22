@@ -228,7 +228,7 @@ function getillCase(req: Request, res: Response, u: string) {
           smokingHis: {
             smokeDayAvg: 1,
             smokeYearAvg: 1,
-            stopSmoke: 0,
+            stopSmoke: 1,
           },
           tumFamHis: null,
           tumHis: '大肠癌,鼻咽癌及头颈部肿瘤',
