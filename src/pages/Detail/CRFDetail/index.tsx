@@ -99,7 +99,7 @@ class CRFDetail extends React.Component {
             marginTop: 64,
           }}
         >
-          {this.props.crfDetail.data ? (
+          {this.props.crfDetail.data || this.state.id == -1 ? (
             <Tabs defaultActiveKey="1" tabPosition="left">
               <TabPane tab="基线资料" key="baseline_info">
                 <Tabs tabPosition="top">
