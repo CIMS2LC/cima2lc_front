@@ -8,7 +8,9 @@ export interface TableListParams {
   filter?: { [key: string]: any[] };
   sorter?: { [key: string]: any };
 }
-
+export interface QueryParams {
+  id: number;
+}
 export interface PatientItem {
   id: number;
   account: string;

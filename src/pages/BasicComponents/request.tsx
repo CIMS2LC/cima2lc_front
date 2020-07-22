@@ -6,7 +6,7 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 
-const getCookie = (key: string) => {
+export const getCookie = (key: string) => {
   const name = key + '=';
   const ca = document.cookie.split(';');
   for (let i = 0; i < ca.length; i++) {
