@@ -32,7 +32,7 @@ class MolecularDetection extends React.Component {
     this.initialValues = props.initialValues;
     if (this.initialValues) {
       this.id = this.initialValues['id'];
-      this.pid = this.initialValues['pid'];
+      this.pid = this.initialValues['pid'] || this.props.pid;
       var molecular_detection_state = {};
       Object.keys(this.state.molecular_detection_labels).map((item: string) => {
         molecular_detection_state[item] = this.initialValues[item];

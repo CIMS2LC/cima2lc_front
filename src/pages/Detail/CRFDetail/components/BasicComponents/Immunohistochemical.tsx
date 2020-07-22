@@ -60,7 +60,7 @@ class Immunohistochemical extends React.Component {
     this.initialValues = props.initialValues;
     if (this.initialValues) {
       this.id = this.initialValues['id'];
-      this.pid = this.initialValues['pid'];
+      this.pid = this.initialValues['pid'] || this.props.pid;
     }
   }
   id = -1;
