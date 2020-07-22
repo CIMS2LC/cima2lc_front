@@ -8,6 +8,22 @@ import axios from 'axios';
 const { Search } = Input;
 const { Option } = Select;
 
+axios.interceptors.request.use(
+  function(config) {
+    // 将token给到一个前后台约定好的key中，作为请求发送
+    let token = localStorage.getItem('token');
+    if (token) {
+      config.headers['token'] = token;
+    } else {
+      console.log('没有token');
+    }
+    return config;
+  },
+  function(error) {
+    // Do something with request error
+    return Promise.reject(error);
+  },
+);
 class QuestionnaireTable extends React.Component {
   state = {
     select: 1,
@@ -74,6 +90,10 @@ class QuestionnaireTable extends React.Component {
     let url = '/api/Questionnaire/list';
     axios.post(url, { current: 1, pageSize: this.state.pageSize }).then(res => {
       let dataSource = [...this.state.data];
+      for (let i in res.data.data) {
+        if (res.data.data[i].sex === true) res.data.data[i].sex = '男';
+        else res.data.data[i].sex = '女';
+      }
       dataSource = res.data.data;
       this.setState({ data: dataSource });
       this.setState({ total: res.data.total });
