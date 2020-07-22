@@ -155,7 +155,7 @@ function getillCase(req: Request, res: Response, u: string) {
           cMETDetMed: null,
           cMETSam: null,
           id: 2,
-          path: '',
+          path: 'static/16/icon_48.png,static/16/icon_16.png',
           pid: 1,
           treNum: null,
         },
