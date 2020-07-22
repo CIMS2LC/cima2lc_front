@@ -27,24 +27,26 @@ class PreHistory extends React.Component {
     this.pid = props.pid;
     this.initialValues = props.initialValues;
     console.log(this.initialValues);
-    this.initialValues['basDisHis'] = (
-      this.initialValues['basDisHis'] || ''
-    ).split(',');
-    this.initialValues['infDisHis'] = (
-      this.initialValues['infDisHis'] || ''
-    ).split(',');
-    this.initialValues['tumHis'] = (this.initialValues['tumHis'] || '').split(
-      ',',
-    );
-    this.initialValues['tumFamHis'] = (
-      this.initialValues['tumFamHis'] || ''
-    ).split(',');
-    if (this.initialValues['smoke']) this.state.is_smoke = 1;
-    //if(this.initialValues['tumor']) this.state.stop_smoke = 1;
-    if (this.initialValues['drink']) this.state.is_drink = 1;
-    //if(this.initialValues['tumor']) this.state.stop_drink = 1;
-    if (this.initialValues['tumor']) this.state.is_tumHis = 1;
-    if (this.initialValues['tumorFam']) this.state.is_tumFamHis = 1;
+    if (this.initialValues) {
+      this.initialValues['basDisHis'] = (
+        this.initialValues['basDisHis'] || ''
+      ).split(',');
+      this.initialValues['infDisHis'] = (
+        this.initialValues['infDisHis'] || ''
+      ).split(',');
+      this.initialValues['tumHis'] = (this.initialValues['tumHis'] || '').split(
+        ',',
+      );
+      this.initialValues['tumFamHis'] = (
+        this.initialValues['tumFamHis'] || ''
+      ).split(',');
+      if (this.initialValues['smoke']) this.state.is_smoke = 1;
+      //if(this.initialValues['tumor']) this.state.stop_smoke = 1;
+      if (this.initialValues['drink']) this.state.is_drink = 1;
+      //if(this.initialValues['tumor']) this.state.stop_drink = 1;
+      if (this.initialValues['tumor']) this.state.is_tumHis = 1;
+      if (this.initialValues['tumorFam']) this.state.is_tumFamHis = 1;
+    }
   }
   id = -1;
   pid = -1;
