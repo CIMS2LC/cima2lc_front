@@ -16,6 +16,14 @@ export async function Patientsave(params?: PatientItem) {
     },
   });
 }
+export async function Patientupdate(params?: PatientItem) {
+  return request('/api/Patient/update', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function PastHissave(params?: PastHisItem) {
   return request('/api/PastHis/add', {
     method: 'POST',

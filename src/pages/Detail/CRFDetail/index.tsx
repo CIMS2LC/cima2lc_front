@@ -20,7 +20,7 @@ import Immunohistochemical from './components/BasicComponents/Immunohistochemica
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
 import PreHistory from './components/BasicComponents/PreHistory';
 import InitialDiagnosisProcess from './components/BasicComponents/InitialDiagnosisProcess';
-import { Patientsave } from './service';
+import { Patientsave, Patientupdate } from './service';
 import { StateType } from './model';
 
 const { Header, Content } = Layout;
@@ -116,15 +116,28 @@ class CRFDetail extends React.Component {
                           values.birthday = values['birthday'].format(
                             'YYYY-MM-DD',
                           );
-                        const res = await Patientsave({
-                          id: this.state.id,
-                          ...values,
-                        });
-                        if (res.code == 200) {
-                          this.setState({ pid: res.id });
-                          console.log('提交成功');
+                        if (this.state.id == -1) {
+                          const res = await Patientsave({
+                            id: this.state.id,
+                            ...values,
+                          });
+                          if (res.code == 200) {
+                            this.setState({ pid: res.id });
+                            console.log('提交成功');
+                          } else {
+                            console.log('提交失败');
+                          }
                         } else {
-                          console.log('提交失败');
+                          const res = await Patientupdate({
+                            id: this.state.id,
+                            pid: this.state.pid,
+                            ...values,
+                          });
+                          if (res.code == 200) {
+                            console.log('更新成功');
+                          } else {
+                            console.log('更新失败');
+                          }
                         }
                       }}
                     >

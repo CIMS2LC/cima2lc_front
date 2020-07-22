@@ -13,6 +13,7 @@ export interface QueryParams {
 }
 export interface PatientItem {
   id: number;
+  pid: number;
   account: string;
   researchCenter: string;
   idNumber: string;
