@@ -51,7 +51,6 @@ class CRFDetail extends React.Component {
         id,
       },
     });
-    console.log(this.props);
   }
   data = {};
   state = {
@@ -109,7 +108,7 @@ class CRFDetail extends React.Component {
                       {...layout}
                       initialValues={
                         this.props.crfDetail.data
-                          ? this.props.crfDetail.data.Patient[0]
+                          ? this.props.crfDetail.data.Patient
                           : undefined
                       }
                       onFinish={async values => {

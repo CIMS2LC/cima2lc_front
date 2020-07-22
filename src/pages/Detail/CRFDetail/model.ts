@@ -1,6 +1,7 @@
 import { Effect, history, Reducer } from 'umi';
 import { message } from 'antd';
 import { querydetail } from './service';
+import moment from 'moment';
 
 export interface StateType {
   code?: 200;
@@ -36,6 +37,10 @@ const Model: ModelType = {
   },
   reducers: {
     getDetail(state, { payload }) {
+      var patient = payload.data.Patient[0];
+      patient['birthday'] = moment(patient['birthday']);
+      payload.data['Patient'] = patient;
+      console.log(payload.data);
       return { ...state, data: payload.data };
     },
   },

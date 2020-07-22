@@ -40,7 +40,7 @@ export default {
       Patient: [
         {
           account: ',54,',
-          birthday: null,
+          birthday: 'Wed, 08 Jul 2020 00:00:00 GMT',
           gender: null,
           hospitalNumber: null,
           id: 3,
