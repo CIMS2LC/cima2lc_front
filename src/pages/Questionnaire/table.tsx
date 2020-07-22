@@ -126,6 +126,10 @@ class QuestionnaireTable extends React.Component {
       if (res.data.code === 200) {
         //成功获取
         let newData = [...this.state.data]; //更新表格必须以这种形式
+        for (let i in res.data.data) {
+          if (res.data.data[i].sex === true) res.data.data[i].sex = '男';
+          else res.data.data[i].sex = '女';
+        }
         newData = res.data.data;
         this.setState({ data: newData });
         this.setState({ total: res.data.total });
@@ -146,7 +150,11 @@ class QuestionnaireTable extends React.Component {
       .post(url, { current: pagination.current, pageSize: pagination.pageSize })
       .then(res => {
         let dataSource = [...this.state.data]; //删除并渲染必须进行的操作
-        dataSource = res.data.list1;
+        for (let i in res.data.data) {
+          if (res.data.data[i].sex === true) res.data.data[i].sex = '男';
+          else res.data.data[i].sex = '女';
+        }
+        dataSource = res.data.data;
         this.setState({ data: dataSource });
         this.setState({ total: res.data.total });
       });
