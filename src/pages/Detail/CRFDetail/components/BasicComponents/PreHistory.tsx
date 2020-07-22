@@ -181,7 +181,7 @@ class PreHistory extends React.Component {
           if (this.id != -1) {
             const res = await PastHisupdate({
               id: this.id,
-              pid: this.pid,
+              pid: this.props.pid,
               ...values,
             });
             if (res.code == 200) {
@@ -190,7 +190,7 @@ class PreHistory extends React.Component {
               console.log('更新失败');
             }
           } else {
-            const res = await PastHissave({ pid: this.pid, ...values });
+            const res = await PastHissave({ pid: this.props.pid, ...values });
             if (res.code == 200) {
               this.id = res.id;
               console.log('提交成功');

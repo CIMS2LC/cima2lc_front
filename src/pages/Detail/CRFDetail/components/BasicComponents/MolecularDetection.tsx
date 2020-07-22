@@ -71,7 +71,7 @@ class MolecularDetection extends React.Component {
           if (this.id != -1) {
             const res = await MoleDetecupdate({
               id: this.id,
-              pid: this.pid,
+              pid: this.props.pid,
               ...values,
             });
             if (res.code == 200) {
@@ -80,7 +80,7 @@ class MolecularDetection extends React.Component {
               console.log('更新失败');
             }
           } else {
-            const res = await MoleDetecsave({ pid: this.pid, ...values });
+            const res = await MoleDetecsave({ pid: this.props.pid, ...values });
             if (res.code == 200) {
               this.id = res.id;
               console.log('提交成功');
@@ -169,7 +169,7 @@ class MolecularDetection extends React.Component {
               token: getCookie('token'),
             }}
             multiple={true}
-            data={{ pid: this.state.pid }}
+            data={{ pid: this.props.pid }}
             onChange={info => {
               if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);
