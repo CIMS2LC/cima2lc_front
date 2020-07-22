@@ -194,7 +194,14 @@ class CRFDetail extends React.Component {
                     />
                   </TabPane>
                   <TabPane tab="初诊过程" key="diag_procedure">
-                    <InitialDiagnosisProcess pid={this.state.pid} />
+                    <InitialDiagnosisProcess
+                      pid={this.state.pid}
+                      initialValues={
+                        this.props.crfDetail.data
+                          ? this.props.crfDetail.data.IniDiaPro[0]
+                          : undefined
+                      }
+                    />
                   </TabPane>
                   <TabPane tab="实验室检查" key="labor_inspect">
                     <LaborInspect pid={this.state.pid} />
