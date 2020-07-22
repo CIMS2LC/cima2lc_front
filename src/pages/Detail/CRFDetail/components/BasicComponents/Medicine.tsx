@@ -29,6 +29,7 @@ const Medicine = props => {
         },
       ]}
       operColumns={[]}
+      dataSource={props.dataSource}
       passData={passData}
       newData={{
         drugName: '药物',

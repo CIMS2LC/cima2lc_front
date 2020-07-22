@@ -60,7 +60,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   const save = async e => {
     try {
       const values = await form.validateFields();
-
       toggleEdit();
       handleSave({ ...record, ...values });
     } catch (errInfo) {
@@ -123,7 +122,7 @@ class EditableTable extends React.Component {
 
     this.state = {
       dataSource: props.dataSource ? props.dataSource : [],
-      count: props.dataSource ? dataSource.length : 0,
+      count: props.dataSource ? props.dataSource.length : 0,
     };
   }
 

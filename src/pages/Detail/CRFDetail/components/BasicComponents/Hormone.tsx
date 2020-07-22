@@ -27,6 +27,7 @@ const Hormone = props => {
           editable: true,
         },
       ]}
+      dataSource={props.dataSource}
       operColumns={[]}
       passData={passData}
       newData={{

@@ -46,6 +46,8 @@ class PreHistory extends React.Component {
       //if(this.initialValues['tumor']) this.state.stop_drink = 1;
       if (this.initialValues['tumor']) this.state.is_tumHis = 1;
       if (this.initialValues['tumorFam']) this.state.is_tumFamHis = 1;
+      if (this.initialValues['drug']) this.state.is_medicine = 1;
+      if (this.initialValues['hormone']) this.state.is_hormone = 1;
     }
   }
   id = -1;
@@ -353,6 +355,7 @@ class PreHistory extends React.Component {
                 this.onChange_hormoneHis(data);
               }}
               value={this.state.hormoneUseHis}
+              dataSource={this.props.initialValues['hormoneUseHis']}
             />
           </Form.Item>
         ) : null}
@@ -372,6 +375,7 @@ class PreHistory extends React.Component {
                 this.onChange_medicineUseHis(data);
               }}
               value={this.state.medicineUseHis}
+              dataSource={this.props.initialValues['drugUseHis']}
             />
           </Form.Item>
         ) : null}
