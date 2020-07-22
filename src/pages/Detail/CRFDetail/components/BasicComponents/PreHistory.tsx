@@ -150,7 +150,7 @@ class PreHistory extends React.Component {
         name="pre_history"
         {...layout}
         onFinish={async values => {
-          values.BasDisHis = (values['basDisHis'] || []).toString();
+          values.basDisHis = (values['basDisHis'] || []).toString();
           values.infDisHis = (values['infDisHis'] || []).toString();
           values.tumHis = (values['tumHis'] || []).toString();
           values.tumFamHis = (values['tumFamHis'] || []).toString();

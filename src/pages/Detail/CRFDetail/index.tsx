@@ -107,7 +107,7 @@ class CRFDetail extends React.Component {
                     name="basic_info"
                     {...layout}
                     initialValues={
-                      this.props.crfDetail
+                      this.props.crfDetail.data
                         ? this.props.crfDetail.data.Patient[0]
                         : undefined
                     }
