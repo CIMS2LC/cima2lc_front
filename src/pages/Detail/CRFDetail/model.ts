@@ -39,7 +39,8 @@ const Model: ModelType = {
     getDetail(state, { payload }) {
       if (payload.code == 200) {
         var patient = payload.data.Patient[0];
-        patient['birthday'] = moment(patient['birthday']);
+        if (patient['birthday'])
+          patient['birthday'] = moment(patient['birthday']);
         patient['gender'] = patient['gender'] == 1 ? true : false;
         payload.data['Patient'] = patient;
         return { ...state, data: payload.data };
