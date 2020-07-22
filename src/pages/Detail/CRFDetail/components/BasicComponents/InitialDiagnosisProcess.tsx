@@ -19,7 +19,6 @@ import moment from 'moment';
 import { check } from 'prettier';
 import { RedEnvelopeFilled } from '@ant-design/icons';
 import { IniDiaProsave } from '../../service';
-//import { IniDiaProsave } from '../../service';
 const layout = {
   labelAlign: 'left',
   labelCol: {
@@ -515,18 +514,20 @@ class InitialDiagnosisProcess extends React.Component {
         this.initialValues.patReDate || '',
         'YYYY-MM-DD',
       );
-      this.setState({
-        patDia: this.initialValues.patDia,
-        C_T: this.initialValues.cStage.split(',')[0],
-        C_N: this.initialValues.cStage.split(',')[1],
-        C_M: this.initialValues.cStage.split(',')[2],
-        P_T: this.initialValues.pStage.split(',')[0],
-        P_N: this.initialValues.pStage.split(',')[1],
-        P_M: this.initialValues.pStage.split(',')[2],
-      }); //病理信息Tree
-      if (stage === '3') this.setState({ c_installment: 1, p_installment: 0 });
-      if (stage === '4') this.setState({ c_installment: 0, p_installment: 1 });
-      if (stage === '5') this.setState({ c_installment: 1, p_installment: 1 });
+      this.state.patDia = this.initialValues.patDia;
+      this.initialValues.C_T = this.initialValues.cStage.split(',')[0];
+      this.initialValues.C_N = this.initialValues.cStage.split(',')[1];
+      this.initialValues.C_M = this.initialValues.cStage.split(',')[2];
+      this.initialValues.P_T = this.initialValues.pStage.split(',')[0];
+      this.initialValues.P_N = this.initialValues.pStage.split(',')[1];
+      this.initialValues.P_M = this.initialValues.pStage.split(',')[2]; //病理信息Tree
+
+      if (this.initialValues.stage == '3') this.state.c_installment = 1;
+      if (this.initialValues.stage == '4') this.state.p_installment = 1;
+      if (this.initialValues.stage == '5') {
+        this.state.c_installment = 1;
+        this.state.p_installment = 1;
+      }
     }
   }
   initialValues = {};
@@ -550,7 +551,7 @@ class InitialDiagnosisProcess extends React.Component {
     if (values.firVisDate)
       values.firVisDate = values.firVisDate.format('YYYY-MM-DD');
     if (values.patReDate)
-      values.firVisDate = values.patReDate.format('YYYY-MM-DD');
+      values.patReDate = values.patReDate.format('YYYY-MM-DD');
     if (values.C_T) {
       values.cStage = values.C_T + ',' + values.C_N + ',' + values.C_M;
     }
@@ -567,7 +568,7 @@ class InitialDiagnosisProcess extends React.Component {
       pid: this.pid,
       patDia: this.state.patDia, //添加病理信息
     };
-    const res = await IniDiaProsave({ pid: this.pid, ...values }); //传参
+    const res = await IniDiaProsave(values); //传参
     console.log(values); //需要传入后端的值
   };
 
@@ -621,7 +622,12 @@ class InitialDiagnosisProcess extends React.Component {
   formRef = React.createRef();
   render() {
     return (
-      <Form {...layout} onFinish={this.onFinish} ref={this.formRef}>
+      <Form
+        {...layout}
+        onFinish={this.onFinish}
+        ref={this.formRef}
+        initialValues={this.initialValues}
+      >
         <Form.Item label="首诊PS评分" name="PSScore">
           <Radio.Group value={this.state.value}>
             {[...Array(5).keys()].map(i => (
