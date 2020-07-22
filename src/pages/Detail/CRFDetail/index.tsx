@@ -43,8 +43,6 @@ class CRFDetail extends React.Component {
     super(props);
     this.state.id = props.location.query.id;
     this.state.pid = props.location.query.id;
-  }
-  componentDidMount = () => {
     const id = this.id;
     const { dispatch } = this.props;
     dispatch({
@@ -54,7 +52,7 @@ class CRFDetail extends React.Component {
       },
     });
     console.log(this.props);
-  };
+  }
   data = {};
   state = {
     value: 1,
