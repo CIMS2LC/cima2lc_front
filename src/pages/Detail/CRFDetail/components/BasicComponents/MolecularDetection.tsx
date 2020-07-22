@@ -49,7 +49,7 @@ class MolecularDetection extends React.Component {
             uid: `${index}`,
             name: fileName,
             status: 'done',
-            url: `http://localhost:8088/file/pid/${fileName}`,
+            url: `http://localhost:8088/file/${this.pid}/${fileName}`,
           });
         });
         console.log(this.molDefaultFileList);
