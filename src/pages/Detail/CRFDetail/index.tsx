@@ -167,7 +167,14 @@ class CRFDetail extends React.Component {
                   </Form>
                 </TabPane>
                 <TabPane tab="既往史" key="pre_history">
-                  <PreHistory pid={this.pid} />
+                  <PreHistory
+                    pid={this.pid}
+                    initialValues={
+                      this.props.crfDetail.data
+                        ? this.props.crfDetail.data.pastHis[0]
+                        : undefined
+                    }
+                  />
                 </TabPane>
                 <TabPane tab="初诊过程" key="diag_procedure">
                   <InitialDiagnosisProcess pid={this.pid} />
