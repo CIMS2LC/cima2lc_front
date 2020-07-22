@@ -25,7 +25,6 @@ class PreHistory extends React.Component {
   constructor(props: any) {
     super(props);
     this.initialValues = props.initialValues;
-    console.log(this.initialValues);
     if (this.initialValues) {
       this.id = this.initialValues['id'];
       this.pid = this.initialValues['pid'];
