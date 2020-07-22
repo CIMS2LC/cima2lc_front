@@ -12,6 +12,7 @@ import {
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { MoleDetecsave } from '../../service';
+import { getCookie } from '@/pages/BasicComponents/request';
 
 const { Option } = Select;
 
@@ -140,9 +141,12 @@ class MolecularDetection extends React.Component {
         </Form.Item>
         <Form.Item label="上传" name="upload">
           <Upload
-            name="file" //发到后端的文件参数名
+            name="file[]" //发到后端的文件参数名
             action="https://localhost:8001/api/upload" //上传的地址
-            headers={{ authorization: 'authorization-text' }}
+            headers={{
+              authorization: 'authorization-text',
+              token: getCookie('token'),
+            }}
             data={{ pid: this.state.pid }}
             onChange={info => {
               if (info.file.status !== 'uploading') {

@@ -10,7 +10,7 @@ import {
   Radio,
   DatePicker,
 } from 'antd';
-import { history } from 'umi';
+import { history, Dispatch, connect } from 'umi';
 
 import styles from './style.less';
 import FollowUpInfo from './components/BasicComponents/FollowUpInfo';
@@ -21,7 +21,8 @@ import MolecularDetection from './components/BasicComponents/MolecularDetection'
 import PreHistory from './components/BasicComponents/PreHistory';
 import InitialDiagnosisProcess from './components/BasicComponents/InitialDiagnosisProcess';
 import { Patientsave } from './service';
-import { PatientItem } from './data';
+import { StateType } from './model';
+
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const layout = {
@@ -33,18 +34,28 @@ const layout = {
   },
 };
 
-class CRFSlidingTabs extends React.Component {
+const mapStateToProps = (values: StateType) => {
+  return { ...values };
+};
+
+class CRFDetail extends React.Component {
   constructor(props) {
     super(props);
     this.id = props.location.query.id;
     this.pid = props.location.query.id;
+    const id = this.id;
+    const { dispatch } = props;
+    dispatch({
+      type: 'crfDetail/detail',
+      payload: {
+        id,
+      },
+    });
+    console.log(this.props);
   }
   id = -1;
   pid = -1;
-  formRef = React.createRef();
-  componentDidMount = () => {
-    console.log(this.props);
-  };
+  data = {};
   state = {
     value: 1,
   };
@@ -95,6 +106,11 @@ class CRFSlidingTabs extends React.Component {
                   <Form
                     name="basic_info"
                     {...layout}
+                    initialValues={
+                      this.props.crfDetail.data
+                        ? this.props.crfDetail.data.Patient[0]
+                        : undefined
+                    }
                     onFinish={async values => {
                       if (values.birthday)
                         values.birthday = values['birthday'].format(
@@ -151,7 +167,14 @@ class CRFSlidingTabs extends React.Component {
                   </Form>
                 </TabPane>
                 <TabPane tab="既往史" key="pre_history">
-                  <PreHistory pid={this.pid} />
+                  <PreHistory
+                    pid={this.pid}
+                    initialValues={
+                      this.props.crfDetail.data
+                        ? this.props.crfDetail.data.pastHis[0]
+                        : undefined
+                    }
+                  />
                 </TabPane>
                 <TabPane tab="初诊过程" key="diag_procedure">
                   <InitialDiagnosisProcess pid={this.pid} />
@@ -180,4 +203,4 @@ class CRFSlidingTabs extends React.Component {
   }
 }
 
-export default CRFSlidingTabs;
+export default connect(mapStateToProps)(CRFDetail);
