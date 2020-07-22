@@ -43,12 +43,13 @@ class MolecularDetection extends React.Component {
         var index = 0;
         path_list.map(item => {
           const tmp_list = item.split('/');
+          const fileName = tmp_list[tmp_list.length - 1];
           console.log(tmp_list);
           this.molDefaultFileList.push({
             uid: `${index}`,
-            name: tmp_list[tmp_list.length - 1],
+            name: fileName,
             status: 'done',
-            url: `${item}`,
+            url: `http://localhost:8088/file/pid/${fileName}`,
           });
         });
         console.log(this.molDefaultFileList);
