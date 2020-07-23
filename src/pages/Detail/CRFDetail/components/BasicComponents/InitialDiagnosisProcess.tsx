@@ -14,12 +14,11 @@ import {
   Select,
   Row,
   Col,
-  message,
 } from 'antd';
 import moment from 'moment';
 import { check } from 'prettier';
 import { RedEnvelopeFilled } from '@ant-design/icons';
-import { IniDiaProsave, IniDiaProupdate } from '../../service';
+import { IniDiaProsave } from '../../service';
 const layout = {
   labelAlign: 'left',
   labelCol: {
@@ -499,9 +498,8 @@ class InitialDiagnosisProcess extends React.Component {
     this.pid = props.pid;
     this.initialValues = props.initialValues;
     if (this.initialValues) {
-      this.id = this.initialValues['id'];
-      this.initialValues.cliniManifest = (
-        this.initialValues.cliniManifest || ''
+      this.initialValues.CliniManifest = (
+        this.initialValues.CliniManifest || ''
       ).split(','); //多选string分成数组
       this.initialValues.part = (this.initialValues.part || '').split(',');
       this.initialValues.bioMet = (this.initialValues.bioMet || '').split(',');
@@ -533,7 +531,6 @@ class InitialDiagnosisProcess extends React.Component {
     }
   }
   initialValues = {};
-  id = -1;
   pid = -1;
   state = {
     value: 1,
@@ -562,7 +559,7 @@ class InitialDiagnosisProcess extends React.Component {
       values.pStage = values.P_T + ',' + values.P_N + ',' + values.P_M;
     }
 
-    values.cliniManifest = (values.cliniManifest || []).toString(); //临床表现
+    values.CliniManifest = (values.CliniManifest || []).toString(); //临床表现
     values.part = (values.part || []).toString();
     values.bioMet = (values.bioMet || []).toString(); //多选转字符
     values.traSite = (values.traSite || []).toString();
@@ -571,25 +568,7 @@ class InitialDiagnosisProcess extends React.Component {
       pid: this.pid,
       patDia: this.state.patDia, //添加病理信息
     };
-
-    if (this.id == -1) {
-      //添加
-      const res = await IniDiaProsave(values); //传参
-      if (res.code == 200) {
-        this.id = res.id;
-        message.success(res.msg);
-      } else {
-        message.error(res.msg);
-      }
-    } else {
-      //更新
-      const res = await IniDiaProupdate({ ...values, id: this.id });
-      if (res.code == 200) {
-        message.success(res.msg);
-      } else {
-        message.error(res.msg);
-      }
-    }
+    const res = await IniDiaProsave(values); //传参
     console.log(values); //需要传入后端的值
   };
 
@@ -646,6 +625,7 @@ class InitialDiagnosisProcess extends React.Component {
       <Form
         {...layout}
         onFinish={this.onFinish}
+        ref={this.formRef}
         initialValues={this.initialValues}
       >
         <Form.Item label="首诊PS评分" name="PSScore">
@@ -655,7 +635,7 @@ class InitialDiagnosisProcess extends React.Component {
             ))}
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="临床表现" name="cliniManifest">
+        <Form.Item label="临床表现" name="CliniManifest">
           <Checkbox.Group options={this.clinical_manifestation_Options} />
         </Form.Item>
         <Form.Item label="影像学" name="videography">
