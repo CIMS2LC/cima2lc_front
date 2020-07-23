@@ -191,7 +191,7 @@ class FollowUpInfo extends React.Component {
     ];
     console.log(this.props.initialValues);
     this.state = {
-      dataSource: this.props.initialValues,
+      dataSource: this.props.initialValues || [],
       file_list: [],
       count: 0,
     };
