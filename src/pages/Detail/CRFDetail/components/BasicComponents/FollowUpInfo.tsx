@@ -264,7 +264,7 @@ class FollowUpInfo extends React.Component {
           onClick={async e => {
             const res = await follInfosave({
               pid: this.props.pid,
-              ...this.state.dataSource,
+              data: this.state.dataSource,
             });
           }}
         >
