@@ -236,7 +236,7 @@ class CRFDetail extends React.Component {
                   pid={this.state.pid}
                   initialValues={
                     this.props.crfDetail.data
-                      ? this.props.crfDetail.data.FollInfo[0]
+                      ? this.props.crfDetail.data.FollInfo
                       : undefined
                   }
                 />

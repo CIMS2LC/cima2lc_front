@@ -18,6 +18,7 @@ import {
 } from '@ant-design/icons';
 import { getCookie } from '@/pages/BasicComponents/request';
 import { follInfosave } from '../../service';
+import moment from 'moment';
 
 const fw_Options = [
   { label: '电话', value: 1 },
@@ -51,6 +52,27 @@ function onChange(text, record, index) {
 class FollowUpInfo extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props.initialValues);
+    // for(var i = 0;i< this.props.initialValues.length;i++){
+    //   if (this.initialValues[i]['savFilPath']) {
+    //     var defaultFileList =[];
+    //     const path_list = (this.props.initialValues[i]['savFilPath'] || '').split(',');
+    //     var index = 0;
+    //     path_list.map(item => {
+    //       const tmp_list = item.split('/');
+    //       const fileName = tmp_list[tmp_list.length - 1];
+    //       console.log(tmp_list);
+    //       defaultFileList.push({
+    //         uid: `${index}`,
+    //         name: fileName,
+    //         status: 'done',
+    //         url: `http://localhost:8088/file/${this.pid}/${fileName}`,
+    //       });
+    //     });
+    //     this.props.initialValues[i]['savFilPath'] = defaultFileList;
+    //     console.log(defaultFileList);
+    //   }
+    // }
     this.columns = [
       {
         title: '序号',
@@ -68,6 +90,7 @@ class FollowUpInfo extends React.Component {
         width: '10%',
         render: (text, record, index) => (
           <DatePicker
+            defaultValue={moment(record['date'])}
             onChange={(e, eString) => {
               onChange(eString, record, 'date');
             }}
@@ -81,6 +104,7 @@ class FollowUpInfo extends React.Component {
         width: '10%',
         render: (text, record, index) => (
           <Select
+            defaultValue={record['folMet']}
             style={{ width: 120 }}
             options={fw_Options}
             onChange={e => {
@@ -96,6 +120,7 @@ class FollowUpInfo extends React.Component {
         width: '10%',
         render: (text, record, index) => (
           <Select
+            defaultValue={record['effEva']}
             style={{ width: 120 }}
             options={re_Options}
             onChange={e => {
@@ -111,6 +136,7 @@ class FollowUpInfo extends React.Component {
         width: '10%',
         render: (text, record, index) => (
           <Select
+            defaultValue={record['livSta']}
             style={{ width: 120 }}
             options={ls_Options}
             onChange={e => {
@@ -126,6 +152,7 @@ class FollowUpInfo extends React.Component {
         width: '10%',
         render: (text, record, index) => (
           <Select
+            defaultValue={record['imaFilType']}
             style={{ width: 120 }}
             options={it_Options}
             onChange={e => {
@@ -150,7 +177,14 @@ class FollowUpInfo extends React.Component {
             }}
             multiple={true}
             data={{ pid: this.props.pid }}
-            //defaultFileList={this.molDefaultFileList}
+            defaultFileList={record['savFilPath'].split(',').map(path => ({
+              uid: `${index}`,
+              name: path.split('/')[path.split('/').length - 1],
+              status: 'done',
+              url: `http://localhost:8088/file/${this.props.pid}/${
+                path.split('/')[path.split('/').length - 1]
+              }`,
+            }))}
             onChange={info => {
               if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);
@@ -192,11 +226,12 @@ class FollowUpInfo extends React.Component {
     console.log(this.props.initialValues);
     this.state = {
       dataSource: this.props.initialValues || [],
+      //dataSource: [],
       file_list: [],
       count: 0,
     };
   }
-
+  molDefaultFileList = [];
   handleDelete = key => {
     const dataSource = [...this.state.dataSource];
     this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
@@ -262,6 +297,7 @@ class FollowUpInfo extends React.Component {
           type="primary"
           htmlType="submit"
           onClick={async e => {
+            console.log(this.state.dataSource);
             const res = await follInfosave({
               pid: this.props.pid,
               data: this.state.dataSource,

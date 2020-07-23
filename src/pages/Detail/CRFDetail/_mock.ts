@@ -26,7 +26,24 @@ function getillCase(req: Request, res: Response, u: string) {
       Coagulation: [],
       Cytokines: [],
       DetailTrePlan: [],
-      FollInfo: [],
+      FollInfo: [
+        {
+          date: '2020-07-22',
+          effEva: 3,
+          examArea: null,
+          folMet: 2,
+          id: 1,
+          imaFilType: '2',
+          livSta: 2,
+          number: 0,
+          pid: 16,
+          remarks: null,
+          savFilPath: 'static/16/icon_48.png',
+          tumorDesc: null,
+          tumorLD: null,
+          tumorSD: null,
+        },
+      ],
       ImageExams: [],
       Immunohis: [
         {
