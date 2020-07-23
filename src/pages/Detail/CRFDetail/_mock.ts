@@ -243,6 +243,15 @@ function getillCase(req: Request, res: Response, u: string) {
   return res.json(result);
 }
 
+function upload(req: Request, res: Response, u: string) {
+  const result = {
+    code: 200,
+    msg: '上传成功',
+    path: ['static/2/1_hetuanceng_tx0.h5.png'],
+  };
+  return res.json(result);
+}
 export default {
   'GET /api/illCase/allinfo/find': getillCase,
+  'POST /api/upload ': upload,
 };
