@@ -73,8 +73,16 @@ export async function MoleDetecupdate(params?: MoleDetecItem) {
   });
 }
 export async function IniDiaProsave(params?: any) {
-  return request('/api/iniDiaPro/add', {
+  return request('http://localhost:8001/api/IniDiaPro/add', {
     method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function IniDiaupdate(params?: any) {
+  return request('http://localhost:8001/api/IniDiaPro/update', {
+    method: 'PUT',
     data: {
       ...params,
     },
