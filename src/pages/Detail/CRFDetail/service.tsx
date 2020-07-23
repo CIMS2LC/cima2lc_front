@@ -73,8 +73,48 @@ export async function MoleDetecupdate(params?: MoleDetecItem) {
   });
 }
 export async function IniDiaProsave(params?: any) {
-  return request('/api/iniDiaPro/add', {
+  return request('http://localhost:8001/api/IniDiaPro/add', {
     method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function IniDiaupdate(params?: any) {
+  return request('http://localhost:8001/api/IniDiaPro/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function sideEffectsave(params?: any) {
+  return request('http://localhost:8001/api/sideEffect/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function sideEffectupdate(params?: any) {
+  return request('http://localhost:8001/api/sideEffect/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function signssave(params?: any) {
+  return request('http://localhost:8001/api/signs/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function signsupdate(params?: any) {
+  return request('http://localhost:8001/api/signs/update', {
+    method: 'PUT',
     data: {
       ...params,
     },

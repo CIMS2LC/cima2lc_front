@@ -18,7 +18,7 @@ import {
 import moment from 'moment';
 import { check } from 'prettier';
 import { RedEnvelopeFilled } from '@ant-design/icons';
-import { IniDiaProsave } from '../../service';
+import { IniDiaProsave, IniDiaupdate } from '../../service';
 const layout = {
   labelAlign: 'left',
   labelCol: {
@@ -497,30 +497,38 @@ class InitialDiagnosisProcess extends React.Component {
     super(props);
     this.pid = props.pid;
     this.initialValues = props.initialValues;
+    console.log(this.initialValues);
     if (this.initialValues) {
-      this.initialValues.CliniManifest = (
-        this.initialValues.CliniManifest || ''
-      ).split(','); //多选string分成数组
-      this.initialValues.part = (this.initialValues.part || '').split(',');
-      this.initialValues.bioMet = (this.initialValues.bioMet || '').split(',');
-      this.initialValues.traSite = (this.initialValues.traSite || '').split(
-        ',',
-      );
-      this.initialValues.firVisDate = moment(
-        this.initialValues.firVisDate || '',
-        'YYYY-MM-DD',
-      ); //日期格式
-      this.initialValues.patReDate = moment(
-        this.initialValues.patReDate || '',
-        'YYYY-MM-DD',
-      );
+      this.id = this.initialValues['id'];
+      //this.initialValues.cliniManifest = (this.initialValues.cliniManifest || "").split(','); //多选string分成数组
+      //this.initialValues.part = (this.initialValues.part || '').split(',');
+      //this.initialValues.bioMet = (this.initialValues.bioMet || '').split(',');
+      //this.initialValues.traSite = (this.initialValues.traSite || '').split(',');
+
+      if (this.initialValues.firVisDate)
+        this.initialValues.firVisDate = moment(this.initialValues.firVisDate);
+      if (this.initialValues.patReDate)
+        this.initialValues.patReDate = moment(this.initialValues.patReDate);
       this.state.patDia = this.initialValues.patDia;
-      this.initialValues.C_T = this.initialValues.cStage.split(',')[0];
-      this.initialValues.C_N = this.initialValues.cStage.split(',')[1];
-      this.initialValues.C_M = this.initialValues.cStage.split(',')[2];
-      this.initialValues.P_T = this.initialValues.pStage.split(',')[0];
-      this.initialValues.P_N = this.initialValues.pStage.split(',')[1];
-      this.initialValues.P_M = this.initialValues.pStage.split(',')[2]; //病理信息Tree
+
+      if (this.initialValues.cStage) {
+        let cStage = this.initialValues.cStage.split(',');
+        this.initialValues.C_T = cStage[0];
+        this.initialValues.C_N = cStage[1];
+        this.initialValues.C_M = cStage[2];
+      }
+      if (this.initialValues.pStage) {
+        let pStage = this.initialValues.pStage.split(',');
+        this.initialValues.P_T = pStage[0];
+        this.initialValues.P_N = pStage[1];
+        this.initialValues.P_M = pStage[2]; //病理信息Tree
+      }
+      //this.initialValues.C_T = this.initialValues.cStage.split(',')[0];
+      //this.initialValues.C_N = this.initialValues.cStage.split(',')[1];
+      //this.initialValues.C_M = this.initialValues.cStage.split(',')[2];
+      //this.initialValues.P_T = this.initialValues.pStage.split(',')[0];
+      //this.initialValues.P_N = this.initialValues.pStage.split(',')[1];
+      //this.initialValues.P_M = this.initialValues.pStage.split(',')[2]; //病理信息Tree
 
       if (this.initialValues.stage == '3') this.state.c_installment = 1;
       if (this.initialValues.stage == '4') this.state.p_installment = 1;
@@ -531,6 +539,7 @@ class InitialDiagnosisProcess extends React.Component {
     }
   }
   initialValues = {};
+  id = -1;
   pid = -1;
   state = {
     value: 1,
@@ -552,14 +561,22 @@ class InitialDiagnosisProcess extends React.Component {
       values.firVisDate = values.firVisDate.format('YYYY-MM-DD');
     if (values.patReDate)
       values.patReDate = values.patReDate.format('YYYY-MM-DD');
-    if (values.C_T) {
-      values.cStage = values.C_T + ',' + values.C_N + ',' + values.C_M;
-    }
-    if (values.P_T) {
-      values.pStage = values.P_T + ',' + values.P_N + ',' + values.P_M;
-    }
 
-    values.CliniManifest = (values.CliniManifest || []).toString(); //临床表现
+    values.cStage =
+      (values.C_T ? values.C_T : '') +
+      ',' +
+      (values.C_N ? values.C_N : '') +
+      ',' +
+      (values.C_M ? values.C_M : '');
+
+    values.pStage =
+      (values.P_T ? values.P_T : '') +
+      ',' +
+      (values.P_N ? values.P_N : '') +
+      ',' +
+      (values.P_M ? values.P_M : '');
+
+    values.cliniManifest = (values.cliniManifest || []).toString(); //临床表现
     values.part = (values.part || []).toString();
     values.bioMet = (values.bioMet || []).toString(); //多选转字符
     values.traSite = (values.traSite || []).toString();
@@ -568,7 +585,27 @@ class InitialDiagnosisProcess extends React.Component {
       pid: this.pid,
       patDia: this.state.patDia, //添加病理信息
     };
-    const res = await IniDiaProsave(values); //传参
+    if (this.id != -1) {
+      console.log(values.videography);
+      const res = await IniDiaupdate({
+        id: this.id,
+        pid: this.props.pid,
+        ...values,
+      });
+      if (res.code == 200) {
+        console.log('更新成功');
+      } else {
+        console.log('更新失败');
+      }
+    } else {
+      const res = await IniDiaProsave({ pid: this.props.pid, ...values });
+      if (res.code == 200) {
+        this.id = res.id;
+        console.log('提交成功');
+      } else {
+        console.log('提交失败');
+      }
+    }
     console.log(values); //需要传入后端的值
   };
 
@@ -631,11 +668,11 @@ class InitialDiagnosisProcess extends React.Component {
         <Form.Item label="首诊PS评分" name="PSScore">
           <Radio.Group value={this.state.value}>
             {[...Array(5).keys()].map(i => (
-              <Radio value={'' + i}>{i}</Radio>
+              <Radio value={i}>{i}</Radio>
             ))}
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="临床表现" name="CliniManifest">
+        <Form.Item label="临床表现" name="cliniManifest">
           <Checkbox.Group options={this.clinical_manifestation_Options} />
         </Form.Item>
         <Form.Item label="影像学" name="videography">

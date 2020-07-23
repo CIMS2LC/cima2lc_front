@@ -17,12 +17,12 @@ import {
 } from 'antd';
 import styles from './index.less';
 
-import LaborInspect from '../BasicComponents/LaborInspect';
-import Immunohistochemical from '../BasicComponents/Immunohistochemical';
-import MolecularDetection from '../BasicComponents/MolecularDetection';
+import LaborInspect from './LaborInspect';
+import Immunohistochemical from './Immunohistochemical';
+import MolecularDetection from './MolecularDetection';
 import SideReaction from './SideReaction';
 import SystemSign from './SystemSign';
-import TreatSchedule from '../BasicComponents/TreatSchedule';
+import TreatSchedule from './TreatSchedule';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -341,10 +341,4 @@ class TreatmentInfo extends React.Component {
     );
   }
 }
-export default () => (
-  <div className={styles.container}>
-    <div id="components-table-demo-edit-cell">
-      <TreatmentInfo />
-    </div>
-  </div>
-);
+export default TreatmentInfo;

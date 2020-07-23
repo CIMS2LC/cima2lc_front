@@ -14,12 +14,6 @@ interface EditableCellProps {
   handleSave: (record: any) => void;
 }
 
-interface EditableColumnProps {
-  dataColumns: [];
-  operColumns?: [];
-  dataSource?: [];
-}
-
 const EditableContext = React.createContext<any>();
 
 const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
@@ -133,7 +127,7 @@ class EditableTable extends React.Component {
 
   handleAdd = () => {
     const { count, dataSource } = this.state;
-    let newData = this.props.newData || {};
+    let newData = this.props.newData || { key: count };
     newData['key'] = count;
     this.setState({
       dataSource: [...dataSource, newData],
@@ -151,7 +145,6 @@ class EditableTable extends React.Component {
     });
 
     this.setState({ dataSource: newData });
-    console.log('props', this.props);
     this.props.passData(this.state.dataSource);
   };
 
@@ -192,12 +185,24 @@ class EditableTable extends React.Component {
           添加
         </Button>
         <Table
-          components={components}
+          //components={components}
           rowClassName={() => 'editable-row'}
           bordered
           dataSource={dataSource}
           columns={columns}
         />
+        {this.props.hassave ? (
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={async e => {
+              const res = await this.props.save(this.state.dataSource);
+              console.log(this.state.dataSource);
+            }}
+          >
+            保存
+          </Button>
+        ) : null}
       </div>
     );
   }
