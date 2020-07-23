@@ -28,7 +28,7 @@ function getillCase(req: Request, res: Response, u: string) {
       DetailTrePlan: [],
       FollInfo: [
         {
-          date: '2020-07-22',
+          date: 'Wed, 08 Jul 2020 00:00:00 GMT',
           effEva: 3,
           examArea: null,
           folMet: 2,

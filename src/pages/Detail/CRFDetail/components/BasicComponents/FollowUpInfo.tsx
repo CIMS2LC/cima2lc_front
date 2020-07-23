@@ -17,7 +17,7 @@ import {
   UploadOutlined,
 } from '@ant-design/icons';
 import { getCookie } from '@/pages/BasicComponents/request';
-import { follInfosave } from '../../service';
+import { follInfosave, follInfoupdate, follInfodelete } from '../../service';
 import moment from 'moment';
 
 const fw_Options = [
@@ -215,7 +215,7 @@ class FollowUpInfo extends React.Component {
             <span>
               <Popconfirm
                 title="确认删除（不可恢复）？"
-                onConfirm={() => this.handleDelete(record.key)}
+                onConfirm={() => this.handleDelete(record)}
               >
                 <a>删除</a>
               </Popconfirm>
@@ -232,9 +232,12 @@ class FollowUpInfo extends React.Component {
     };
   }
   molDefaultFileList = [];
-  handleDelete = key => {
+  handleDelete = async record => {
+    await follInfodelete({ pid: this.props.pid, id: record.id });
     const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    this.setState({
+      dataSource: dataSource.filter(item => item.key !== record.key),
+    });
   };
 
   handleAdd = () => {
@@ -298,7 +301,8 @@ class FollowUpInfo extends React.Component {
           htmlType="submit"
           onClick={async e => {
             console.log(this.state.dataSource);
-            const res = await follInfosave({
+
+            const res = await follInfoupdate({
               pid: this.props.pid,
               data: this.state.dataSource,
             });
