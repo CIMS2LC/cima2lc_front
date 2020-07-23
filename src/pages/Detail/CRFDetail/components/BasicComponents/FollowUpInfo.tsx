@@ -206,6 +206,7 @@ class FollowUpInfo extends React.Component {
     const { count, dataSource } = this.state;
     const newData = {
       key: count,
+      number: count,
     };
     this.setState({
       dataSource: [...dataSource, newData],
@@ -263,7 +264,6 @@ class FollowUpInfo extends React.Component {
           onClick={async e => {
             const res = await follInfosave({
               pid: this.props.pid,
-              number: 0,
               ...this.state.dataSource,
             });
           }}
