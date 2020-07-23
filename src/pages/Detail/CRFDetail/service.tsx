@@ -121,7 +121,7 @@ export async function signsupdate(params?: any) {
   });
 }
 export async function follInfosave(params?: any) {
-  return request('http://localhost:8001/api/follInfo/add', {
+  return request('http://localhost:8001/api/FollInfo/add', {
     method: 'POST',
     data: {
       ...params,
@@ -129,7 +129,7 @@ export async function follInfosave(params?: any) {
   });
 }
 export async function follInfoupdate(params?: any) {
-  return request('http://localhost:8001/api/follInfo/update', {
+  return request('http://localhost:8001/api/FollInfo/update', {
     method: 'PUT',
     data: {
       ...params,

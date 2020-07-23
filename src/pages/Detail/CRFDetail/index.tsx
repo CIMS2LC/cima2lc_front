@@ -232,10 +232,24 @@ class CRFDetail extends React.Component {
                 </Tabs>
               </TabPane>
               <TabPane tab="随访信息" key="followUp_info">
-                <FollowUpInfo />
+                <FollowUpInfo
+                  pid={this.state.pid}
+                  initialValues={
+                    this.props.crfDetail.data
+                      ? this.props.crfDetail.data.FollInfo[0]
+                      : undefined
+                  }
+                />
               </TabPane>
               <TabPane tab="治疗信息" key="treatment_info">
-                <TreatmentInfo />
+                <TreatmentInfo
+                  pid={this.state.pid}
+                  initialValues={
+                    this.props.crfDetail.data
+                      ? this.props.crfDetail.data
+                      : undefined
+                  }
+                />
               </TabPane>
             </Tabs>
           ) : null}

@@ -189,8 +189,9 @@ class FollowUpInfo extends React.Component {
           ) : null,
       },
     ];
+    console.log(this.props.initialValues);
     this.state = {
-      dataSource: [],
+      dataSource: this.props.initialValues,
       file_list: [],
       count: 0,
     };
@@ -260,7 +261,11 @@ class FollowUpInfo extends React.Component {
           type="primary"
           htmlType="submit"
           onClick={async e => {
-            const res = await follInfosave(this.state.dataSource);
+            const res = await follInfosave({
+              pid: this.props.pid,
+              number: 0,
+              ...this.state.dataSource,
+            });
           }}
         >
           保存
