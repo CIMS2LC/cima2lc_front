@@ -14,7 +14,7 @@ import { history, Dispatch, connect } from 'umi';
 
 import styles from './style.less';
 import FollowUpInfo from './components/BasicComponents/FollowUpInfo';
-import TreatmentInfo from './components/TreatmentInfo';
+import TreatmentInfo from './components/BasicComponents/TreatmentInfo';
 import LaborInspect from './components/BasicComponents/LaborInspect';
 import Immunohistochemical from './components/BasicComponents/Immunohistochemical';
 import MolecularDetection from './components/BasicComponents/MolecularDetection';

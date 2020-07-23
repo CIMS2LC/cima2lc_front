@@ -1,5 +1,7 @@
-import { DatePicker, Select, Popconfirm, Radio, Rate, Cascader } from 'antd';
 import React from 'react';
+import EditableTable from '@/pages/BasicComponents/EditableTable';
+import { Radio, DatePicker, Cascader, Rate } from 'antd';
+import { sideEffectsave } from '../../service';
 
 const options = [
   {
@@ -239,57 +241,112 @@ const options = [
     ],
   },
 ];
-function onChange(value: any) {
-  console.log(value);
-}
 
-// Just show the latest item.
-function displayRender(label: any) {
-  return label[label.length - 1];
-}
-var columns = [
-  {
-    title: '症状描述',
-    dataIndex: 'description',
-    width: '10%',
-    render: () => (
-      <Cascader
-        options={options}
-        expandTrigger="hover"
-        displayRender={displayRender}
-        onChange={onChange}
-      />
-    ),
-  },
-  {
-    title: '分级',
-    key: 'grade',
-    width: '10%',
-    render: () => <Rate count={4} />,
-  },
-  {
-    title: '开始日期',
-    key: 'begin_time',
-    width: '10%',
-    render: () => <DatePicker />,
-  },
-  {
-    title: '目前是否仍存在',
-    dataIndex: 'exist',
-    width: '10%',
-    render: () => (
-      <Radio.Group>
-        <Radio value={0}>否</Radio>
-        <Radio value={1}>是</Radio>
-      </Radio.Group>
-    ),
-  },
-  {
-    title: '结束日期',
-    dataIndex: 'end_time',
-    width: '10%',
-    render: () => <DatePicker />,
-  },
-];
+const SideReaction = props => {
+  const passData = data => {
+    props.passData(data);
+  };
+  const onChange = (text, record, index) => {
+    record[index] = text;
+  };
+  const displayRender = (label: any) => {
+    return label[label.length - 1];
+  };
+  return (
+    <EditableTable
+      dataColumns={[
+        {
+          title: '序号',
+          dataIndex: 'key',
+          key: 'key',
+          width: '5%',
+          render: (text, record, index) => {
+            return <span>{index + 1}</span>;
+          },
+        },
+        {
+          title: '症状描述',
+          dataIndex: 'sidReaName',
+          key: 'sidReaName',
+          width: '10%',
+          onChange: { onChange },
+          render: (text, record, index) => {
+            return (
+              <Cascader
+                options={options}
+                expandTrigger="hover"
+                displayRender={displayRender}
+                onChange={e => {
+                  onChange(e.toString(), record, 'sidReaName');
+                }}
+              />
+            );
+          },
+        },
+        {
+          title: '分级',
+          dataIndex: 'sidRecCla',
+          key: 'sidRecCla',
+          width: '10%',
+          render: (text, record, index) => (
+            <Rate
+              count={4}
+              onChange={e => {
+                onChange(e, record, 'sidRecCla');
+              }}
+            />
+          ),
+        },
+        {
+          title: '开始日期',
+          dataIndex: 'begDate',
+          key: 'begDate',
+          width: '10%',
+          render: (text, record, index) => (
+            <DatePicker
+              onChange={(e, eString) => {
+                onChange(eString, record, 'begDate');
+              }}
+            />
+          ),
+        },
+        {
+          title: '目前是否仍存在',
+          dataIndex: 'isExe',
+          key: 'isExe',
+          width: '10%',
+          render: (text, record, index) => (
+            <Radio.Group
+              onChange={e => {
+                onChange(e.target.value, record, 'isExe');
+              }}
+            >
+              <Radio value={0}>否</Radio>
+              <Radio value={1}>是</Radio>
+            </Radio.Group>
+          ),
+        },
+        {
+          title: '结束日期',
+          dataIndex: 'endDate',
+          key: 'endDate',
+          width: '10%',
+          render: (text, record, index) => (
+            <DatePicker
+              onChange={(e, eString) => {
+                onChange(eString, record, 'endDate');
+              }}
+            />
+          ),
+        },
+      ]}
+      hassave={true}
+      save={sideEffectsave}
+      dataSource={props.dataSource}
+      operColumns={[]}
+      passData={passData}
+    />
+  );
+};
 
-export { columns };
+export default SideReaction;

@@ -88,6 +88,38 @@ export async function IniDiaupdate(params?: any) {
     },
   });
 }
+export async function sideEffectsave(params?: any) {
+  return request('http://localhost:8001/api/sideEffect/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function sideEffectupdate(params?: any) {
+  return request('http://localhost:8001/api/sideEffect/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function signssave(params?: any) {
+  return request('http://localhost:8001/api/signs/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function signsupdate(params?: any) {
+  return request('http://localhost:8001/api/signs/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function querydetail(params?: QueryParams) {
   return request('/api/illCase/allinfo/find', {
     params,
