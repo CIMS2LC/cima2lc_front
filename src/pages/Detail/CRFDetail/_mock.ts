@@ -77,7 +77,7 @@ function getillCase(req: Request, res: Response, u: string) {
       ],
       IniDiaPro: [
         {
-          CliniManifest: '咳痰,发热,食欲不佳',
+          cliniManifest: '咳痰,发热,食欲不佳',
           Ki67: 'trhrt',
           PSScore: '2',
           TSize: 'rtgytrh',

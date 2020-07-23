@@ -80,6 +80,14 @@ export async function IniDiaProsave(params?: any) {
     },
   });
 }
+export async function IniDiaProupdate(params?: any) {
+  return request('/api/IniDiaPro/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function querydetail(params?: QueryParams) {
   return request('/api/illCase/allinfo/find', {
     params,
