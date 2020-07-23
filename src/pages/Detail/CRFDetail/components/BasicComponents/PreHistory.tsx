@@ -41,11 +41,21 @@ class PreHistory extends React.Component {
         this.initialValues['tumFamHis'] || ''
       ).split(',');
       if (this.initialValues['smoke']) this.state.is_smoke = 1;
-      //if(this.initialValues['tumor']) this.state.stop_smoke = 1;
+      if (
+        this.initialValues['smokingHis'] &&
+        this.initialValues['smokingHis']['stopSmoke']
+      )
+        this.state.stop_smoke = 1;
       if (this.initialValues['drink']) this.state.is_drink = 1;
-      //if(this.initialValues['tumor']) this.state.stop_drink = 1;
+      if (
+        this.initialValues['drinkingHis'] &&
+        this.initialValues['drinkingHis']['stopDrink']
+      )
+        this.state.stop_drink = 1;
       if (this.initialValues['tumor']) this.state.is_tumHis = 1;
       if (this.initialValues['tumorFam']) this.state.is_tumFamHis = 1;
+      if (this.initialValues['drug']) this.state.is_medicine = 1;
+      if (this.initialValues['hormone']) this.state.is_hormone = 1;
     }
   }
   id = -1;
@@ -60,6 +70,8 @@ class PreHistory extends React.Component {
     is_medicine: 0,
     is_tumHis: 0,
     is_tumFamHis: 0,
+    hormoneUseHis: {},
+    medicineUseHis: {},
   };
 
   onChange_smoke = (e: any) => {
@@ -104,6 +116,12 @@ class PreHistory extends React.Component {
     this.setState({
       [key]: value,
     });
+  };
+  onChange_hormoneHis = (data: any) => {
+    this.setState({ hormoneUseHis: data });
+  };
+  onChange_medicineUseHis = (data: any) => {
+    this.setState({ medicineUseHis: data });
   };
   underlying_disease_history_Options = [
     '无',
@@ -178,6 +196,8 @@ class PreHistory extends React.Component {
           values.infDisHis = (values['infDisHis'] || []).toString();
           values.tumHis = (values['tumHis'] || []).toString();
           values.tumFamHis = (values['tumFamHis'] || []).toString();
+          values.hormoneUseHis = this.state.hormoneUseHis;
+          values.drugUseHis = this.state.medicineUseHis;
           if (this.id != -1) {
             const res = await PastHisupdate({
               id: this.id,
@@ -338,7 +358,13 @@ class PreHistory extends React.Component {
         </Form.Item>
         {this.state.is_hormone ? (
           <Form.Item label="激素使用史" name="hormoneUseHis">
-            <Hormone />
+            <Hormone
+              passData={data => {
+                this.onChange_hormoneHis(data);
+              }}
+              value={this.state.hormoneUseHis}
+              dataSource={this.props.initialValues['hormoneUseHis']}
+            />
           </Form.Item>
         ) : null}
         <Form.Item label="是否长期使用其他药物" name="drug">
@@ -352,7 +378,13 @@ class PreHistory extends React.Component {
         </Form.Item>
         {this.state.is_medicine ? (
           <Form.Item label="药物使用史" name="drugUseHis">
-            {/* <Medicine /> */}
+            <Medicine
+              passData={data => {
+                this.onChange_medicineUseHis(data);
+              }}
+              value={this.state.medicineUseHis}
+              dataSource={this.props.initialValues['drugUseHis']}
+            />
           </Form.Item>
         ) : null}
         <Form.Item>

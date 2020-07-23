@@ -1,11 +1,24 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Table, Input, Button, Popconfirm, Form } from 'antd';
 
-import {
-  EditableRowProps,
-  EditableCellProps,
-  EditableColumnProps,
-} from './data';
+interface EditableRowProps {
+  index: number;
+}
+
+interface EditableCellProps {
+  title: React.ReactNode;
+  editable: boolean;
+  children: React.ReactNode;
+  dataIndex: string;
+  record: any;
+  handleSave: (record: any) => void;
+}
+
+interface EditableColumnProps {
+  dataColumns: [];
+  operColumns?: [];
+  dataSource?: [];
+}
 
 const EditableContext = React.createContext<any>();
 
@@ -47,7 +60,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   const save = async e => {
     try {
       const values = await form.validateFields();
-
       toggleEdit();
       handleSave({ ...record, ...values });
     } catch (errInfo) {
@@ -85,9 +97,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-var DataSource = [];
 class EditableTable extends React.Component {
-  constructor(props: EditableColumnProps) {
+  constructor(props) {
     super(props);
     this.columns = [
       ...(props.dataColumns ? props.dataColumns : []),
@@ -111,7 +122,7 @@ class EditableTable extends React.Component {
 
     this.state = {
       dataSource: props.dataSource ? props.dataSource : [],
-      count: 1,
+      count: props.dataSource ? props.dataSource.length : 0,
     };
   }
 
@@ -122,12 +133,8 @@ class EditableTable extends React.Component {
 
   handleAdd = () => {
     const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      name: `Edward King ${count}`,
-      age: 32,
-      address: `London, Park Lane no. ${count}`,
-    };
+    let newData = this.props.newData || {};
+    newData['key'] = count;
     this.setState({
       dataSource: [...dataSource, newData],
       count: count + 1,
@@ -142,7 +149,10 @@ class EditableTable extends React.Component {
       ...item,
       ...row,
     });
+
     this.setState({ dataSource: newData });
+    console.log('props', this.props);
+    this.props.passData(this.state.dataSource);
   };
 
   public handleGet = () => {

@@ -38,8 +38,25 @@ class MolecularDetection extends React.Component {
         molecular_detection_state[item] = this.initialValues[item];
       });
       this.state.molecular_detection_labels = molecular_detection_state;
+      if (this.initialValues['path']) {
+        const path_list = (this.initialValues['path'] || '').split(',');
+        var index = 0;
+        path_list.map(item => {
+          const tmp_list = item.split('/');
+          const fileName = tmp_list[tmp_list.length - 1];
+          console.log(tmp_list);
+          this.molDefaultFileList.push({
+            uid: `${index}`,
+            name: fileName,
+            status: 'done',
+            url: `http://localhost:8088/file/${this.pid}/${fileName}`,
+          });
+        });
+        console.log(this.molDefaultFileList);
+      }
     }
   }
+  molDefaultFileList = [];
   id = -1;
   pid = -1;
   state = {
@@ -170,6 +187,7 @@ class MolecularDetection extends React.Component {
             }}
             multiple={true}
             data={{ pid: this.props.pid }}
+            defaultFileList={this.molDefaultFileList}
             onChange={info => {
               if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);

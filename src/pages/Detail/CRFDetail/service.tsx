@@ -73,7 +73,7 @@ export async function MoleDetecupdate(params?: MoleDetecItem) {
   });
 }
 export async function IniDiaProsave(params?: any) {
-  return request('/api/MoleDetec/add', {
+  return request('/api/iniDiaPro/add', {
     method: 'POST',
     data: {
       ...params,
