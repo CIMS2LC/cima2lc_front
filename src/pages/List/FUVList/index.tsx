@@ -14,6 +14,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 
 import UpdateForm, { FormValueType } from './components/UpdateForm';
+import { treeData } from '@/pages/Detail/CRFDetail/components/BasicComponents/InitialDiagnosisProcess';
 import { TableListItem } from './data.d';
 import {
   query,
@@ -63,9 +64,6 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
     await deletelist({
       id: selectedRows.map(row => row.key),
     });
-    // await removeRule({
-    //   key: selectedRows.map(row => row.key),
-    // });
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -76,13 +74,20 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
   }
 };
 
-function getTitle(datas, key) {
-  //遍历树  获取id数组
-  for (var i in datas) {
-    if (datas[i].children) {
-      var res = getName(datas[i].children, key);
+function getTitle(datas, key, path) {
+  if (path === undefined) {
+    path = [];
+  }
+  for (var i of datas) {
+    var tmpPath = path;
+    tmpPath.push(i.title);
+
+    if (key == i.key) return tmpPath.join('-');
+    if (i.children) {
+      var res = getTitle(i.children, key, tmpPath);
       if (res) return res;
-    } else if (datas[i].key === key) return datas[i].title;
+    }
+    tmpPath.pop();
   }
 }
 
@@ -92,19 +97,12 @@ const TableList: React.FC<{}> = () => {
   );
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-
   const handleDelete = async record => {
     console.log(record);
     await deletelist({
       id: record.id,
     });
-    //await removeRule({ id: record.id });
-    //const dataSource = [...dataSource];
-    //this.setState({
-    //  dataSource: dataSource.filter(item => item.key !== record.key),
-    //});
   };
-
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '住院号/就诊号',
@@ -125,15 +123,13 @@ const TableList: React.FC<{}> = () => {
     {
       title: '性别',
       dataIndex: 'gender',
-      valueEnum: {
-        0: { text: '1', gender: '男' },
-        1: { text: '0', gender: '女' },
-      },
       render: text => `${text === '0' ? '女' : text === '1' ? '男' : text}`,
     },
     {
       title: '病理诊断',
       dataIndex: 'patDia',
+      render: text =>
+        `${(text || '').split(',').map(e => getTitle(treeData, e))}`,
     },
     // {
     //   title: '治疗方案',
