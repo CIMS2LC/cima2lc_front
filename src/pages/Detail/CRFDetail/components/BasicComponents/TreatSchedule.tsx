@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 import {
   Input,
@@ -9,6 +9,7 @@ import {
   InputNumber,
   Radio,
 } from 'antd';
+
 const { Option } = Select;
 
 //const treat_schedule_name = ['chemotherapy','targetedtherapy','immunotherapy','antivasculartherapy'];
@@ -86,115 +87,125 @@ const treat_schedule_medicine_options = {
     ],
   },
 };
+function onChange(text, record, index) {
+  record[index] = text;
+}
 interface TreatScheduleProps {
   treat_schedule_name: string;
-  scheme?: string;
 }
+
 class TreatSchedule extends React.Component {
-  constructor(props: TreatScheduleProps) {
-    super(props);
-    this.treat_schedule_name = props.treat_schedule_name;
-    Object.keys(treat_schedule_medicine_options[this.treat_schedule_name]).map(
-      item => {
-        this.scheme_list.push({ value: item });
-      },
-    );
-  }
+  //const TreatSchedule: React.FC<TreatScheduleProps> = props => {
+  passData = data => {
+    this.props.passData(data);
+  };
+  //var [scheme, setScheme] = useState('常用药物');
   state = {
     scheme: '常用药物',
   };
-  treat_schedule_name = '';
-  scheme_list = [];
   render() {
     return (
-      <div>
-        <EditableTable
-          dataColumns={[
-            {
-              title: '治疗名称',
-              dataIndex: 'treatment_name',
-              width: '10%',
-              render: () => <Input />,
+      <EditableTable
+        dataColumns={[
+          {
+            title: '治疗名称',
+            dataIndex: 'treatment_name',
+            width: '10%',
+            render: (text, record, index) => (
+              <Input
+                onChange={(e, eString) => {
+                  console.log(record);
+                  onChange(eString, record, 'date');
+                }}
+              />
+            ),
+          },
+          {
+            title: '治疗方案',
+            dataIndex: 'treatment_name',
+            width: '10%',
+            render: (text, record, index) => {
+              return (
+                <Select
+                  style={{ width: 120 }}
+                  onChange={value => {
+                    this.setState({ scheme: value });
+                  }}
+                  defaultValue="常用药物"
+                  options={Object.keys(
+                    treat_schedule_medicine_options[
+                      this.props.treat_schedule_name
+                    ],
+                  ).map(item => ({ value: item }))}
+                />
+              );
             },
-            {
-              title: '治疗方案',
-              dataIndex: 'treatment_name',
-              width: '10%',
-              render: () => {
-                return (
-                  <Select
-                    style={{ width: 120 }}
-                    onChange={value => {
-                      this.setState({
-                        scheme: value,
-                      });
-                    }}
-                    defaultValue="常用药物"
-                    options={this.scheme_list}
-                  />
-                );
-              },
+          },
+          {
+            title: '药物名称',
+            key: 'medicine_name',
+            width: '10%',
+            render: () => {
+              return (
+                <Select
+                  mode="tags"
+                  style={{ width: '100%' }}
+                  placeholder="Tags Mode"
+                  options={
+                    treat_schedule_medicine_options[
+                      this.props.treat_schedule_name
+                    ][this.state.scheme]
+                  }
+                  tagRender={props => {
+                    return (
+                      <div>
+                        <Popover
+                          content={
+                            <div>
+                              <label>剂量</label>
+                              <InputNumber />
+                              <label>单位</label>
+                              <Radio.Group>
+                                <Radio value={1}>克</Radio>
+                                <Radio value={2}>毫克</Radio>
+                                <Radio value={3}>毫升</Radio>
+                              </Radio.Group>
+                            </div>
+                          }
+                        >
+                          <Tag>{props.value}</Tag>
+                        </Popover>
+                      </div>
+                    );
+                  }}
+                ></Select>
+              );
             },
-            {
-              title: '药物名称',
-              key: 'medicine_name',
-              width: '10%',
-              render: () => {
-                return (
-                  <Select
-                    mode="tags"
-                    style={{ width: '100%' }}
-                    placeholder="Tags Mode"
-                    options={
-                      treat_schedule_medicine_options[this.treat_schedule_name][
-                        this.state.scheme
-                      ]
-                    }
-                    tagRender={props => {
-                      return (
-                        <div>
-                          <Popover
-                            content={
-                              <div>
-                                <label>剂量</label>
-                                <InputNumber />
-                                <label>单位</label>
-                                <Radio.Group>
-                                  <Radio value={1}>克</Radio>
-                                  <Radio value={2}>毫克</Radio>
-                                  <Radio value={3}>毫升</Radio>
-                                </Radio.Group>
-                              </div>
-                            }
-                          >
-                            <Tag>{props.value}</Tag>
-                          </Popover>
-                        </div>
-                      );
-                    }}
-                  >
-                    {/* {this.children_option} */}
-                  </Select>
-                );
-              },
-            },
-            {
-              title: '给药/治疗开始日期',
-              key: 'begin_time',
-              width: '10%',
-              render: () => <DatePicker />,
-            },
-            {
-              title: '给药/治疗结束日期',
-              key: 'end_time',
-              width: '10%',
-              render: () => <DatePicker />,
-            },
-          ]}
-          operColumns={[]}
-        />
-      </div>
+          },
+          {
+            title: '给药/治疗开始日期',
+            key: 'begin_time',
+            width: '10%',
+            render: () => <DatePicker />,
+          },
+          {
+            title: '给药/治疗结束日期',
+            key: 'end_time',
+            width: '10%',
+            render: () => <DatePicker />,
+          },
+        ]}
+        operColumns={[]}
+        dataSource={this.props.dataSource}
+        passData={this.props.passData}
+        newData={{
+          drugName: '药物',
+          drugDose: '1g',
+          duration: 0,
+        }}
+      />
     );
   }
 }
+
 export default TreatSchedule;

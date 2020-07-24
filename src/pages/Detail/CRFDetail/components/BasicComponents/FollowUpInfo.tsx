@@ -53,26 +53,6 @@ class FollowUpInfo extends React.Component {
   constructor(props) {
     super(props);
     console.log(this.props.initialValues);
-    // for(var i = 0;i< this.props.initialValues.length;i++){
-    //   if (this.initialValues[i]['savFilPath']) {
-    //     var defaultFileList =[];
-    //     const path_list = (this.props.initialValues[i]['savFilPath'] || '').split(',');
-    //     var index = 0;
-    //     path_list.map(item => {
-    //       const tmp_list = item.split('/');
-    //       const fileName = tmp_list[tmp_list.length - 1];
-    //       console.log(tmp_list);
-    //       defaultFileList.push({
-    //         uid: `${index}`,
-    //         name: fileName,
-    //         status: 'done',
-    //         url: `http://localhost:8088/file/${this.pid}/${fileName}`,
-    //       });
-    //     });
-    //     this.props.initialValues[i]['savFilPath'] = defaultFileList;
-    //     console.log(defaultFileList);
-    //   }
-    // }
     this.columns = [
       {
         title: '序号',

@@ -55,12 +55,12 @@ class TreatmentInfo extends React.Component {
             <MolecularDetection />
           </TabPane>
 
-          <TabPane tab="疗效评估" key="effect_evalution">
+          {/* <TabPane tab="疗效评估" key="effect_evalution">
             <EffectEvalution
               pid={this.props.pid}
               initialValues={this.props.initialValues}
             />
-          </TabPane>
+          </TabPane> */}
           <TabPane tab="症状体征" key="system_sign">
             <SystemSign
               pid={this.props.pid}

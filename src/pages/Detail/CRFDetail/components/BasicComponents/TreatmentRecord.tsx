@@ -16,6 +16,7 @@ import {
   Popconfirm,
 } from 'antd';
 import TreatSchedule from './TreatSchedule';
+import { treRecsave, treRecupdate } from '../../service';
 const layout = {
   labelCol: {
     span: 3,
@@ -30,6 +31,10 @@ class TreatmentRecord extends React.Component {
   constructor(props: any) {
     super(props);
   }
+  onChange_chemotherapy = (data: any) => {
+    console.log(data);
+    this.setState({ hormoneUseHis: data });
+  };
   state = {
     treatment: -1,
     chemotherapy: false,
@@ -37,6 +42,7 @@ class TreatmentRecord extends React.Component {
     immunotherapy: false,
     othertherapy: false,
     antivasculartherapy: false,
+    hormoneUseHis: '',
   };
   trement = [
     { label: '1线', value: 1 },
@@ -66,7 +72,42 @@ class TreatmentRecord extends React.Component {
     '淋巴结',
     '其他',
   ];
-  onfinish = (values: any) => {
+  best_effect_evalution = [
+    { label: 'PD-进展', value: 1 },
+    { label: 'SD-稳定', value: 2 },
+    { label: 'PR-部分缓解', value: 3 },
+    { label: 'CR-完全缓解', value: 4 },
+    { label: '术后未发现新病灶', value: 5 },
+  ];
+  onfinish = async (values: any) => {
+    if (values.proDate) values.proDate = values.proDate.format('YYYY-MM-DD');
+    if (values.beEffEvaDate)
+      values.beEffEvaDate = values.beEffEvaDate.format('YYYY-MM-DD');
+
+    if (this.id != -1) {
+      console.log(values.videography);
+      const res = await treRecupdate({
+        //service里面加请求
+        pid: this.props.pid,
+        data: { id: this.id, treNum: this.props.treNum, ...values },
+      });
+      if (res.code == 200) {
+        console.log('更新成功');
+      } else {
+        console.log('更新失败');
+      }
+    } else {
+      const res = await treRecsave({
+        pid: this.props.pid,
+        data: { treNum: this.props.treNum, ...values },
+      });
+      if (res && res.code == 200) {
+        this.id = res.id;
+        console.log('提交成功');
+      } else {
+        console.log('提交失败');
+      }
+    }
     console.log(values);
   };
   render() {
@@ -103,7 +144,12 @@ class TreatmentRecord extends React.Component {
               />
             </Form.Item>
             {this.state.chemotherapy ? (
-              <TreatSchedule treat_schedule_name="chemotherapy" />
+              <TreatSchedule
+                treat_schedule_name="chemotherapy"
+                passData={data => {
+                  this.onChange_chemotherapy(data);
+                }}
+              />
             ) : null}
 
             <Form.Item label="靶向治疗">
@@ -264,6 +310,18 @@ class TreatmentRecord extends React.Component {
             </div>
           </div>
         ) : null}
+        <Form.Item label="最佳疗效评估日期" name="beEffEvaDate">
+          <DatePicker />
+        </Form.Item>
+        <Form.Item label="最佳疗效评估" name="beEffEva">
+          <Select style={{ width: 120 }} options={this.best_effect_evalution} />
+        </Form.Item>
+        <Form.Item label="进展日期" name="proDate">
+          <DatePicker />
+        </Form.Item>
+        <Form.Item label="进展描述" name="proDes">
+          <Input />
+        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
             保存
