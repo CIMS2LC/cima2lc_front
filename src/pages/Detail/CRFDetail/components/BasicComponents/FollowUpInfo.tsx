@@ -177,14 +177,16 @@ class FollowUpInfo extends React.Component {
             }}
             multiple={true}
             data={{ pid: this.props.pid }}
-            defaultFileList={record['savFilPath'].split(',').map(path => ({
-              uid: `${index}`,
-              name: path.split('/')[path.split('/').length - 1],
-              status: 'done',
-              url: `http://localhost:8088/file/${this.props.pid}/${
-                path.split('/')[path.split('/').length - 1]
-              }`,
-            }))}
+            defaultFileList={(record['savFilPath'] || '')
+              .split(',')
+              .map(path => ({
+                uid: `${index}`,
+                name: path.split('/')[path.split('/').length - 1],
+                status: 'done',
+                url: `http://localhost:8088/file/${this.props.pid}/${
+                  path.split('/')[path.split('/').length - 1]
+                }`,
+              }))}
             onChange={info => {
               if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);
