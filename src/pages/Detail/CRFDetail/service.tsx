@@ -120,6 +120,30 @@ export async function signsupdate(params?: any) {
     },
   });
 }
+export async function follInfosave(params?: any) {
+  return request('http://localhost:8001/api/FollInfo/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function follInfoupdate(params?: any) {
+  return request('http://localhost:8001/api/FollInfo/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function follInfodelete(params?: any) {
+  return request('http://localhost:8001/api/FollInfo/delete', {
+    method: 'DELETE',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function querydetail(params?: QueryParams) {
   return request('/api/illCase/allinfo/find', {
     params,

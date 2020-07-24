@@ -26,7 +26,24 @@ function getillCase(req: Request, res: Response, u: string) {
       Coagulation: [],
       Cytokines: [],
       DetailTrePlan: [],
-      FollInfo: [],
+      FollInfo: [
+        {
+          date: 'Wed, 08 Jul 2020 00:00:00 GMT',
+          effEva: 3,
+          examArea: null,
+          folMet: 2,
+          id: 1,
+          imaFilType: '2',
+          livSta: 2,
+          number: 0,
+          pid: 16,
+          remarks: null,
+          savFilPath: 'static/16/icon_48.png',
+          tumorDesc: null,
+          tumorLD: null,
+          tumorSD: null,
+        },
+      ],
       ImageExams: [],
       Immunohis: [
         {
@@ -243,6 +260,15 @@ function getillCase(req: Request, res: Response, u: string) {
   return res.json(result);
 }
 
+function upload(req: Request, res: Response, u: string) {
+  const result = {
+    code: 200,
+    msg: '上传成功',
+    path: ['static/2/1_hetuanceng_tx0.h5.png'],
+  };
+  return res.json(result);
+}
 export default {
   'GET /api/illCase/allinfo/find': getillCase,
+  'POST /api/upload ': upload,
 };

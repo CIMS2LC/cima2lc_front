@@ -1,12 +1,23 @@
 import React from 'react';
-//import EditableTable from '@/pages/BasicComponents/EditableTable';
-import { Form, Button, Space, DatePicker, Select, Popconfirm } from 'antd';
+import {
+  Form,
+  Button,
+  Space,
+  DatePicker,
+  Select,
+  Popconfirm,
+  Table,
+  Upload,
+  message,
+} from 'antd';
 import PicturesWall from './PicturesWall';
 import {
   MinusCircleOutlined,
   PlusOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
+import { getCookie } from '@/pages/BasicComponents/request';
+import { follInfosave, follInfoupdate, follInfodelete } from '../../service';
 import moment from 'moment';
 
 const fw_Options = [
@@ -34,132 +45,274 @@ const it_Options = [
   { label: 'PET/CT', value: 5 },
 ];
 
-var data = [];
-const onFinish = values => {
-  console.log(values);
-  if (values.FollInfo) {
-    for (let j = 0, len = values.FollInfo.length; j < len; j++) {
-      values.FollInfo[j].date = moment(values.FollInfo[j].date).format(
-        'YYYY-MM-DD',
-      );
-    }
-    console.log(values.FollInfo);
-  }
-};
+function onChange(text, record, index) {
+  record[index] = text;
+}
 
 class FollowUpInfo extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    console.log(this.props.initialValues);
+    // for(var i = 0;i< this.props.initialValues.length;i++){
+    //   if (this.initialValues[i]['savFilPath']) {
+    //     var defaultFileList =[];
+    //     const path_list = (this.props.initialValues[i]['savFilPath'] || '').split(',');
+    //     var index = 0;
+    //     path_list.map(item => {
+    //       const tmp_list = item.split('/');
+    //       const fileName = tmp_list[tmp_list.length - 1];
+    //       console.log(tmp_list);
+    //       defaultFileList.push({
+    //         uid: `${index}`,
+    //         name: fileName,
+    //         status: 'done',
+    //         url: `http://localhost:8088/file/${this.pid}/${fileName}`,
+    //       });
+    //     });
+    //     this.props.initialValues[i]['savFilPath'] = defaultFileList;
+    //     console.log(defaultFileList);
+    //   }
+    // }
+    this.columns = [
+      {
+        title: '序号',
+        dataIndex: 'key',
+        key: 'key',
+        width: '5%',
+        render: (text, record, index) => {
+          return <span>{index + 1}</span>;
+        },
+      },
+      {
+        title: '随访日期',
+        dataIndex: 'date',
+        key: 'date',
+        width: '10%',
+        render: (text, record, index) => (
+          <DatePicker
+            defaultValue={moment(record['date'])}
+            onChange={(e, eString) => {
+              onChange(eString, record, 'date');
+            }}
+          />
+        ),
+      },
+      {
+        title: '随访方式',
+        dataIndex: 'folMet',
+        key: 'folMet',
+        width: '10%',
+        render: (text, record, index) => (
+          <Select
+            defaultValue={record['folMet']}
+            style={{ width: 120 }}
+            options={fw_Options}
+            onChange={e => {
+              onChange(e, record, 'folMet');
+            }}
+          />
+        ),
+      },
+      {
+        title: '疗效评估',
+        dataIndex: 'effEva',
+        key: 'effEva',
+        width: '10%',
+        render: (text, record, index) => (
+          <Select
+            defaultValue={record['effEva']}
+            style={{ width: 120 }}
+            options={re_Options}
+            onChange={e => {
+              onChange(e, record, 'effEva');
+            }}
+          />
+        ),
+      },
+      {
+        title: '生存状态',
+        dataIndex: 'livSta',
+        key: 'livSta',
+        width: '10%',
+        render: (text, record, index) => (
+          <Select
+            defaultValue={record['livSta']}
+            style={{ width: 120 }}
+            options={ls_Options}
+            onChange={e => {
+              onChange(e, record, 'livSta');
+            }}
+          />
+        ),
+      },
+      {
+        title: '影像类型',
+        dataIndex: 'imaFilType',
+        key: 'imaFilType',
+        width: '10%',
+        render: (text, record, index) => (
+          <Select
+            defaultValue={record['imaFilType']}
+            style={{ width: 120 }}
+            options={it_Options}
+            onChange={e => {
+              onChange(e, record, 'imaFilType');
+            }}
+          />
+        ),
+      },
+      {
+        title: '影像',
+        dataIndex: 'savFilPath',
+        key: 'savFilPath',
+        width: '10%',
+        render: (text, record, index) => (
+          <Upload
+            name="file[]" //发到后端的文件参数名
+            //action="/api/upload" //上传的地址
+            action="http://localhost:8001/api/upload" //上传的地址
+            headers={{
+              authorization: 'authorization-text',
+              token: getCookie('token'),
+            }}
+            multiple={true}
+            data={{ pid: this.props.pid }}
+            defaultFileList={record['savFilPath'].split(',').map(path => ({
+              uid: `${index}`,
+              name: path.split('/')[path.split('/').length - 1],
+              status: 'done',
+              url: `http://localhost:8088/file/${this.props.pid}/${
+                path.split('/')[path.split('/').length - 1]
+              }`,
+            }))}
+            onChange={info => {
+              if (info.file.status !== 'uploading') {
+                console.log(info.file, info.fileList);
+              }
+              if (info.file.status === 'done') {
+                var fileList = this.state.file_list;
+                fileList = fileList.concat(info.file.response.path);
+                console.log(fileList);
+                record['savFilPath'] = fileList.toString();
+                this.setState({ file_list: fileList });
+                message.success(`${info.file.name} file uploaded successfully`);
+              } else if (info.file.status === 'error') {
+                message.error(`${info.file.name} file upload failed.`);
+              }
+            }}
+          >
+            <Button>
+              <UploadOutlined /> 上传报告
+            </Button>
+          </Upload>
+        ),
+      },
+      {
+        title: 'operation',
+        dataIndex: 'operation',
+        render: (text, record) =>
+          this.state.dataSource.length >= 1 ? (
+            <span>
+              <Popconfirm
+                title="确认删除（不可恢复）？"
+                onConfirm={() => this.handleDelete(record)}
+              >
+                <a>删除</a>
+              </Popconfirm>
+            </span>
+          ) : null,
+      },
+    ];
+    console.log(this.props.initialValues);
+    this.state = {
+      dataSource: this.props.initialValues || [],
+      //dataSource: [],
+      file_list: [],
+      count: 0,
+    };
+  }
+  molDefaultFileList = [];
+  handleDelete = async record => {
+    await follInfodelete({ pid: this.props.pid, id: record.id });
+    const dataSource = [...this.state.dataSource];
+    this.setState({
+      dataSource: dataSource.filter(item => item.key !== record.key),
+    });
+  };
+
+  handleAdd = () => {
+    const { count, dataSource } = this.state;
+    const newData = {
+      key: count,
+      number: count,
+    };
+    this.setState({
+      dataSource: [...dataSource, newData],
+      count: count + 1,
+    });
+  };
+
+  handleSave = row => {
+    const newData = [...this.state.dataSource];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    this.setState({ dataSource: newData });
+  };
 
   render() {
+    const { dataSource } = this.state;
+    const columns = this.columns.map(col => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: this.handleSave,
+        }),
+      };
+    });
     return (
-      <Form name="form" onFinish={onFinish} autoComplete="off">
-        <Form.List name="FollInfo">
-          {(fields, { add, remove }) => {
-            return (
-              <div>
-                {fields.map(field => (
-                  <Space
-                    key={field.key}
-                    style={{ display: 'flex', marginBottom: 8 }}
-                    align="start"
-                  >
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'key']}
-                      fieldKey={[field.fieldKey, 'key']}
-                      label="序号"
-                    >
-                      {field.key + 1}
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'date']}
-                      fieldKey={[field.fieldKey, 'date']}
-                      rules={[{ required: true, message: '缺少随访日期' }]}
-                      label="随访日期"
-                    >
-                      <DatePicker format="YYYY-MM-DD" />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'folMet']}
-                      fieldKey={[field.fieldKey, 'folMet']}
-                      rules={[{ required: true, message: '缺少随访方式' }]}
-                      label="随访方式"
-                    >
-                      <Select style={{ width: 120 }} options={fw_Options} />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'effEva']} // key={field.key}
-                      fieldKey={[field.fieldKey, 'effEva']}
-                      rules={[{ required: true, message: '缺少随访方式' }]}
-                      label="疗效评估"
-                    >
-                      <Select style={{ width: 120 }} options={re_Options} />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'livSta']}
-                      fieldKey={[field.fieldKey, 'livSta']}
-                      rules={[{ required: true, message: '缺少生存状态' }]}
-                      label="生存状态"
-                    >
-                      <Select style={{ width: 120 }} options={ls_Options} />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'imaFilType']}
-                      fieldKey={[field.fieldKey, 'imaFilType']}
-                      label="影像类型"
-                    >
-                      <Select style={{ width: 120 }} options={it_Options} />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'savFilPath']}
-                      fieldKey={[field.fieldKey, 'savFilPath']}
-                      label="影像"
-                    >
-                      <PicturesWall />
-                    </Form.Item>
+      <div>
+        <Button
+          onClick={this.handleAdd}
+          type="primary"
+          style={{ marginBottom: 16 }}
+        >
+          添加
+        </Button>
+        <Table
+          //components={components}
+          rowClassName={() => 'editable-row'}
+          bordered
+          dataSource={dataSource}
+          columns={columns}
+        />
+        <Button
+          type="primary"
+          htmlType="submit"
+          onClick={async e => {
+            console.log(this.state.dataSource);
 
-                    <Popconfirm
-                      title="确认删除?"
-                      onConfirm={() => {
-                        remove(field.name);
-                        data.splice(field.name, 1);
-                      }}
-                    >
-                      <MinusCircleOutlined />
-                    </Popconfirm>
-                  </Space>
-                ))}
-
-                <Form.Item>
-                  <Button
-                    type="dashed"
-                    onClick={() => {
-                      add();
-                      data.push({});
-                    }}
-                    block
-                  >
-                    <PlusOutlined />
-                  </Button>
-                </Form.Item>
-              </div>
-            );
+            const res = await follInfoupdate({
+              pid: this.props.pid,
+              data: this.state.dataSource,
+            });
           }}
-        </Form.List>
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            保存
-          </Button>
-        </Form.Item>
-      </Form>
+        >
+          保存
+        </Button>
+      </div>
     );
   }
 }
+
 export default FollowUpInfo;
