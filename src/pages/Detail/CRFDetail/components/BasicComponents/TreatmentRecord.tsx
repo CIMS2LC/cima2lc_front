@@ -18,7 +18,7 @@ import {
 import TreatSchedule from './TreatSchedule';
 const layout = {
   labelCol: {
-    span: 2,
+    span: 3,
   },
   wrapperCol: {
     span: 8,
@@ -66,9 +66,12 @@ class TreatmentRecord extends React.Component {
     '淋巴结',
     '其他',
   ];
+  onfinish = (values: any) => {
+    console.log(values);
+  };
   render() {
     return (
-      <Form name="treatment_record" {...layout}>
+      <Form name="treatment_record" {...layout} onFinish={this.onfinish}>
         <Form.Item label="几线治疗" name="trement">
           <Select
             style={{ width: 120 }}
@@ -80,115 +83,107 @@ class TreatmentRecord extends React.Component {
         </Form.Item>
         {this.state.treatment < 6 && this.state.treatment >= 0 ? (
           <div>
-            <div>
-              <label>是否加入临床治疗</label>
+            <Form.Item label="是否加入临床治疗">
               <Radio.Group>
                 <Radio value={1}>是</Radio>
                 <Radio value={0}>否</Radio>
                 <Radio value={-1}>不详</Radio>
               </Radio.Group>
-            </div>
-            <div>
-              <label>治疗方案</label>
-              <div>
-                <label>化疗</label>
-                <Switch
-                  defaultChecked={false}
-                  checkedChildren="有"
-                  unCheckedChildren="无"
-                  onChange={checked => {
-                    this.setState({ chemotherapy: checked });
-                  }}
-                />
-                {this.state.chemotherapy ? (
-                  <TreatSchedule treat_schedule_name="chemotherapy" />
-                ) : null}
-              </div>
-              <div>
-                <label>靶向治疗</label>
-                <Switch
-                  defaultChecked={false}
-                  checkedChildren="有"
-                  unCheckedChildren="无"
-                  onChange={checked => {
-                    this.setState({ targetedtherapy: checked });
-                  }}
-                />
-                {this.state.targetedtherapy ? (
-                  <TreatSchedule treat_schedule_name="targetedtherapy" />
-                ) : null}
-              </div>
-              <div>
-                <label>免疫治疗</label>
-                <Switch
-                  defaultChecked={false}
-                  checkedChildren="有"
-                  unCheckedChildren="无"
-                  onChange={checked => {
-                    this.setState({ immunotherapy: checked });
-                  }}
-                />
-                {this.state.immunotherapy ? (
-                  <TreatSchedule treat_schedule_name="immunotherapy" />
-                ) : null}
-              </div>
-              <div>
-                <label>抗血管治疗</label>
-                <Switch
-                  defaultChecked={false}
-                  checkedChildren="有"
-                  unCheckedChildren="无"
-                  onChange={checked => {
-                    this.setState({ antivasculartherapy: checked });
-                  }}
-                />
-                {this.state.antivasculartherapy ? (
-                  <TreatSchedule treat_schedule_name="antivasculartherapy" />
-                ) : null}
-              </div>
-              <div>
-                <label>其他</label>
-                <Switch
-                  defaultChecked={false}
-                  checkedChildren="有"
-                  unCheckedChildren="无"
-                  onChange={checked => {
-                    this.setState({ othertherapy: checked });
-                  }}
-                />
-              </div>
-            </div>
-            <div>
-              <label>开始日期</label>
+            </Form.Item>
+
+            <label>治疗方案:</label>
+            <Form.Item label="化疗">
+              <Switch
+                defaultChecked={false}
+                checkedChildren="有"
+                unCheckedChildren="无"
+                onChange={checked => {
+                  this.setState({ chemotherapy: checked });
+                }}
+              />
+            </Form.Item>
+            {this.state.chemotherapy ? (
+              <TreatSchedule treat_schedule_name="chemotherapy" />
+            ) : null}
+
+            <Form.Item label="靶向治疗">
+              <Switch
+                defaultChecked={false}
+                checkedChildren="有"
+                unCheckedChildren="无"
+                onChange={checked => {
+                  this.setState({ targetedtherapy: checked });
+                }}
+              />
+            </Form.Item>
+            {this.state.targetedtherapy ? (
+              <TreatSchedule treat_schedule_name="targetedtherapy" />
+            ) : null}
+
+            <Form.Item label="免疫治疗">
+              <Switch
+                defaultChecked={false}
+                checkedChildren="有"
+                unCheckedChildren="无"
+                onChange={checked => {
+                  this.setState({ immunotherapy: checked });
+                }}
+              />
+            </Form.Item>
+            {this.state.immunotherapy ? (
+              <TreatSchedule treat_schedule_name="immunotherapy" />
+            ) : null}
+
+            <Form.Item label="抗血管治疗">
+              <Switch
+                defaultChecked={false}
+                checkedChildren="有"
+                unCheckedChildren="无"
+                onChange={checked => {
+                  this.setState({ antivasculartherapy: checked });
+                }}
+              />
+            </Form.Item>
+            {this.state.antivasculartherapy ? (
+              <TreatSchedule treat_schedule_name="antivasculartherapy" />
+            ) : null}
+
+            <Form.Item label="其他">
+              <Switch
+                defaultChecked={false}
+                checkedChildren="有"
+                unCheckedChildren="无"
+                onChange={checked => {
+                  this.setState({ othertherapy: checked });
+                }}
+              />
+            </Form.Item>
+
+            <Form.Item label="开始日期">
               <DatePicker />
-            </div>
-            <div>
-              <label>结束日期</label>
+            </Form.Item>
+            <Form.Item label="结束日期">
               <DatePicker />
-            </div>
-            <div>
-              <label>是否重复活检</label>
+            </Form.Item>
+
+            <Form.Item label="是否重复活检">
               <Radio.Group>
                 <Radio value={1}>是</Radio>
                 <Radio value={0}>否</Radio>
               </Radio.Group>
-            </div>
-            <div>
-              <label>活检方式</label>
+            </Form.Item>
+            <Form.Item label="活检方式">
               <Input />
-            </div>
-            <div>
-              <label>取材部位</label>
+            </Form.Item>
+            <Form.Item label="取材部位">
               <Input />
-            </div>
-            <div>
-              <label>标本库流水号</label>
+            </Form.Item>
+            <Form.Item label="标本库流水号">
               <Input />
-            </div>
-            <div>
-              <label>病理诊断结果</label>
+            </Form.Item>
+            <Form.Item label="病理诊断结果">
               <Input />
-            </div>
+            </Form.Item>
           </div>
         ) : null}
 
