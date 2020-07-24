@@ -102,6 +102,9 @@ const TableList: React.FC<{}> = () => {
     await deletelist({
       id: record.id,
     });
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
   };
   const columns: ProColumns<TableListItem>[] = [
     {

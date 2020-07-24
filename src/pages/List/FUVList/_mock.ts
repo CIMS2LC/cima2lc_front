@@ -168,7 +168,15 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
   res.json(result);
 }
 
+function deletelist(req: Request, res: Response, u: string, b: Request) {
+  const result = {
+    code: 200,
+    msg: '病例删除操作成功',
+  };
+  return res.json(result);
+}
 export default {
   'GET /api/list': getRule,
   'POST /api/rule': postRule,
+  'DELETE /api/illCase/delete': deletelist,
 };
