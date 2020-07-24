@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Button, Select, DatePicker } from 'antd';
+import { treRecupdate, treRecsave } from '../../service';
 const layout = {
   labelCol: {
     span: 3,
@@ -44,9 +45,8 @@ class EffectEvalution extends React.Component {
       console.log(values.videography);
       const res = await treRecupdate({
         //service里面加请求
-        id: this.id,
         pid: this.props.pid,
-        ...values,
+        data: { id: this.id, treNum: this.props.treNum, ...values },
       });
       if (res.code == 200) {
         console.log('更新成功');
@@ -54,8 +54,11 @@ class EffectEvalution extends React.Component {
         console.log('更新失败');
       }
     } else {
-      const res = await treRecsave({ pid: this.props.pid, ...values });
-      if (res.code == 200) {
+      const res = await treRecsave({
+        pid: this.props.pid,
+        data: { treNum: this.props.treNum, ...values },
+      });
+      if (res && res.code == 200) {
         this.id = res.id;
         console.log('提交成功');
       } else {

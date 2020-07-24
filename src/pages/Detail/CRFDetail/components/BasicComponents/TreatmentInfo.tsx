@@ -56,13 +56,22 @@ class TreatmentInfo extends React.Component {
           </TabPane>
 
           <TabPane tab="疗效评估" key="effect_evalution">
-            <EffectEvalution />
+            <EffectEvalution
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
           <TabPane tab="症状体征" key="system_sign">
-            <SystemSign />
+            <SystemSign
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
           <TabPane tab="副反应" key="side_reaction">
-            <SideReaction />
+            <SideReaction
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
         </Tabs>
       </div>
