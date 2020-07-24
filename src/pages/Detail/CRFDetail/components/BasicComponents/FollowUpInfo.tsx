@@ -235,7 +235,9 @@ class FollowUpInfo extends React.Component {
   }
   molDefaultFileList = [];
   handleDelete = async record => {
-    await follInfodelete({ pid: this.props.pid, id: record.id });
+    if (record.id) {
+      await follInfodelete({ pid: this.props.pid, id: record.id });
+    }
     const dataSource = [...this.state.dataSource];
     this.setState({
       dataSource: dataSource.filter(item => item.key !== record.key),

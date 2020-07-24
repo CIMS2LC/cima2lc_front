@@ -1,5 +1,14 @@
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Dropdown, Menu, message, Input, Select } from 'antd';
+import {
+  Button,
+  Divider,
+  Dropdown,
+  Menu,
+  message,
+  Input,
+  Select,
+  Popconfirm,
+} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -57,12 +66,32 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
   }
 };
 
+function getTitle(datas, key) {
+  //遍历树  获取id数组
+  for (var i in datas) {
+    if (datas[i].children) {
+      var res = getName(datas[i].children, key);
+      if (res) return res;
+    } else if (datas[i].key === key) return datas[i].title;
+  }
+}
+
 const TableList: React.FC<{}> = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(
     false,
   );
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
+
+  const handleDelete = async record => {
+    console.log(record);
+    await removeRule({ id: record.id });
+    //const dataSource = [...dataSource];
+    //this.setState({
+    //  dataSource: dataSource.filter(item => item.key !== record.key),
+    //});
+  };
+
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '住院号/就诊号',
@@ -83,6 +112,11 @@ const TableList: React.FC<{}> = () => {
     {
       title: '性别',
       dataIndex: 'gender',
+      valueEnum: {
+        0: { text: '1', gender: '男' },
+        1: { text: '0', gender: '女' },
+      },
+      render: text => `${text === '0' ? '女' : text === '1' ? '男' : text}`,
     },
     {
       title: '病理诊断',
@@ -151,7 +185,12 @@ const TableList: React.FC<{}> = () => {
           <>
             <Link to={`/detail/crf_detail?id=${record.id}`}>编辑</Link>
             <Divider type="vertical" />
-            <a href="">删除</a>
+            <Popconfirm
+              title="确认删除（不可恢复）？"
+              onConfirm={() => handleDelete(record)}
+            >
+              <a>删除</a>
+            </Popconfirm>
           </>
         );
       },
