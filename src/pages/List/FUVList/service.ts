@@ -6,6 +6,14 @@ export async function query(params?: QueryListItem) {
     params,
   });
 }
+export async function deletelist(params?: any) {
+  return request('/api/illCase/delete', {
+    method: 'DELETE',
+    data: {
+      ...params,
+    },
+  });
+}
 
 export async function queryRule(params?: TableListParams) {
   return request('/api/list', {

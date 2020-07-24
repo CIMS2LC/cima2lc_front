@@ -15,7 +15,14 @@ import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 import { TableListItem } from './data.d';
-import { query, queryRule, updateRule, addRule, removeRule } from './service';
+import {
+  query,
+  queryRule,
+  updateRule,
+  addRule,
+  removeRule,
+  deletelist,
+} from './service';
 import { Link } from 'umi';
 import { history } from 'umi';
 
@@ -53,9 +60,12 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeRule({
-      key: selectedRows.map(row => row.key),
+    await deletelist({
+      id: selectedRows.map(row => row.key),
     });
+    // await removeRule({
+    //   key: selectedRows.map(row => row.key),
+    // });
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -85,7 +95,10 @@ const TableList: React.FC<{}> = () => {
 
   const handleDelete = async record => {
     console.log(record);
-    await removeRule({ id: record.id });
+    await deletelist({
+      id: record.id,
+    });
+    //await removeRule({ id: record.id });
     //const dataSource = [...dataSource];
     //this.setState({
     //  dataSource: dataSource.filter(item => item.key !== record.key),

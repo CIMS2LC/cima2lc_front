@@ -236,12 +236,23 @@ class FollowUpInfo extends React.Component {
   molDefaultFileList = [];
   handleDelete = async record => {
     if (record.id) {
-      await follInfodelete({ pid: this.props.pid, id: record.id });
+      const res = await follInfodelete({ pid: this.props.pid, id: record.id });
+      if (res.code == 200) {
+        console.log('删除成功');
+        const dataSource = [...this.state.dataSource];
+        this.setState({
+          dataSource: dataSource.filter(item => item.id !== record.id),
+        });
+      } else {
+        console.log('删除失败');
+      }
+    } else {
+      const dataSource = [...this.state.dataSource];
+      this.setState({
+        dataSource: dataSource.filter(item => item.key !== record.key),
+      });
+      console.log('删除成功');
     }
-    const dataSource = [...this.state.dataSource];
-    this.setState({
-      dataSource: dataSource.filter(item => item.key !== record.key),
-    });
   };
 
   handleAdd = () => {
@@ -310,6 +321,7 @@ class FollowUpInfo extends React.Component {
               pid: this.props.pid,
               data: this.state.dataSource,
             });
+            this.setState({ dataSource: res.data });
           }}
         >
           保存
