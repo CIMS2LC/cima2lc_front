@@ -192,6 +192,7 @@ class CRFDetail extends React.Component {
                             if (this.state.id == -1) {
                               const res = await Patientsave({
                                 id: this.state.id,
+                                treNum: this.props.treNum,
                                 ...values,
                               });
                               this.update_detail();
@@ -291,6 +292,7 @@ class CRFDetail extends React.Component {
                       <TabPane tab="免疫组化" key="immunohistochemical">
                         <Immunohistochemical
                           pid={this.state.pid}
+                          treNum={0}
                           initialValues={
                             this.props.crfDetail.data
                               ? this.props.crfDetail.data.Immunohis[0]
@@ -301,6 +303,7 @@ class CRFDetail extends React.Component {
                       <TabPane tab="分子检测" key="molecular_detection">
                         <MolecularDetection
                           pid={this.state.pid}
+                          treNum={0}
                           initialValues={
                             this.props.crfDetail.data
                               ? this.props.crfDetail.data.MoleDetec[0]

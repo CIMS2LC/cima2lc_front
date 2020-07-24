@@ -89,6 +89,7 @@ class MolecularDetection extends React.Component {
             const res = await MoleDetecupdate({
               id: this.id,
               pid: this.props.pid,
+              treNum: this.props.treNum,
               ...values,
             });
             if (res.code == 200) {
@@ -97,7 +98,11 @@ class MolecularDetection extends React.Component {
               console.log('更新失败');
             }
           } else {
-            const res = await MoleDetecsave({ pid: this.props.pid, ...values });
+            const res = await MoleDetecsave({
+              pid: this.props.pid,
+              treNum: this.props.treNum,
+              ...values,
+            });
             if (res.code == 200) {
               this.id = res.id;
               console.log('提交成功');

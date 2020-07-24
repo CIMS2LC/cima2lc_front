@@ -76,6 +76,7 @@ class Immunohistochemical extends React.Component {
             const res = await Immunohisupdate({
               id: this.id,
               pid: this.props.pid,
+              treNum: this.props.treNum,
               ...values,
             });
             if (res.code == 200) {
@@ -86,7 +87,7 @@ class Immunohistochemical extends React.Component {
           } else {
             const res = await Immunohissave({
               pid: this.props.pid,
-              treNum: 0,
+              treNum: this.props.treNum,
               ...values,
             });
             if (res.code == 200) {
