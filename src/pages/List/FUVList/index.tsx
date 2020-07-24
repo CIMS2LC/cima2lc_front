@@ -131,60 +131,6 @@ const TableList: React.FC<{}> = () => {
       render: text =>
         `${(text || '').split(',').map(e => getTitle(treeData, e))}`,
     },
-    // {
-    //   title: '治疗方案',
-    //   dataIndex: 'theraShed',
-    //   valueType: 'textarea',
-    // },
-    // {
-    //   title: '治疗结束时间',
-    //   dataIndex: 'endtreatedAt',
-    //   sorter: true,
-    //   valueType: 'dateTime',
-    //   hideInForm: true,
-    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
-    //     const status = form.getFieldValue('status');
-    //     if (`${status}` === '0') {
-    //       return false;
-    //     }
-    //     if (`${status}` === '3') {
-    //       return <Input {...rest} placeholder="请输入异常原因！" />;
-    //     }
-    //     return defaultRender(item);
-    //   },
-    // },
-    // {
-    //   title: '上次随访时间',
-    //   dataIndex: 'lastfolAt',
-    //   sorter: true,
-    //   valueType: 'dateTime',
-    //   hideInForm: true,
-    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
-    //     const status = form.getFieldValue('status');
-    //     if (`${status}` === '0') {
-    //       return false;
-    //     }
-    //     if (`${status}` === '3') {
-    //       return <Input {...rest} placeholder="请输入异常原因！" />;
-    //     }
-    //     return defaultRender(item);
-    //   },
-    // },
-    // {
-    //   title: '随访疗效评估',
-    //   dataIndex: 'folEffEva',
-    //   valueType: 'textarea',
-    // },
-    // {
-    //   title: '生存状态',
-    //   dataIndex: 'status',
-    //   hideInForm: true,
-    //   valueEnum: {
-    //     0: { text: '关闭', status: 'Default' },
-    //     1: { text: '存活', status: 'Processing' },
-    //     2: { text: '死亡', status: 'Success' },
-    //   },
-    // },
     {
       title: '操作',
       dataIndex: 'option',
@@ -245,7 +191,7 @@ const TableList: React.FC<{}> = () => {
       <ProTable<TableListItem>
         headerTitle="查询表格"
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="id"
         search={false}
         toolBarRender={(action, { selectedRows }) => [
           <Button
