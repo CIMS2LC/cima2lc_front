@@ -53,26 +53,6 @@ class FollowUpInfo extends React.Component {
   constructor(props) {
     super(props);
     console.log(this.props.initialValues);
-    // for(var i = 0;i< this.props.initialValues.length;i++){
-    //   if (this.initialValues[i]['savFilPath']) {
-    //     var defaultFileList =[];
-    //     const path_list = (this.props.initialValues[i]['savFilPath'] || '').split(',');
-    //     var index = 0;
-    //     path_list.map(item => {
-    //       const tmp_list = item.split('/');
-    //       const fileName = tmp_list[tmp_list.length - 1];
-    //       console.log(tmp_list);
-    //       defaultFileList.push({
-    //         uid: `${index}`,
-    //         name: fileName,
-    //         status: 'done',
-    //         url: `http://localhost:8088/file/${this.pid}/${fileName}`,
-    //       });
-    //     });
-    //     this.props.initialValues[i]['savFilPath'] = defaultFileList;
-    //     console.log(defaultFileList);
-    //   }
-    // }
     this.columns = [
       {
         title: '序号',
@@ -177,14 +157,16 @@ class FollowUpInfo extends React.Component {
             }}
             multiple={true}
             data={{ pid: this.props.pid }}
-            defaultFileList={record['savFilPath'].split(',').map(path => ({
-              uid: `${index}`,
-              name: path.split('/')[path.split('/').length - 1],
-              status: 'done',
-              url: `http://localhost:8088/file/${this.props.pid}/${
-                path.split('/')[path.split('/').length - 1]
-              }`,
-            }))}
+            defaultFileList={(record['savFilPath'] || '')
+              .split(',')
+              .map(path => ({
+                uid: `${index}`,
+                name: path.split('/')[path.split('/').length - 1],
+                status: 'done',
+                url: `http://localhost:8088/file/${this.props.pid}/${
+                  path.split('/')[path.split('/').length - 1]
+                }`,
+              }))}
             onChange={info => {
               if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);
@@ -233,11 +215,24 @@ class FollowUpInfo extends React.Component {
   }
   molDefaultFileList = [];
   handleDelete = async record => {
-    await follInfodelete({ pid: this.props.pid, id: record.id });
-    const dataSource = [...this.state.dataSource];
-    this.setState({
-      dataSource: dataSource.filter(item => item.key !== record.key),
-    });
+    if (record.id) {
+      const res = await follInfodelete({ pid: this.props.pid, id: record.id });
+      if (res.code == 200) {
+        console.log('删除成功');
+        const dataSource = [...this.state.dataSource];
+        this.setState({
+          dataSource: dataSource.filter(item => item.id !== record.id),
+        });
+      } else {
+        console.log('删除失败');
+      }
+    } else {
+      const dataSource = [...this.state.dataSource];
+      this.setState({
+        dataSource: dataSource.filter(item => item.key !== record.key),
+      });
+      console.log('删除成功');
+    }
   };
 
   handleAdd = () => {
@@ -306,6 +301,7 @@ class FollowUpInfo extends React.Component {
               pid: this.props.pid,
               data: this.state.dataSource,
             });
+            this.setState({ dataSource: res.data });
           }}
         >
           保存

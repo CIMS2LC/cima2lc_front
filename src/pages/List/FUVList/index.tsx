@@ -1,12 +1,29 @@
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Dropdown, Menu, message, Input, Select } from 'antd';
+import {
+  Button,
+  Divider,
+  Dropdown,
+  Menu,
+  message,
+  Input,
+  Select,
+  Popconfirm,
+} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 
 import UpdateForm, { FormValueType } from './components/UpdateForm';
+import { treeData } from '@/pages/Detail/CRFDetail/components/BasicComponents/InitialDiagnosisProcess';
 import { TableListItem } from './data.d';
-import { query, queryRule, updateRule, addRule, removeRule } from './service';
+import {
+  query,
+  queryRule,
+  updateRule,
+  addRule,
+  removeRule,
+  deletelist,
+} from './service';
 import { Link } from 'umi';
 import { history } from 'umi';
 
@@ -44,8 +61,8 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeRule({
-      key: selectedRows.map(row => row.key),
+    await deletelist({
+      id: selectedRows.map(row => row.key),
     });
     hide();
     message.success('删除成功，即将刷新');
@@ -57,12 +74,38 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
   }
 };
 
+function getTitle(datas, key, path) {
+  if (path === undefined) {
+    path = [];
+  }
+  for (var i of datas) {
+    var tmpPath = path;
+    tmpPath.push(i.title);
+
+    if (key == i.key) return tmpPath.join('-');
+    if (i.children) {
+      var res = getTitle(i.children, key, tmpPath);
+      if (res) return res;
+    }
+    tmpPath.pop();
+  }
+}
+
 const TableList: React.FC<{}> = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(
     false,
   );
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
+  const handleDelete = async record => {
+    console.log(record);
+    await deletelist({
+      id: record.id,
+    });
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
+  };
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '住院号/就诊号',
@@ -83,65 +126,14 @@ const TableList: React.FC<{}> = () => {
     {
       title: '性别',
       dataIndex: 'gender',
+      render: text => `${text === '0' ? '女' : text === '1' ? '男' : text}`,
     },
     {
       title: '病理诊断',
       dataIndex: 'patDia',
+      render: text =>
+        `${(text || '').split(',').map(e => getTitle(treeData, e))}`,
     },
-    // {
-    //   title: '治疗方案',
-    //   dataIndex: 'theraShed',
-    //   valueType: 'textarea',
-    // },
-    // {
-    //   title: '治疗结束时间',
-    //   dataIndex: 'endtreatedAt',
-    //   sorter: true,
-    //   valueType: 'dateTime',
-    //   hideInForm: true,
-    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
-    //     const status = form.getFieldValue('status');
-    //     if (`${status}` === '0') {
-    //       return false;
-    //     }
-    //     if (`${status}` === '3') {
-    //       return <Input {...rest} placeholder="请输入异常原因！" />;
-    //     }
-    //     return defaultRender(item);
-    //   },
-    // },
-    // {
-    //   title: '上次随访时间',
-    //   dataIndex: 'lastfolAt',
-    //   sorter: true,
-    //   valueType: 'dateTime',
-    //   hideInForm: true,
-    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
-    //     const status = form.getFieldValue('status');
-    //     if (`${status}` === '0') {
-    //       return false;
-    //     }
-    //     if (`${status}` === '3') {
-    //       return <Input {...rest} placeholder="请输入异常原因！" />;
-    //     }
-    //     return defaultRender(item);
-    //   },
-    // },
-    // {
-    //   title: '随访疗效评估',
-    //   dataIndex: 'folEffEva',
-    //   valueType: 'textarea',
-    // },
-    // {
-    //   title: '生存状态',
-    //   dataIndex: 'status',
-    //   hideInForm: true,
-    //   valueEnum: {
-    //     0: { text: '关闭', status: 'Default' },
-    //     1: { text: '存活', status: 'Processing' },
-    //     2: { text: '死亡', status: 'Success' },
-    //   },
-    // },
     {
       title: '操作',
       dataIndex: 'option',
@@ -151,7 +143,12 @@ const TableList: React.FC<{}> = () => {
           <>
             <Link to={`/detail/crf_detail?id=${record.id}`}>编辑</Link>
             <Divider type="vertical" />
-            <a href="">删除</a>
+            <Popconfirm
+              title="确认删除（不可恢复）？"
+              onConfirm={() => handleDelete(record)}
+            >
+              <a>删除</a>
+            </Popconfirm>
           </>
         );
       },
@@ -197,7 +194,7 @@ const TableList: React.FC<{}> = () => {
       <ProTable<TableListItem>
         headerTitle="查询表格"
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="id"
         search={false}
         toolBarRender={(action, { selectedRows }) => [
           <Button

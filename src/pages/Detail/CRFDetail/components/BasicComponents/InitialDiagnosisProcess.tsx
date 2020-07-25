@@ -44,7 +44,7 @@ const longinputlayout = {
     span: 5,
   },
 };
-const treeData = [
+export const treeData = [
   //病例诊断信息
   {
     title: '上皮型肿瘤',
@@ -148,7 +148,6 @@ const treeData = [
             title: '非角化型鳞癌',
             key: '0-0-1-1',
           },
-          ,
           {
             title: '基底鳞状细胞癌',
             key: '0-0-1-2',

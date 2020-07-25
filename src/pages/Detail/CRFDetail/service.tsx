@@ -88,6 +88,22 @@ export async function IniDiaupdate(params?: any) {
     },
   });
 }
+export async function treRecsave(params?: any) {
+  return request('http://localhost:8001/api/treRec/add', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function treRecupdate(params?: any) {
+  return request('http://localhost:8001/api/treRec/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function sideEffectsave(params?: any) {
   return request('http://localhost:8001/api/sideEffect/add', {
     method: 'POST',

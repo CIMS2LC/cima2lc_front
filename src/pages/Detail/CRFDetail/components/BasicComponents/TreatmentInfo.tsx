@@ -22,8 +22,8 @@ import Immunohistochemical from './Immunohistochemical';
 import MolecularDetection from './MolecularDetection';
 import SideReaction from './SideReaction';
 import SystemSign from './SystemSign';
-import TreatSchedule from './TreatSchedule';
 import TreatmentRecord from './TreatmentRecord';
+import EffectEvalution from './EffectEvalution';
 const { TabPane } = Tabs;
 const { Option } = Select;
 
@@ -37,23 +37,6 @@ const layout = {
 };
 
 class TreatmentInfo extends React.Component {
-  state = {
-    treatment: -1,
-    chemotherapy: false,
-    targetedtherapy: false,
-    immunotherapy: false,
-    othertherapy: false,
-    antivasculartherapy: false,
-  };
-
-  best_effect_evalution = [
-    { label: 'PD-进展', value: 1 },
-    { label: 'SD-稳定', value: 2 },
-    { label: 'PR-部分缓解', value: 3 },
-    { label: 'CR-完全缓解', value: 4 },
-    { label: '术后未发现新病灶', value: 5 },
-  ];
-
   render() {
     return (
       <div>
@@ -71,38 +54,24 @@ class TreatmentInfo extends React.Component {
           <TabPane tab="分子检测" key="molecular_detection">
             <MolecularDetection />
           </TabPane>
-          <TabPane tab="疗效评估" key="effect_evalution">
-            <Form name="effect_evalution" {...layout}>
-              <Form.Item
-                label="最佳疗效评估日期"
-                name="best_effect_evalution_date"
-              >
-                <DatePicker />
-              </Form.Item>
-              <Form.Item label="最佳疗效评估" name="best_effect_evalution">
-                <Select
-                  style={{ width: 120 }}
-                  options={this.best_effect_evalution}
-                />
-              </Form.Item>
-              <Form.Item label="进展日期" name="progress_date">
-                <DatePicker />
-              </Form.Item>
-              <Form.Item label="进展描述" name="progress_description">
-                <Input />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  保存
-                </Button>
-              </Form.Item>
-            </Form>
-          </TabPane>
+
+          {/* <TabPane tab="疗效评估" key="effect_evalution">
+            <EffectEvalution
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
+          </TabPane> */}
           <TabPane tab="症状体征" key="system_sign">
-            <SystemSign />
+            <SystemSign
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
           <TabPane tab="副反应" key="side_reaction">
-            <SideReaction />
+            <SideReaction
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
         </Tabs>
       </div>

@@ -363,7 +363,7 @@ class PreHistory extends React.Component {
                 this.onChange_hormoneHis(data);
               }}
               value={this.state.hormoneUseHis}
-              dataSource={this.props.initialValues['hormoneUseHis']}
+              dataSource={(this.props.initialValues || {})['hormoneUseHis']}
             />
           </Form.Item>
         ) : null}
@@ -383,7 +383,7 @@ class PreHistory extends React.Component {
                 this.onChange_medicineUseHis(data);
               }}
               value={this.state.medicineUseHis}
-              dataSource={this.props.initialValues['drugUseHis']}
+              dataSource={(this.props.initialValues || {})['drugUseHis']}
             />
           </Form.Item>
         ) : null}
