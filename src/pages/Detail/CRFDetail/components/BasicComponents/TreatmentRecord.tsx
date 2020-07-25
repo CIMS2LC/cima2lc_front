@@ -100,10 +100,15 @@ class TreatmentRecord extends React.Component {
     if (values.proDate) values.proDate = values.proDate.format('YYYY-MM-DD');
     if (values.beEffEvaDate)
       values.beEffEvaDate = values.beEffEvaDate.format('YYYY-MM-DD');
-    console.log(values);
+    if (values.begDate)
+      values.beEffEvaDate = values.begDate.format('YYYY-MM-DD');
+    if (values.endDate)
+      values.beEffEvaDate = values.endDate.format('YYYY-MM-DD');
+
     if (this.id != -1) {
       const res = await treRecupdate({
         pid: this.props.pid,
+        treNum: this.props.treNum,
         data: { id: this.id, treNum: this.props.treNum, ...values },
       });
       if (res && res.code == 200) {
@@ -114,6 +119,7 @@ class TreatmentRecord extends React.Component {
     } else {
       const res = await treRecsave({
         pid: this.props.pid,
+        treNum: this.props.treNum,
         data: { treNum: this.props.treNum, ...values },
       });
       if (res && res.code == 200) {
@@ -245,29 +251,29 @@ class TreatmentRecord extends React.Component {
               />
             </Form.Item>
 
-            <Form.Item label="开始日期">
+            <Form.Item label="开始日期" name="begDate">
               <DatePicker />
             </Form.Item>
-            <Form.Item label="结束日期">
+            <Form.Item label="结束日期" name="endDate">
               <DatePicker />
             </Form.Item>
 
-            <Form.Item label="是否重复活检">
+            <Form.Item label="是否重复活检" name="isRepBio">
               <Radio.Group>
-                <Radio value={1}>是</Radio>
-                <Radio value={0}>否</Radio>
+                <Radio value={true}>是</Radio>
+                <Radio value={false}>否</Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item label="活检方式">
+            <Form.Item label="活检方式" name="bioMet">
               <Input />
             </Form.Item>
-            <Form.Item label="取材部位">
+            <Form.Item label="取材部位" name="matPart">
               <Input />
             </Form.Item>
-            <Form.Item label="标本库流水号">
-              <Input />
+            <Form.Item label="标本库流水号" name="specNum">
+              <InputNumber />
             </Form.Item>
-            <Form.Item label="病理诊断结果">
+            <Form.Item label="病理诊断结果" name="patDiaRes">
               <Input />
             </Form.Item>
           </div>

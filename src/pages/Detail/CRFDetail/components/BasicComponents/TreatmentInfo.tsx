@@ -42,17 +42,30 @@ class TreatmentInfo extends React.Component {
       <div>
         <Tabs tabPosition="top">
           <TabPane tab="治疗记录" key="treatment_record">
-            <TreatmentRecord />
+            <TreatmentRecord
+              treNum={this.props.treNum}
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
 
           <TabPane tab="实验室检查" key="labor_inspect">
-            <LaborInspect />
+            <LaborInspect
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
           <TabPane tab="免疫组化" key="immunohistochemical">
-            <Immunohistochemical />
+            <Immunohistochemical
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
           <TabPane tab="分子检测" key="molecular_detection">
-            <MolecularDetection />
+            <MolecularDetection
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
 
           {/* <TabPane tab="疗效评估" key="effect_evalution">
