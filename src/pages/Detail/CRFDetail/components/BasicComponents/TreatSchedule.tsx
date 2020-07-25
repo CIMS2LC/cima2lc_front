@@ -103,34 +103,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-const treat_schedule_medicine = {
-  chemotherapy: [],
-  targetedtherapy: [
-    '吉非替尼',
-    '厄洛替尼',
-    '埃克替尼',
-    '阿法替尼',
-    '克唑替尼',
-    '奥希替尼',
-    '曲妥珠单抗',
-    '拉帕替尼',
-    '贝伐单抗',
-    '依维莫司',
-    '尼妥珠单抗',
-    '帕妥珠单抗',
-    'TDM1',
-    '不详',
-    '其他',
-  ],
-  immunotherapy: [],
-  antivasculartherapy: [
-    '重组人血管内皮抑素',
-    '贝伐珠单抗',
-    '安罗替尼',
-    '阿帕替尼',
-  ],
-};
-
 const treat_schedule_medicine_options = {
   chemotherapy: {
     'EP方案（依托泊苷+奈达铂/顺铂/卡铂）': [{ value: '依托泊苷' }],
@@ -198,7 +170,7 @@ class TreatSchedule extends React.Component {
               style={{ width: 120 }}
               onChange={value => {
                 record['treSolu'] = value;
-                this.setState({ scheme: value });
+                this.setState({ treSolu: value });
               }}
               defaultValue="常用药物"
               options={Object.keys(
@@ -211,7 +183,7 @@ class TreatSchedule extends React.Component {
       {
         title: '药物名称',
         key: 'drugName',
-        width: '10%',
+        width: '20%',
         render: (text, record, index) => {
           return (
             <Select
@@ -223,31 +195,46 @@ class TreatSchedule extends React.Component {
                   this.state.treSolu
                 ]
               }
-              onChange={value => {
-                record['drugName'] = value;
+              onChange={values => {
+                var drugs = record['drugs'];
+                if (!drugs) drugs = {};
+                values.map(item => {
+                  if (!drugs[[item]]) drugs[[item]] = {};
+                });
+                record['drugs'] = drugs;
+                console.log(record);
               }}
-              tagRender={props => {
-                return (
-                  <div>
-                    <Popover
-                      content={
-                        <div>
-                          <label>剂量</label>
-                          <InputNumber />
-                          <label>单位</label>
-                          <Radio.Group>
-                            <Radio value={1}>克</Radio>
-                            <Radio value={2}>毫克</Radio>
-                            <Radio value={3}>毫升</Radio>
-                          </Radio.Group>
-                        </div>
-                      }
-                    >
-                      <Tag>{props.value}</Tag>
-                    </Popover>
-                  </div>
-                );
-              }}
+              tagRender={tagvalue => (
+                <Popover
+                  content={
+                    <div>
+                      <label>剂量</label>
+                      <InputNumber
+                        onChange={value => {
+                          record['drugs'][`${tagvalue.value}`][
+                            'drugDosa'
+                          ] = value;
+                          console.log(record);
+                        }}
+                      />
+                      <label>单位</label>
+                      <Radio.Group
+                        onChange={e => {
+                          record['drugs'][`${tagvalue.value}`]['unit'] =
+                            e.target.value;
+                          console.log(record);
+                        }}
+                      >
+                        <Radio value={'g'}>克</Radio>
+                        <Radio value={'mg'}>毫克</Radio>
+                        <Radio value={'ml'}>毫升</Radio>
+                      </Radio.Group>
+                    </div>
+                  }
+                >
+                  <Tag>{props.value}</Tag>
+                </Popover>
+              )}
             ></Select>
           );
         },
@@ -296,6 +283,7 @@ class TreatSchedule extends React.Component {
     this.state = {
       dataSource: props.dataSource ? props.dataSource : [],
       count: props.dataSource ? props.dataSource.length : 0,
+      treSolu: '常用药物',
     };
   }
 

@@ -38,7 +38,11 @@ class TreatmentRecord extends React.Component {
     immunotherapy: false,
     othertherapy: false,
     antivasculartherapy: false,
-    hormoneUseHis: '',
+    Chemotherapy: undefined,
+    TargetedTherapy: undefined,
+    ImmunityTherapy: undefined,
+    AntivascularTherapy: undefined,
+    Other: undefined,
   };
   trement = [
     { label: '1线', value: 1 },
@@ -48,7 +52,7 @@ class TreatmentRecord extends React.Component {
     { label: '5线', value: 5 },
     { label: '手术', value: 6 },
     { label: '放疗', value: 7 },
-    { label: '其他', value: 0 },
+    { label: '其他', value: 8 },
   ];
   radiation_area = [
     '脑',
@@ -76,14 +80,17 @@ class TreatmentRecord extends React.Component {
     { label: '术后未发现新病灶', value: 5 },
   ];
   onfinish = async (values: any) => {
-    values['hormoneUseHis'] = this.state.hormoneUseHis;
+    values['Chemotherapy'] = this.state.Chemotherapy;
+    values['TargetedTherapy'] = this.state.TargetedTherapy;
+    values['ImmunityTherapy'] = this.state.ImmunityTherapy;
+    values['AntivascularTherapy'] = this.state.AntivascularTherapy;
+    values['Other'] = this.state.Other;
     if (values.proDate) values.proDate = values.proDate.format('YYYY-MM-DD');
     if (values.beEffEvaDate)
       values.beEffEvaDate = values.beEffEvaDate.format('YYYY-MM-DD');
 
     if (this.id != -1) {
       const res = await treRecupdate({
-        //service里面加请求
         pid: this.props.pid,
         data: { id: this.id, treNum: this.props.treNum, ...values },
       });
@@ -143,7 +150,7 @@ class TreatmentRecord extends React.Component {
               <TreatSchedule
                 treat_schedule_name="chemotherapy"
                 passData={data => {
-                  this.setState({ hormoneUseHis: data });
+                  this.setState({ Chemotherapy: data });
                 }}
               />
             ) : null}
@@ -159,7 +166,12 @@ class TreatmentRecord extends React.Component {
               />
             </Form.Item>
             {this.state.targetedtherapy ? (
-              <TreatSchedule treat_schedule_name="targetedtherapy" />
+              <TreatSchedule
+                treat_schedule_name="targetedtherapy"
+                passData={data => {
+                  this.setState({ TargetedTherapy: data });
+                }}
+              />
             ) : null}
 
             <Form.Item label="免疫治疗">
@@ -173,7 +185,12 @@ class TreatmentRecord extends React.Component {
               />
             </Form.Item>
             {this.state.immunotherapy ? (
-              <TreatSchedule treat_schedule_name="immunotherapy" />
+              <TreatSchedule
+                treat_schedule_name="immunotherapy"
+                passData={data => {
+                  this.setState({ ImmunityTherapy: data });
+                }}
+              />
             ) : null}
 
             <Form.Item label="抗血管治疗">
@@ -187,7 +204,12 @@ class TreatmentRecord extends React.Component {
               />
             </Form.Item>
             {this.state.antivasculartherapy ? (
-              <TreatSchedule treat_schedule_name="antivasculartherapy" />
+              <TreatSchedule
+                treat_schedule_name="antivasculartherapy"
+                passData={data => {
+                  this.setState({ AntivascularTherapy: data });
+                }}
+              />
             ) : null}
 
             <Form.Item label="其他">
