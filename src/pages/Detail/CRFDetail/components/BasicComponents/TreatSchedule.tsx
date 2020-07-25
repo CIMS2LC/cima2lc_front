@@ -12,6 +12,7 @@ import {
   Tag,
   DatePicker,
 } from 'antd';
+import moment from 'moment';
 
 interface EditableRowProps {
   index: number;
@@ -243,25 +244,25 @@ class TreatSchedule extends React.Component {
         title: '给药/治疗开始日期',
         key: 'begDate',
         width: '10%',
-        render: (text, record, index) => {
+        render: (text, record, index) => (
           <DatePicker
             onChange={(e, value) => {
-              record['begDate'] = value;
+              record['begDate'] = moment(value).format('YYYY-MM-DD');
             }}
-          />;
-        },
+          />
+        ),
       },
       {
         title: '给药/治疗结束日期',
         key: 'endDate',
         width: '10%',
-        render: (text, record, index) => {
+        render: (text, record, index) => (
           <DatePicker
             onChange={(e, value) => {
-              record['endDate'] = value;
+              record['endDate'] = moment(value).format('YYYY-MM-DD');
             }}
-          />;
-        },
+          />
+        ),
       },
       {
         title: '常用操作',
