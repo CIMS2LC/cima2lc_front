@@ -98,6 +98,7 @@ const TableList: React.FC<{}> = () => {
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const handleDelete = async record => {
+    console.log('删除');
     console.log(record);
     await deletelist({
       id: record.id,
@@ -178,7 +179,11 @@ const TableList: React.FC<{}> = () => {
         style={{ width: 400 }}
         onSearch={value => {
           var key = state.select;
+          console.log('123');
           query({ key, value });
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
         }}
       />
       <Button
