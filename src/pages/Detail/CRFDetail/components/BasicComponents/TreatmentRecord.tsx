@@ -31,10 +31,6 @@ class TreatmentRecord extends React.Component {
   constructor(props: any) {
     super(props);
   }
-  onChange_chemotherapy = (data: any) => {
-    console.log(data);
-    this.setState({ hormoneUseHis: data });
-  };
   state = {
     treatment: -1,
     chemotherapy: false,
@@ -80,18 +76,18 @@ class TreatmentRecord extends React.Component {
     { label: '术后未发现新病灶', value: 5 },
   ];
   onfinish = async (values: any) => {
+    values['hormoneUseHis'] = this.state.hormoneUseHis;
     if (values.proDate) values.proDate = values.proDate.format('YYYY-MM-DD');
     if (values.beEffEvaDate)
       values.beEffEvaDate = values.beEffEvaDate.format('YYYY-MM-DD');
 
     if (this.id != -1) {
-      console.log(values.videography);
       const res = await treRecupdate({
         //service里面加请求
         pid: this.props.pid,
         data: { id: this.id, treNum: this.props.treNum, ...values },
       });
-      if (res.code == 200) {
+      if (res && res.code == 200) {
         console.log('更新成功');
       } else {
         console.log('更新失败');
@@ -147,7 +143,7 @@ class TreatmentRecord extends React.Component {
               <TreatSchedule
                 treat_schedule_name="chemotherapy"
                 passData={data => {
-                  this.onChange_chemotherapy(data);
+                  this.setState({ hormoneUseHis: data });
                 }}
               />
             ) : null}
