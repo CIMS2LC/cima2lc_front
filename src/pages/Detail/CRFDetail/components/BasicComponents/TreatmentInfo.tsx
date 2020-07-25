@@ -43,6 +43,7 @@ class TreatmentInfo extends React.Component {
         <Tabs tabPosition="top">
           <TabPane tab="治疗记录" key="treatment_record">
             <TreatmentRecord
+              treNum={this.props.treNum}
               pid={this.props.pid}
               initialValues={this.props.initialValues}
             />

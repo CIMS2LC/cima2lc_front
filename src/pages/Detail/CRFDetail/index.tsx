@@ -328,6 +328,7 @@ class CRFDetail extends React.Component {
                     <TreatmentInfo
                       key="treatment_info"
                       pid={this.state.pid}
+                      treNum={this.state.treNum}
                       initialValues={
                         this.props.crfDetail.data
                           ? this.props.crfDetail.data

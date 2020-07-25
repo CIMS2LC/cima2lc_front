@@ -96,6 +96,7 @@ class TreatmentRecord extends React.Component {
     if (this.id != -1) {
       const res = await treRecupdate({
         pid: this.props.pid,
+        treNum: this.props.treNum,
         data: { id: this.id, treNum: this.props.treNum, ...values },
       });
       if (res && res.code == 200) {
@@ -106,6 +107,7 @@ class TreatmentRecord extends React.Component {
     } else {
       const res = await treRecsave({
         pid: this.props.pid,
+        treNum: this.props.treNum,
         data: { treNum: this.props.treNum, ...values },
       });
       if (res && res.code == 200) {
