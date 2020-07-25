@@ -233,7 +233,7 @@ class TreatSchedule extends React.Component {
                     </div>
                   }
                 >
-                  <Tag>{props.value}</Tag>
+                  <Tag>{tagvalue.value}</Tag>
                 </Popover>
               )}
             ></Select>
