@@ -109,7 +109,7 @@ class TreatmentRecord extends React.Component {
         pid: this.props.pid,
         treNum: this.props.treNum,
         trement: this.state.trement_name,
-        values,
+        ...values,
       });
       if (res && res.code == 200) {
         console.log('更新成功');
