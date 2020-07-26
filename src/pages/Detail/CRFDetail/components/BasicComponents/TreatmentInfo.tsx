@@ -52,18 +52,21 @@ class TreatmentInfo extends React.Component {
           <TabPane tab="实验室检查" key="labor_inspect">
             <LaborInspect
               pid={this.props.pid}
+              treNum={this.props.treNum}
               initialValues={this.props.initialValues}
             />
           </TabPane>
           <TabPane tab="免疫组化" key="immunohistochemical">
             <Immunohistochemical
               pid={this.props.pid}
+              treNum={this.props.treNum}
               initialValues={this.props.initialValues}
             />
           </TabPane>
           <TabPane tab="分子检测" key="molecular_detection">
             <MolecularDetection
               pid={this.props.pid}
+              treNum={this.props.treNum}
               initialValues={this.props.initialValues}
             />
           </TabPane>
@@ -77,12 +80,14 @@ class TreatmentInfo extends React.Component {
           <TabPane tab="症状体征" key="system_sign">
             <SystemSign
               pid={this.props.pid}
+              treNum={this.props.treNum}
               initialValues={this.props.initialValues}
             />
           </TabPane>
           <TabPane tab="副反应" key="side_reaction">
             <SideReaction
               pid={this.props.pid}
+              treNum={this.props.treNum}
               initialValues={this.props.initialValues}
             />
           </TabPane>

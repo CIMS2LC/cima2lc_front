@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import TreatSchedule from './TreatSchedule';
 import { treRecsave, treRecupdate } from '../../service';
+import moment from 'moment';
 const layout = {
   labelCol: {
     span: 3,
@@ -103,11 +104,6 @@ class TreatmentRecord extends React.Component {
     'other',
   ];
   onfinish = async (values: any) => {
-    values['Chemotherapy'] = this.state.Chemotherapy;
-    values['TargetedTherapy'] = this.state.TargetedTherapy;
-    values['ImmunityTherapy'] = this.state.ImmunityTherapy;
-    values['AntivascularTherapy'] = this.state.AntivascularTherapy;
-    values['Other'] = this.state.Other;
     if (values.proDate) values.proDate = values.proDate.format('YYYY-MM-DD');
     if (values.beEffEvaDate)
       values.beEffEvaDate = values.beEffEvaDate.format('YYYY-MM-DD');
@@ -116,30 +112,63 @@ class TreatmentRecord extends React.Component {
     if (values.endDate)
       values.beEffEvaDate = values.endDate.format('YYYY-MM-DD');
 
-    if (this.id != -1) {
-      const res = await treRecupdate({
-        pid: this.props.pid,
-        treNum: this.props.treNum,
-        data: { id: this.id, treNum: this.props.treNum, ...values },
-      });
-      if (res && res.code == 200) {
-        console.log('更新成功');
-      } else {
-        console.log('更新失败');
-      }
-    } else {
-      const res = await treRecsave({
-        pid: this.props.pid,
-        treNum: this.props.treNum,
-        data: { treNum: this.props.treNum, ...values },
-      });
-      if (res && res.code == 200) {
-        this.id = res.id;
-        console.log('提交成功');
-      } else {
-        console.log('提交失败');
-      }
+    //处理treSolu,1-5线处理
+    if (this.state.treatment < 6 && this.state.treatment >= 0) {
+      var treSolu = [];
+      if (this.state.chemotherapy) treSolu.push('Chemotherapy');
+      if (this.state.targetedtherapy) treSolu.push('TargetedTherapy');
+      if (this.state.immunotherapy) treSolu.push('ImmunityTherapy');
+      if (this.state.antivasculartherapy) treSolu.push('AntivascularTherapy');
+      if (this.state.othertherapy) treSolu.push('Other');
+      values[this.state.trement_name]['treSolu'] = treSolu.toString();
+
+      values['Chemotherapy'] = this.state.Chemotherapy;
+      values['TargetedTherapy'] = this.state.TargetedTherapy;
+      values['ImmunityTherapy'] = this.state.ImmunityTherapy;
+      values['AntivascularTherapy'] = this.state.AntivascularTherapy;
+      values['Other'] = this.state.Other;
     }
+    if (this.state.treatment == 6) {
+      values['Chemotherapy'] = this.state.Chemotherapy;
+      if (values[this.state.trement_name]['surDate'])
+        values[this.state.trement_name]['surDate'] = values[
+          this.state.trement_name
+        ]['surDate'].format('YYYY-MM-DD');
+    }
+    if (this.state.treatment == 7) {
+      if (values[this.state.trement_name]['begDate'])
+        values[this.state.trement_name]['begDate'] = values[
+          this.state.trement_name
+        ]['begDate'].format('YYYY-MM-DD');
+      if (values[this.state.trement_name]['endDate'])
+        values[this.state.trement_name]['endDate'] = values[
+          this.state.trement_name
+        ]['endDate'].format('YYYY-MM-DD');
+    }
+    //if (this.id != -1) {
+    const res = await treRecupdate({
+      pid: this.props.pid,
+      treNum: this.props.treNum,
+      data: { id: this.id, treNum: this.props.treNum, ...values },
+    });
+    if (res && res.code == 200) {
+      console.log('更新成功');
+    } else {
+      console.log('更新失败');
+    }
+    // } else {
+    //   const res = await treRecsave({
+    //     pid: this.props.pid,
+    //     treNum: this.props.treNum,
+    //     data: { treNum: this.props.treNum, ...values },
+    //   });
+    //   if (res && res.code == 200) {
+    //     this.id = res.id;
+    //     console.log('提交成功');
+    //   } else {
+    //     console.log('提交失败');
+    //   }
+    // }
   };
   render() {
     return (
@@ -323,12 +352,12 @@ class TreatmentRecord extends React.Component {
               name={[this.state.trement_name, 'surSco']}
             >
               <Checkbox.Group>
-                <Checkbox value="1">肺叶</Checkbox>
-                <Checkbox value="2">肺段</Checkbox>
-                <Checkbox value="3">楔形</Checkbox>
-                <Checkbox value="4">双肺叶</Checkbox>
-                <Checkbox value="5">全肺</Checkbox>
-                <Checkbox value="6">其他</Checkbox>
+                <Checkbox value="肺叶">肺叶</Checkbox>
+                <Checkbox value="肺段">肺段</Checkbox>
+                <Checkbox value="楔形">楔形</Checkbox>
+                <Checkbox value="双肺叶">双肺叶</Checkbox>
+                <Checkbox value="全肺">全肺</Checkbox>
+                <Checkbox value="其他">其他</Checkbox>
               </Checkbox.Group>
             </Form.Item>
             <Form.Item
@@ -336,8 +365,8 @@ class TreatmentRecord extends React.Component {
               name={[this.state.trement_name, 'lymDis']}
             >
               <Checkbox.Group>
-                <Checkbox value="1">系统性清扫</Checkbox>
-                <Checkbox value="2">取样</Checkbox>
+                <Checkbox value="系统性清扫">系统性清扫</Checkbox>
+                <Checkbox value="取样">取样</Checkbox>
               </Checkbox.Group>
             </Form.Item>
             <Form.Item
@@ -360,7 +389,12 @@ class TreatmentRecord extends React.Component {
               />
             </Form.Item>
             {this.state.posAdjChem ? (
-              <TreatSchedule treat_schedule_name="chemotherapy" /> //辅助化疗的表格(名字需要改)
+              <TreatSchedule
+                treat_schedule_name="chemotherapy"
+                passData={data => {
+                  this.setState({ Chemotherapy: data });
+                }}
+              /> //辅助化疗的表格(名字需要改)
             ) : null}
 
             <Form.Item label="是否进展" name="isPro">
@@ -388,37 +422,50 @@ class TreatmentRecord extends React.Component {
 
         {this.state.treatment == 7 ? (
           <div>
-            <Form.Item label="开始日期" name="begDate">
+            <Form.Item
+              label="开始日期"
+              name={[this.state.trement_name, 'begDate']}
+            >
               <DatePicker />
             </Form.Item>
-            <Form.Item label="结束日期" name="endDate">
+            <Form.Item
+              label="结束日期"
+              name={[this.state.trement_name, 'endDate']}
+            >
               <DatePicker />
             </Form.Item>
-            <Form.Item label="放疗部位" name="radSite">
+            <Form.Item
+              label="放疗部位"
+              name={[this.state.trement_name, 'radSite']}
+            >
               <Checkbox.Group options={this.radiation_area} />
             </Form.Item>
-
-            <Form.Item label="放疗剂量" name="radDose" {...layout1}>
+            <Form.Item
+              label="放疗剂量"
+              name={[this.state.trement_name, 'radDose']}
+              {...layout1}
+            >
               <Row>
                 <Col span={12}>
                   <InputNumber />
                 </Col>
                 <Col span={12}>
-                  <Form.Item name="dosUnit">
-                    <Select
-                      defaultValue="Gy"
-                      onChange={e => {
-                        console.log('');
-                      }}
-                    >
-                      <Option value={false}>Gy</Option>
-                      <Option value={true}>cGy</Option>
+                  <Form.Item
+                    name={[this.state.trement_name, 'dosUnit']}
+                    initialValue={0}
+                  >
+                    <Select>
+                      <Option value={0}>Gy</Option>
+                      <Option value={1}>cGy</Option>
                     </Select>
                   </Form.Item>
                 </Col>
               </Row>
             </Form.Item>
-            <Form.Item label="分割次数">
+            <Form.Item
+              label="分割次数"
+              name={[this.state.trement_name, 'splTim']}
+            >
               <InputNumber />
             </Form.Item>
           </div>

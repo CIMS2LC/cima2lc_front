@@ -299,6 +299,7 @@ class TreatSchedule extends React.Component {
       treatName: 'xxx',
       key: count,
       id: count,
+      currPeriod: count + 1,
     };
     this.setState({
       dataSource: [...dataSource, newData],
