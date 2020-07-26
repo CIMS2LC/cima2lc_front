@@ -85,31 +85,31 @@ class MolecularDetection extends React.Component {
         initialValues={this.initialValues}
         onFinish={async values => {
           values.path = this.state.file_list.toString();
-          if (this.id != -1) {
-            const res = await MoleDetecupdate({
-              id: this.id,
-              pid: this.props.pid,
-              treNum: this.props.treNum,
-              ...values,
-            });
-            if (res.code == 200) {
-              console.log('更新成功');
-            } else {
-              console.log('更新失败');
-            }
+          //if (this.id != -1) {
+          const res = await MoleDetecupdate({
+            id: this.id,
+            pid: this.props.pid,
+            treNum: this.props.treNum,
+            ...values,
+          });
+          if (res.code == 200) {
+            console.log('更新成功');
           } else {
-            const res = await MoleDetecsave({
-              pid: this.props.pid,
-              treNum: this.props.treNum,
-              ...values,
-            });
-            if (res.code == 200) {
-              this.id = res.id;
-              console.log('提交成功');
-            } else {
-              console.log('提交失败');
-            }
+            console.log('更新失败');
           }
+          // } else {
+          //   const res = await MoleDetecsave({
+          //     pid: this.props.pid,
+          //     treNum: this.props.treNum,
+          //     ...values,
+          //   });
+          //   if (res.code == 200) {
+          //     this.id = res.id;
+          //     console.log('提交成功');
+          //   } else {
+          //     console.log('提交失败');
+          //   }
+          // }
         }}
       >
         {Object.keys(this.state.molecular_detection_labels).map(
