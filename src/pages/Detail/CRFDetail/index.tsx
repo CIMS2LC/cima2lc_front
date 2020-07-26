@@ -189,9 +189,9 @@ class CRFDetail extends React.Component {
                               values.birthday = values['birthday'].format(
                                 'YYYY-MM-DD',
                               );
-                            if (this.state.id == -1) {
+                            if (this.state.pid == -1) {
                               const res = await Patientsave({
-                                id: this.state.id,
+                                id: this.state.pid,
                                 treNum: this.props.treNum,
                                 ...values,
                               });
@@ -204,7 +204,7 @@ class CRFDetail extends React.Component {
                               }
                             } else {
                               const res = await Patientupdate({
-                                id: this.state.id,
+                                id: this.state.pid,
                                 pid: this.state.pid,
                                 ...values,
                               });
