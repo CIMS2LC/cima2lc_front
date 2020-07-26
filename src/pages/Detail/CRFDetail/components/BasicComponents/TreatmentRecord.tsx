@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Tabs,
   Form,
+  Row,
+  Col,
   Divider,
   Radio,
   Rate,
@@ -25,7 +27,14 @@ const layout = {
     span: 8,
   },
 };
-
+const layout1 = {
+  labelCol: {
+    span: 3,
+  },
+  wrapperCol: {
+    span: 4,
+  },
+};
 const { Option } = Select;
 class TreatmentRecord extends React.Component {
   constructor(props: any) {
@@ -44,6 +53,9 @@ class TreatmentRecord extends React.Component {
     AntivascularTherapy: undefined,
     Other: undefined,
     trement_name: '',
+    posAdjChem: false,
+    isPro: false,
+    clinTri: false, //临床实验名称
   };
   trement = [
     { label: '1线', value: 1 },
@@ -108,8 +120,7 @@ class TreatmentRecord extends React.Component {
       const res = await treRecupdate({
         pid: this.props.pid,
         treNum: this.props.treNum,
-        trement: this.state.trement_name,
-        ...values,
+        data: { id: this.id, treNum: this.props.treNum, ...values },
       });
       if (res && res.code == 200) {
         console.log('更新成功');
@@ -129,7 +140,6 @@ class TreatmentRecord extends React.Component {
         console.log('提交失败');
       }
     }
-    console.log(values);
   };
   render() {
     return (
@@ -145,17 +155,29 @@ class TreatmentRecord extends React.Component {
           />
         </Form.Item>
         {this.state.treatment < 6 && this.state.treatment >= 0 ? (
-          <Form.Item name={this.state.trement_name}>
+          <div>
             <Form.Item
               label="是否加入临床治疗"
+              name="isTre"
               name={[this.state.trement_name, 'isTre']}
             >
-              <Radio.Group>
+              <Radio.Group
+                onChange={v => {
+                  if (v.target.value == 1) this.setState({ clinTri: true });
+                  else this.setState({ clinTri: false });
+                }}
+              >
                 <Radio value={1}>是</Radio>
                 <Radio value={0}>否</Radio>
                 <Radio value={-1}>不详</Radio>
               </Radio.Group>
             </Form.Item>
+
+            {this.state.clinTri ? (
+              <Form.Item label="临床实验名称" name="clinTri">
+                <Input />
+              </Form.Item>
+            ) : null}
 
             <label>治疗方案:</label>
             <Form.Item label="化疗">
@@ -291,8 +313,9 @@ class TreatmentRecord extends React.Component {
             >
               <Input />
             </Form.Item>
-          </Form.Item>
+          </div>
         ) : null}
+
         {this.state.treatment == 6 ? (
           <Form.Item name={this.state.trement_name}>
             <Form.Item
@@ -300,12 +323,12 @@ class TreatmentRecord extends React.Component {
               name={[this.state.trement_name, 'surSco']}
             >
               <Checkbox.Group>
-                <Checkbox value={1}>肺叶</Checkbox>
-                <Checkbox value={2}>肺段</Checkbox>
-                <Checkbox value={3}>楔形</Checkbox>
-                <Checkbox value={4}>双肺叶</Checkbox>
-                <Checkbox value={5}>全肺</Checkbox>
-                <Checkbox value={6}>其他</Checkbox>
+                <Checkbox value="1">肺叶</Checkbox>
+                <Checkbox value="2">肺段</Checkbox>
+                <Checkbox value="3">楔形</Checkbox>
+                <Checkbox value="4">双肺叶</Checkbox>
+                <Checkbox value="5">全肺</Checkbox>
+                <Checkbox value="6">其他</Checkbox>
               </Checkbox.Group>
             </Form.Item>
             <Form.Item
@@ -313,10 +336,9 @@ class TreatmentRecord extends React.Component {
               name={[this.state.trement_name, 'lymDis']}
             >
               <Checkbox.Group>
-                <Checkbox value={1}>系统性清扫</Checkbox>
-                <Checkbox value={2}>取样</Checkbox>
+                <Checkbox value="1">系统性清扫</Checkbox>
+                <Checkbox value="2">取样</Checkbox>
               </Checkbox.Group>
-              <InputNumber placeholder="清扫组数"></InputNumber>
             </Form.Item>
             <Form.Item
               label="手术日期"
@@ -329,56 +351,77 @@ class TreatmentRecord extends React.Component {
               name={[this.state.trement_name, 'posAdjChem']}
             >
               <Switch
-                defaultChecked
+                defaultChecked={this.state.posAdjChem}
                 checkedChildren="有"
                 unCheckedChildren="无"
+                onChange={checked => {
+                  this.setState({ posAdjChem: checked });
+                }}
               />
             </Form.Item>
-            <Form.Item
-              label="是否进展"
-              name={[this.state.trement_name, 'isPro']}
-            >
+            {this.state.posAdjChem ? (
+              <TreatSchedule treat_schedule_name="chemotherapy" /> //辅助化疗的表格(名字需要改)
+            ) : null}
+
+            <Form.Item label="是否进展" name="isPro">
               <Switch
-                defaultChecked
+                defaultChecked={this.state.isPro}
                 checkedChildren="有"
                 unCheckedChildren="无"
+                onChange={checked => {
+                  this.setState({ isPro: checked });
+                }}
               />
             </Form.Item>
+            {this.state.isPro ? (
+              <div>
+                <Form.Item label="进展日期" name="proDate">
+                  <DatePicker />
+                </Form.Item>
+                <Form.Item label="进展描述" name="proDes">
+                  <Input />
+                </Form.Item>
+              </div>
+            ) : null}
           </Form.Item>
         ) : null}
+
         {this.state.treatment == 7 ? (
-          <Form.Item name={this.state.trement_name}>
-            <div>
-              <label>开始日期</label>
+          <div>
+            <Form.Item label="开始日期" name="begDate">
               <DatePicker />
-            </div>
-            <div>
-              <label>结束日期</label>
+            </Form.Item>
+            <Form.Item label="结束日期" name="endDate">
               <DatePicker />
-            </div>
-            <div>
-              <label>放疗部位</label>
+            </Form.Item>
+            <Form.Item label="放疗部位" name="radSite">
               <Checkbox.Group options={this.radiation_area} />
-            </div>
-            <div>
-              <label>放疗剂量</label>
+            </Form.Item>
+
+            <Form.Item label="放疗剂量" name="radDose" {...layout1}>
+              <Row>
+                <Col span={12}>
+                  <InputNumber />
+                </Col>
+                <Col span={12}>
+                  <Form.Item name="dosUnit">
+                    <Select
+                      defaultValue="Gy"
+                      onChange={e => {
+                        console.log('');
+                      }}
+                    >
+                      <Option value={false}>Gy</Option>
+                      <Option value={true}>cGy</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form.Item>
+            <Form.Item label="分割次数">
               <InputNumber />
-              <Select
-                defaultValue="Gy"
-                style={{ width: 120 }}
-                onChange={e => {
-                  console.log('');
-                }}
-              >
-                <Option value="Gy">Gy</Option>
-                <Option value="cGy">cGy</Option>
-              </Select>
-            </div>
-            <div>
-              <label>分割次数</label>
-              <InputNumber />
-            </div>
-          </Form.Item>
+            </Form.Item>
+          </div>
         ) : null}
 
         <Form.Item label="最佳疗效评估日期" name="beEffEvaDate">
