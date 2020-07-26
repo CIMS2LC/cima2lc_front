@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Button,
   Layout,
@@ -24,6 +24,7 @@ import PreHistory from './components/BasicComponents/PreHistory';
 import InitialDiagnosisProcess from './components/BasicComponents/InitialDiagnosisProcess';
 import { Patientsave, Patientupdate } from './service';
 import { StateType } from './model';
+import { ActionType } from '@ant-design/pro-table';
 
 const { Header, Content, Sider } = Layout;
 const { TabPane } = Tabs;
@@ -67,6 +68,7 @@ class CRFDetail extends React.Component {
     treNum: 0,
     openKeys: [],
     selectedKeys: ['baseline'],
+    currTre: '',
   };
   idNumber_onChange = (value: any) => {
     console.log('changed', value);
@@ -123,20 +125,19 @@ class CRFDetail extends React.Component {
                   selectedKeys={this.state.selectedKeys}
                   openKeys={this.state.openKeys}
                   onClick={item => {
-                    console.log(item);
                     if (item.key === 'add') {
                       const { treNum, treatment_infos } = this.state;
                       const newData = { treNum: treNum + 1 };
                       this.setState({
                         treNum: treNum + 1,
                         treatment_infos: [...treatment_infos, newData],
+                        currTre: treNum + 1,
                       });
                       item.keyPath[0] = String(treNum + 1);
                     }
                     this.setState({
                       selectedKeys: item.keyPath,
                     });
-                    console.log(this.state);
                   }}
                 >
                   <Menu.Item key="baseline">基线资料</Menu.Item>
@@ -147,6 +148,7 @@ class CRFDetail extends React.Component {
                     selectedKeys={this.state.selectedKeys}
                     openKeys={this.state.openKeys}
                     onTitleClick={key => {
+                      console.log(key);
                       if (this.state.openKeys.length === 0) {
                         this.setState({
                           selectedKeys: [key.key],
@@ -156,6 +158,13 @@ class CRFDetail extends React.Component {
                         this.setState({
                           selectedKeys: [key.key],
                           openKeys: [],
+                        });
+                      }
+                    }}
+                    onClick={item => {
+                      if (item.key != 'add') {
+                        this.setState({
+                          currTre: item.key,
                         });
                       }
                     }}
@@ -324,18 +333,18 @@ class CRFDetail extends React.Component {
                         }
                       />
                     </div>
-                  ) : (
+                  ) : this.state.selectedKeys[0] === this.state.currTre ? (
                     <TreatmentInfo
                       key="treatment_info"
                       pid={this.state.pid}
-                      treNum={this.state.treNum}
+                      treNum={this.state.currTre}
                       initialValues={
                         this.props.crfDetail.data
                           ? this.props.crfDetail.data
                           : undefined
                       }
                     />
-                  )}
+                  ) : null}
                 </Content>
               </Content>
             </Layout>
