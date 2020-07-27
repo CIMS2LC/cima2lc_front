@@ -292,7 +292,14 @@ const TableList: React.FC<{}> = () => {
           values={stepFormValues}
         />
       ) : null}
-      {staticvisible ? <Statistic visible={staticvisible} /> : null}
+      {staticvisible ? (
+        <Statistic
+          visible={staticvisible}
+          onCancel={() => {
+            setStaticvisible(false);
+          }}
+        />
+      ) : null}
     </PageHeaderWrapper>
   );
 };

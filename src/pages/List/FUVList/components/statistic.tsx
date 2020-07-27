@@ -3,7 +3,16 @@ import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 //import "./index.css";
 import { screen } from '../service';
-import { Modal, Button, Form, Checkbox, Select, Tree, Radio } from 'antd';
+import {
+  Modal,
+  Button,
+  Form,
+  Checkbox,
+  Select,
+  Tree,
+  Radio,
+  TreeSelect,
+} from 'antd';
 const layout = {
   labelAlign: 'left',
   labelCol: {
@@ -535,6 +544,7 @@ class Statistic extends React.Component {
   };
 
   handleOk = () => {
+    this.props.onCancel();
     this.setState({
       ModalText: 'The modal will be closed after two seconds',
       confirmLoading: true,
@@ -548,7 +558,7 @@ class Statistic extends React.Component {
   };
 
   handleCancel = () => {
-    console.log('Clicked cancel button');
+    this.props.onCancel();
     this.setState({
       visible: false,
     });
@@ -569,14 +579,13 @@ class Statistic extends React.Component {
             name="statistic"
             {...layout}
             onFinish={async value => {
-              console.log(value);
               await screen(value);
             }}
             ref={this.formRef}
             initialValues={this.initialValues}
           >
             <Form.Item label="病理诊断" {...inputlayout} name="patDia">
-              <Tree checkable treeData={treeData} />
+              <TreeSelect treeCheckable={true} treeData={treeData} />
             </Form.Item>
             <Form.Item label="病理分期" name="patStage">
               <Select style={{ width: 80 }} options={patOps} />
