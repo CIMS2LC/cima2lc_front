@@ -32,7 +32,7 @@ export async function excelDownload(url, options) {
   fetch(url, options)
     .then(response => response.blob())
     .then(blobData => {
-      download(blobData, 'result.xis');
+      download(blobData, 'result.xls');
     });
 }
 
