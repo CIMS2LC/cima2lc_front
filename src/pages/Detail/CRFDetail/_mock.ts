@@ -25,7 +25,25 @@ function getillCase(req: Request, res: Response, u: string) {
       BloodRoutine: [],
       Coagulation: [],
       Cytokines: [],
-      DetailTrePlan: [],
+      DetailTrePlan: [
+        {
+          begDate: '2020-07-13',
+          currPeriod: 1,
+          drugs: {
+            紫杉醇: {
+              drugDosa: 1,
+              unit: 'g',
+            },
+          },
+          endDate: '2020-07-06',
+          id: 3,
+          pid: 2,
+          treNum: 1,
+          treSche: '常用药物',
+          treSolu: 'Chemotherapy',
+          treatName: 'xxx1',
+        },
+      ],
       FollInfo: [
         {
           date: 'Wed, 08 Jul 2020 00:00:00 GMT',

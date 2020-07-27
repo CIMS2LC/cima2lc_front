@@ -162,8 +162,8 @@ class TreatSchedule extends React.Component {
         editable: true,
       },
       {
-        title: '治疗方案',
-        dataIndex: 'treSolu',
+        title: '药物方案',
+        dataIndex: 'treSche',
         width: '10%',
         render: (text, record, index) => {
           return (
@@ -171,9 +171,10 @@ class TreatSchedule extends React.Component {
               style={{ width: 120 }}
               onChange={value => {
                 record['treSolu'] = value;
+                record['treSche'] = value;
                 this.setState({ treSolu: value });
               }}
-              defaultValue="常用药物"
+              defaultValue={record['treSche'] || '常用药物'}
               options={Object.keys(
                 treat_schedule_medicine_options[this.props.treat_schedule_name],
               ).map(item => ({ value: item }))}
@@ -196,6 +197,7 @@ class TreatSchedule extends React.Component {
                   this.state.treSolu
                 ]
               }
+              defaultValue={Object.keys(record['drugs'])}
               onChange={values => {
                 var drugs = record['drugs'];
                 if (!drugs) drugs = {};
@@ -211,6 +213,9 @@ class TreatSchedule extends React.Component {
                     <div>
                       <label>剂量</label>
                       <InputNumber
+                        defaultValue={
+                          record['drugs'][`${tagvalue.value}`]['drugDosa'] || ''
+                        }
                         onChange={value => {
                           record['drugs'][`${tagvalue.value}`][
                             'drugDosa'
@@ -220,6 +225,9 @@ class TreatSchedule extends React.Component {
                       />
                       <label>单位</label>
                       <Radio.Group
+                        defaultValue={
+                          record['drugs'][`${tagvalue.value}`]['unit'] || 'g'
+                        }
                         onChange={e => {
                           record['drugs'][`${tagvalue.value}`]['unit'] =
                             e.target.value;
@@ -243,9 +251,10 @@ class TreatSchedule extends React.Component {
       {
         title: '给药/治疗开始日期',
         key: 'begDate',
-        width: '10%',
+        width: '20%',
         render: (text, record, index) => (
           <DatePicker
+            defaultValue={moment(record['begDate'])}
             onChange={(e, value) => {
               record['begDate'] = moment(value).format('YYYY-MM-DD');
             }}
@@ -255,9 +264,10 @@ class TreatSchedule extends React.Component {
       {
         title: '给药/治疗结束日期',
         key: 'endDate',
-        width: '10%',
+        width: '20%',
         render: (text, record, index) => (
           <DatePicker
+            defaultValue={moment(record['endDate'])}
             onChange={(e, value) => {
               record['endDate'] = moment(value).format('YYYY-MM-DD');
             }}
@@ -281,6 +291,14 @@ class TreatSchedule extends React.Component {
       },
     ];
 
+    if (props.dataSource) {
+      console.log(props.dataSource);
+      // props.dataSource.map(item=>{
+      //   if(item['begDate']) item['begDate'] = moment(item['begDate']);
+      //   if(item['endDate']) item['endDate'] = moment(item['endDate']);
+
+      // })
+    }
     this.state = {
       dataSource: props.dataSource ? props.dataSource : [],
       count: props.dataSource ? props.dataSource.length : 0,

@@ -73,6 +73,30 @@ class TreatmentRecord extends React.Component {
         ) {
           if (treVal.begDate) treVal.begDate = moment(treVal.begDate);
           if (treVal.endDate) treVal.endDate = moment(treVal.endDate);
+          if (treVal.treSolu) {
+            if (treVal.treSolu.indexOf('Chemotherapy') != -1)
+              this.state.chemotherapy = true;
+            if (treVal.treSolu.indexOf('TargetedTherapy') != -1)
+              this.state.targetedtherapy = true;
+            if (treVal.treSolu.indexOf('ImmunityTherapy') != -1)
+              this.state.immunotherapy = true;
+            if (treVal.treSolu.indexOf('AntivascularTherapy') != -1)
+              this.state.antivasculartherapy = true;
+            if (treVal.treSolu.indexOf('Other') != -1)
+              this.state.othertherapy = true;
+          }
+          if (this.props.initialValues.DetailTrePlan) {
+            this.props.initialValues.DetailTrePlan.map(item => {
+              if (item.treNum == this.props.treNum) {
+                if (treVal[item.treSolu]) {
+                  treVal[item.treSolu].push(item);
+                } else {
+                  treVal[item.treSolu] = [];
+                  treVal[item.treSolu].push(item);
+                }
+              }
+            });
+          }
         }
         if (['surgery'].indexOf(this.state.trement_name) != -1) {
           if (treVal.surDate) treVal.surDate = moment(treVal.surDate);
@@ -204,19 +228,6 @@ class TreatmentRecord extends React.Component {
     } else {
       console.log('更新失败');
     }
-    // } else {
-    //   const res = await treRecsave({
-    //     pid: this.props.pid,
-    //     treNum: this.props.treNum,
-    //     data: { treNum: this.props.treNum, ...values },
-    //   });
-    //   if (res && res.code == 200) {
-    //     this.id = res.id;
-    //     console.log('提交成功');
-    //   } else {
-    //     console.log('提交失败');
-    //   }
-    // }
   };
   render() {
     return (
@@ -282,6 +293,7 @@ class TreatmentRecord extends React.Component {
                 passData={data => {
                   this.setState({ Chemotherapy: data });
                 }}
+                dataSource={this.TreRec[this.TreRec.trement]['Chemotherapy']}
               />
             ) : null}
 
@@ -301,6 +313,7 @@ class TreatmentRecord extends React.Component {
                 passData={data => {
                   this.setState({ TargetedTherapy: data });
                 }}
+                dataSource={this.TreRec[this.TreRec.trement]['TargetedTherapy']}
               />
             ) : null}
 
@@ -320,6 +333,7 @@ class TreatmentRecord extends React.Component {
                 passData={data => {
                   this.setState({ ImmunityTherapy: data });
                 }}
+                dataSource={this.TreRec[this.TreRec.trement]['ImmunityTherapy']}
               />
             ) : null}
 
@@ -339,6 +353,9 @@ class TreatmentRecord extends React.Component {
                 passData={data => {
                   this.setState({ AntivascularTherapy: data });
                 }}
+                dataSource={
+                  this.TreRec[this.TreRec.trement]['AntivascularTherapy']
+                }
               />
             ) : null}
 

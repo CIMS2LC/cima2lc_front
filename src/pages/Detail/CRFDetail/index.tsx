@@ -52,7 +52,6 @@ class CRFDetail extends React.Component {
   }
   update_treatment_infos = () => {
     if (this.props.crfDetail.data) {
-      //this.state.currTre = ;
       if (this.props.crfDetail.data.TreRec)
         var count = this.props.crfDetail.data.TreRec.length;
       this.state.treNum = count;
