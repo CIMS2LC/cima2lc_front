@@ -1,4 +1,5 @@
 import request from '../../BasicComponents/request';
+import getCookie from '../../BasicComponents/request';
 import { QueryListItem, TableListParams } from './data.d';
 
 export async function query(params?: QueryListItem) {
@@ -24,8 +25,7 @@ export async function excelDownload(url, options) {
   options.headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json; charset=utf-8',
-    token:
-      'eyJhbGciOiJIUzUxMiIsImlhdCI6MTU5NTU4MjY3OSwiZXhwIjoxNTk4MTc0Njc5fQ.eyJ1c2VyX2lkIjo1NCwic2NvcGVzIjpbIklucHV0Q1JGIiwiQ2hlY2tDUkYiLCJFeHBvcnQiLCJTdGF0c0FuYWx5c2lzIiwiQ2hlY2tBbGxTYW1wbGVzIl0sInJlc2VhcmNoX2NlbnRlcl9pZCI6MTd9.eAnmXQdWBr04zDVsNGqDKxb-5900BzI-c9nJLsATA_psT3biiGwzd_bqrYblJTAxXRsDjMCWfJOwFCMUt3uZsQ',
+    token: getCookie('token'),
     ...options.headers,
   };
 

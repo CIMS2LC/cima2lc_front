@@ -37,6 +37,24 @@ const layout = {
 };
 
 class TreatmentInfo extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log(this.props.initialValues);
+    this.props.initialValues.SideEffect.map(item => {
+      if (item.treNum == this.props.treNum) {
+        this.sideEffectList.push(item);
+      }
+    });
+    this.props.initialValues.Signs.map(item => {
+      if (item.treNum == this.props.treNum) {
+        this.signList.push(item);
+      }
+    });
+    console.log(this.signList);
+    console.log(this.sideEffectList);
+  }
+  signList = [];
+  sideEffectList = [];
   render() {
     return (
       <div>
@@ -85,16 +103,14 @@ class TreatmentInfo extends React.Component {
             <SystemSign
               pid={this.props.pid}
               treNum={this.props.treNum}
-              initialValues={this.props.initialValues.Signs[this.props.treNum]}
+              initialValues={this.signList}
             />
           </TabPane>
           <TabPane tab="副反应" key="side_reaction">
             <SideReaction
               pid={this.props.pid}
               treNum={this.props.treNum}
-              initialValues={
-                this.props.initialValues.SideEffect[this.props.treNum]
-              }
+              initialValues={this.sideEffectList}
             />
           </TabPane>
         </Tabs>

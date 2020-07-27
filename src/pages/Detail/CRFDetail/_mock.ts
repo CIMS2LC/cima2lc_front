@@ -244,8 +244,39 @@ function getillCase(req: Request, res: Response, u: string) {
           treNum: 1,
         },
       ],
-      SideEffect: [],
-      Signs: [],
+      SideEffect: [
+        {
+          begDate: '2020-07-16',
+          endDate: '2020-07-20',
+          id: 1,
+          isExe: false,
+          pid: 2,
+          sidReaName: '循环系统副作用,心率失常',
+          sidRecCla: 2,
+          treNum: 1,
+        },
+        {
+          begDate: '2020-07-06',
+          endDate: '2020-07-19',
+          id: 2,
+          isExe: false,
+          pid: 2,
+          sidReaName: '呼吸系统副作用,呼吸系统纤维化',
+          sidRecCla: 2,
+          treNum: 1,
+        },
+      ],
+      Signs: [
+        {
+          begDate: '2020-07-20',
+          endDate: '2020-07-16',
+          id: 1,
+          isExe: false,
+          pid: 2,
+          symName: '12',
+          treNum: 1,
+        },
+      ],
       Surgery: [
         {
           cleGro: null,
