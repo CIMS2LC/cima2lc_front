@@ -23,6 +23,7 @@ import {
   addRule,
   removeRule,
   deletelist,
+  exportExcel,
 } from './service';
 import { Link } from 'umi';
 import { history } from 'umi';
@@ -96,6 +97,7 @@ const TableList: React.FC<{}> = () => {
     false,
   );
   const [stepFormValues, setStepFormValues] = useState({});
+  const [queryParms, setqueryParms] = useState({});
   const actionRef = useRef<ActionType>();
   const handleDelete = async record => {
     console.log('删除');
@@ -213,9 +215,6 @@ const TableList: React.FC<{}> = () => {
           <Button type="primary" onClick={() => {}}>
             <PlusOutlined /> 统计分析
           </Button>,
-          <Button type="primary" onClick={() => {}}>
-            <PlusOutlined /> CSV导出
-          </Button>,
           selectedRows && selectedRows.length > 0 && (
             <Dropdown
               overlay={
@@ -225,11 +224,18 @@ const TableList: React.FC<{}> = () => {
                       await handleRemove(selectedRows);
                       action.reload();
                     }
+                    console.log(selectedRows);
+                    if (e.key === 'csv') {
+                      var pids = [];
+                      selectedRows.map(item => pids.push(item.id));
+                      await exportExcel({ pid: pids });
+                      action.reload();
+                    }
                   }}
                   selectedKeys={[]}
                 >
-                  bbbbb
                   <Menu.Item key="approval">批量审批</Menu.Item>
+                  <Menu.Item key="csv">CSV导出</Menu.Item>
                 </Menu>
               }
             >
@@ -249,9 +255,9 @@ const TableList: React.FC<{}> = () => {
             </span>
           </div>
         )}
-        request={(params, sorter, filter) =>
-          queryRule({ ...params, sorter, filter })
-        }
+        request={(params, sorter, filter) => {
+          return queryRule({ ...params, sorter, filter });
+        }}
         columns={columns}
         rowSelection={{}}
       />
