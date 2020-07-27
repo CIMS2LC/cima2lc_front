@@ -42,7 +42,7 @@ class TreatmentRecord extends React.Component {
     super(props);
   }
   state = {
-    treatment: -1,
+    treatment: 0,
     chemotherapy: false,
     targetedtherapy: false,
     immunotherapy: false,
@@ -107,10 +107,8 @@ class TreatmentRecord extends React.Component {
     if (values.proDate) values.proDate = values.proDate.format('YYYY-MM-DD');
     if (values.beEffEvaDate)
       values.beEffEvaDate = values.beEffEvaDate.format('YYYY-MM-DD');
-    if (values.begDate)
-      values.beEffEvaDate = values.begDate.format('YYYY-MM-DD');
-    if (values.endDate)
-      values.beEffEvaDate = values.endDate.format('YYYY-MM-DD');
+    if (values.begDate) values.begDate = values.begDate.format('YYYY-MM-DD');
+    if (values.endDate) values.endDate = values.endDate.format('YYYY-MM-DD');
 
     //处理treSolu,1-5线处理
     if (this.state.treatment < 6 && this.state.treatment >= 0) {
