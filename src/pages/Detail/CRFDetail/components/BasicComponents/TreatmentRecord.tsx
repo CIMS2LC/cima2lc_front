@@ -37,12 +37,58 @@ const layout1 = {
   },
 };
 const { Option } = Select;
+
+const treatment_map = {
+  one: 'One',
+  two: 'Two',
+  three: 'Three',
+  four: 'Four',
+  five: 'Five',
+  surgery: 'Surgery',
+  radiotherapy: 'Radiotherapy',
+  other: 'Other',
+};
+
 class TreatmentRecord extends React.Component {
   constructor(props: any) {
     super(props);
+    this.TreRec = this.props.initialValues.TreRec[this.props.treNum - 1];
+    if (this.TreRec) {
+      if (this.TreRec.beEffEvaDate)
+        this.TreRec['beEffEvaDate'] = moment(this.TreRec.beEffEvaDate);
+      if (this.TreRec.proDate)
+        this.TreRec['proDate'] = moment(this.TreRec.proDate);
+      if (this.TreRec.trement) {
+        this.state.trement_name = this.TreRec.trement;
+        var treVal = this.props.initialValues[
+          treatment_map[this.TreRec.trement]
+        ][this.props.treNum - 1];
+        console.log(treVal);
+        if (
+          ['one', 'two', 'three', 'four', 'five', 'other'].indexOf(
+            this.state.trement_name,
+          ) != -1
+        ) {
+        }
+        if (['surgery'].indexOf(this.state.trement_name) != -1) {
+          console.log(treVal.surDate);
+          if (treVal.surDate) treVal.surDate = moment(treVal.surDate);
+          if (treVal.proDate) treVal.proDate = moment(treVal.proDate);
+        }
+        if (['radiotherapy'].indexOf(this.state.trement_name) != -1) {
+        }
+        this.TreRec[this.TreRec.trement] = treVal;
+        // this.TreRec = {
+        //   ...this.TreRec,
+        //   ...this.props.initialValues[treatment_map[this.TreRec.trement]][this.props.treNum-1]
+        // };
+      }
+    }
+    console.log(this.TreRec);
   }
+  TreRec = undefined;
   state = {
-    treatment: 0,
+    treatment: '',
     chemotherapy: false,
     targetedtherapy: false,
     immunotherapy: false,
@@ -59,14 +105,14 @@ class TreatmentRecord extends React.Component {
     clinTri: false, //临床实验名称
   };
   trement = [
-    { label: '1线', value: 1 },
-    { label: '2线', value: 2 },
-    { label: '3线', value: 3 },
-    { label: '4线', value: 4 },
-    { label: '5线', value: 5 },
-    { label: '手术', value: 6 },
-    { label: '放疗', value: 7 },
-    { label: '其他', value: 8 },
+    { label: '1线', value: 'one' },
+    { label: '2线', value: 'two' },
+    { label: '3线', value: 'three' },
+    { label: '4线', value: 'four' },
+    { label: '5线', value: 'five' },
+    { label: '手术', value: 'surgery' },
+    { label: '放疗', value: 'radiotherapy' },
+    { label: '其他', value: 'other' },
   ];
   radiation_area = [
     '脑',
@@ -93,17 +139,8 @@ class TreatmentRecord extends React.Component {
     { label: 'CR-完全缓解', value: 4 },
     { label: '术后未发现新病灶', value: 5 },
   ];
-  treatment_name = [
-    'one',
-    'two',
-    'three',
-    'four',
-    'five',
-    'surgery',
-    'radiotherapy',
-    'other',
-  ];
   onfinish = async (values: any) => {
+    console.log(values);
     if (values.proDate) values.proDate = values.proDate.format('YYYY-MM-DD');
     if (values.beEffEvaDate)
       values.beEffEvaDate = values.beEffEvaDate.format('YYYY-MM-DD');
@@ -111,7 +148,11 @@ class TreatmentRecord extends React.Component {
     if (values.endDate) values.endDate = values.endDate.format('YYYY-MM-DD');
 
     //处理treSolu,1-5线处理
-    if (this.state.treatment < 6 && this.state.treatment >= 0) {
+    if (
+      ['one', 'two', 'three', 'four', 'five', 'other'].indexOf(
+        this.state.trement_name,
+      ) != -1
+    ) {
       var treSolu = [];
       if (this.state.chemotherapy) treSolu.push('Chemotherapy');
       if (this.state.targetedtherapy) treSolu.push('TargetedTherapy');
@@ -133,14 +174,14 @@ class TreatmentRecord extends React.Component {
       values['AntivascularTherapy'] = this.state.AntivascularTherapy;
       values['Other'] = this.state.Other;
     }
-    if (this.state.treatment == 6) {
+    if (['surgery'].indexOf(this.state.trement_name) != -1) {
       values['Chemotherapy'] = this.state.Chemotherapy;
       if (values[this.state.trement_name]['surDate'])
         values[this.state.trement_name]['surDate'] = values[
           this.state.trement_name
         ]['surDate'].format('YYYY-MM-DD');
     }
-    if (this.state.treatment == 7) {
+    if (['radiotherapy'].indexOf(this.state.trement_name) != -1) {
       if (values[this.state.trement_name]['begDate'])
         values[this.state.trement_name]['begDate'] = values[
           this.state.trement_name
@@ -177,22 +218,31 @@ class TreatmentRecord extends React.Component {
   };
   render() {
     return (
-      <Form name="treatment_record" {...layout} onFinish={this.onfinish}>
-        <Form.Item label="几线治疗" name="trement">
+      <Form
+        name="treatment_record"
+        {...layout}
+        onFinish={this.onfinish}
+        initialValues={this.TreRec}
+      >
+        <Form.Item
+          label="几线治疗"
+          name="trement"
+          //initialValue={this.props.initialValues.TreRec[this.props.treNum]}
+        >
           <Select
             style={{ width: 120 }}
             options={this.trement}
-            onChange={(value: number) => {
-              this.setState({ trement_name: this.treatment_name[value - 1] });
-              this.setState({ treatment: value });
+            onChange={(value: string) => {
+              this.setState({ trement_name: value });
             }}
           />
         </Form.Item>
-        {this.state.treatment < 6 && this.state.treatment >= 0 ? (
+        {['one', 'two', 'three', 'four', 'five', 'other'].indexOf(
+          this.state.trement_name,
+        ) != -1 ? (
           <div>
             <Form.Item
               label="是否加入临床治疗"
-              name="isTre"
               name={[this.state.trement_name, 'isTre']}
             >
               <Radio.Group
@@ -350,7 +400,7 @@ class TreatmentRecord extends React.Component {
           </div>
         ) : null}
 
-        {this.state.treatment == 6 ? (
+        {['surgery'].indexOf(this.state.trement_name) != -1 ? (
           <Form.Item name={this.state.trement_name}>
             <Form.Item
               label="手术范围"
@@ -425,7 +475,7 @@ class TreatmentRecord extends React.Component {
           </Form.Item>
         ) : null}
 
-        {this.state.treatment == 7 ? (
+        {['radiotherapy'].indexOf(this.state.trement_name) != -1 ? (
           <div>
             <Form.Item
               label="开始日期"

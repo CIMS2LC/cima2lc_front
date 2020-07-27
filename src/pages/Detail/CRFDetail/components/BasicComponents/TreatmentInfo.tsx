@@ -60,14 +60,18 @@ class TreatmentInfo extends React.Component {
             <Immunohistochemical
               pid={this.props.pid}
               treNum={this.props.treNum}
-              initialValues={this.props.initialValues}
+              initialValues={
+                this.props.initialValues.Immunohis[this.props.treNum]
+              }
             />
           </TabPane>
           <TabPane tab="分子检测" key="molecular_detection">
             <MolecularDetection
               pid={this.props.pid}
               treNum={this.props.treNum}
-              initialValues={this.props.initialValues}
+              initialValues={
+                this.props.initialValues.MoleDetec[this.props.treNum]
+              }
             />
           </TabPane>
 
@@ -81,14 +85,16 @@ class TreatmentInfo extends React.Component {
             <SystemSign
               pid={this.props.pid}
               treNum={this.props.treNum}
-              initialValues={this.props.initialValues}
+              initialValues={this.props.initialValues.Signs[this.props.treNum]}
             />
           </TabPane>
           <TabPane tab="副反应" key="side_reaction">
             <SideReaction
               pid={this.props.pid}
               treNum={this.props.treNum}
-              initialValues={this.props.initialValues}
+              initialValues={
+                this.props.initialValues.SideEffect[this.props.treNum]
+              }
             />
           </TabPane>
         </Tabs>
