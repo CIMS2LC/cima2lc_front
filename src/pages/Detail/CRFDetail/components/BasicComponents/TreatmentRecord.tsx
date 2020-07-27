@@ -279,7 +279,7 @@ class TreatmentRecord extends React.Component {
             <label>治疗方案:</label>
             <Form.Item label="化疗">
               <Switch
-                defaultChecked={false}
+                defaultChecked={this.state.chemotherapy || false}
                 checkedChildren="有"
                 unCheckedChildren="无"
                 onChange={checked => {
@@ -299,7 +299,7 @@ class TreatmentRecord extends React.Component {
 
             <Form.Item label="靶向治疗">
               <Switch
-                defaultChecked={false}
+                defaultChecked={this.state.targetedtherapy || false}
                 checkedChildren="有"
                 unCheckedChildren="无"
                 onChange={checked => {
@@ -319,7 +319,7 @@ class TreatmentRecord extends React.Component {
 
             <Form.Item label="免疫治疗">
               <Switch
-                defaultChecked={false}
+                defaultChecked={this.state.immunotherapy || false}
                 checkedChildren="有"
                 unCheckedChildren="无"
                 onChange={checked => {
@@ -339,7 +339,7 @@ class TreatmentRecord extends React.Component {
 
             <Form.Item label="抗血管治疗">
               <Switch
-                defaultChecked={false}
+                defaultChecked={this.state.antivasculartherapy || false}
                 checkedChildren="有"
                 unCheckedChildren="无"
                 onChange={checked => {
