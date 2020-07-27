@@ -1,7 +1,7 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 import { Radio, DatePicker, Cascader, Rate } from 'antd';
-import { sideEffectsave } from '../../service';
+import { sideEffectsave, sideEffectupdate } from '../../service';
 
 const options = [
   {
@@ -341,10 +341,12 @@ const SideReaction = props => {
         },
       ]}
       hassave={true}
-      save={sideEffectsave}
+      save={sideEffectupdate}
       dataSource={props.dataSource}
       operColumns={[]}
       passData={passData}
+      pid={props.pid}
+      treNum={props.treNum}
     />
   );
 };

@@ -196,7 +196,11 @@ class EditableTable extends React.Component {
             type="primary"
             htmlType="submit"
             onClick={async e => {
-              const res = await this.props.save(this.state.dataSource);
+              const res = await this.props.save({
+                pid: this.props.pid,
+                treNum: this.props.treNum,
+                dataSource: this.state.dataSource,
+              });
               console.log(this.state.dataSource);
             }}
           >

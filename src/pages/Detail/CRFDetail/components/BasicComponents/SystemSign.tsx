@@ -1,7 +1,7 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 import { Radio, DatePicker, Cascader, Rate, Input } from 'antd';
-import { sideEffectsave, signssave } from '../../service';
+import { sideEffectsave, signssave, signsupdate } from '../../service';
 
 const SystemSign = props => {
   const passData = data => {
@@ -79,10 +79,12 @@ const SystemSign = props => {
         },
       ]}
       hassave={true}
-      save={signssave}
+      save={signsupdate}
       dataSource={props.dataSource}
       operColumns={[]}
       passData={passData}
+      pid={props.pid}
+      treNum={props.treNum}
     />
   );
 };
