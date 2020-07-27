@@ -119,7 +119,14 @@ class TreatmentRecord extends React.Component {
       if (this.state.antivasculartherapy) treSolu.push('AntivascularTherapy');
       if (this.state.othertherapy) treSolu.push('Other');
       values[this.state.trement_name]['treSolu'] = treSolu.toString();
-
+      if (values[this.state.trement_name]['begDate'])
+        values[this.state.trement_name]['begDate'] = values[
+          this.state.trement_name
+        ]['begDate'].format('YYYY-MM-DD');
+      if (values[this.state.trement_name]['endDate'])
+        values[this.state.trement_name]['endDate'] = values[
+          this.state.trement_name
+        ]['endDate'].format('YYYY-MM-DD');
       values['Chemotherapy'] = this.state.Chemotherapy;
       values['TargetedTherapy'] = this.state.TargetedTherapy;
       values['ImmunityTherapy'] = this.state.ImmunityTherapy;
