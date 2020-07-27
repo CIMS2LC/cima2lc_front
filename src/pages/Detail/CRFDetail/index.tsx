@@ -48,6 +48,9 @@ class CRFDetail extends React.Component {
     this.state.id = props.location.query.id || -1;
     this.state.pid = props.location.query.id || -1;
     this.update_detail();
+    this.update_treatment_infos();
+  }
+  update_treatment_infos = () => {
     if (this.props.crfDetail.data) {
       //this.state.currTre = ;
       if (this.props.crfDetail.data.TreRec)
@@ -59,8 +62,9 @@ class CRFDetail extends React.Component {
       }
       console.log(treatment_infos);
       this.state.treatment_infos = treatment_infos;
+      return true;
     }
-  }
+  };
   update_detail = () => {
     const id = this.state.id;
     const { dispatch } = this.props;
@@ -183,11 +187,14 @@ class CRFDetail extends React.Component {
                     }}
                     //defaultSelectedKeys={this.state.currTre}
                   >
-                    {treatment_infos.map(v => {
-                      return (
-                        <Menu.Item key={v.treNum}>治疗信息{v.treNum}</Menu.Item>
-                      );
-                    })}
+                    {this.update_treatment_infos() &&
+                      treatment_infos.map(v => {
+                        return (
+                          <Menu.Item key={v.treNum}>
+                            治疗信息{v.treNum}
+                          </Menu.Item>
+                        );
+                      })}
                     <Menu.Item key="add" icon={<PlusCircleOutlined />}>
                       添加
                     </Menu.Item>
