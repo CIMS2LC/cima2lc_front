@@ -14,6 +14,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 
 import UpdateForm, { FormValueType } from './components/UpdateForm';
+import Statistic from './components/statistic';
 import { treeData } from '@/pages/Detail/CRFDetail/components/BasicComponents/InitialDiagnosisProcess';
 import { TableListItem } from './data.d';
 import {
@@ -98,6 +99,7 @@ const TableList: React.FC<{}> = () => {
   );
   const [stepFormValues, setStepFormValues] = useState({});
   const [queryParms, setqueryParms] = useState({});
+  const [staticvisible, setStaticvisible] = useState(false);
   const actionRef = useRef<ActionType>();
   const handleDelete = async record => {
     console.log('删除');
@@ -160,6 +162,10 @@ const TableList: React.FC<{}> = () => {
 
   const state = {
     select: 'all',
+    visible: false,
+  };
+  const showModel = () => {
+    setVisible(true);
   };
   return (
     <PageHeaderWrapper>
@@ -212,7 +218,12 @@ const TableList: React.FC<{}> = () => {
           >
             <PlusOutlined /> 添加
           </Button>,
-          <Button type="primary" onClick={() => {}}>
+          <Button
+            type="primary"
+            onClick={() => {
+              setStaticvisible(true);
+            }}
+          >
             <PlusOutlined /> 统计分析
           </Button>,
           selectedRows && selectedRows.length > 0 && (
@@ -281,6 +292,7 @@ const TableList: React.FC<{}> = () => {
           values={stepFormValues}
         />
       ) : null}
+      {staticvisible ? <Statistic visible={staticvisible} /> : null}
     </PageHeaderWrapper>
   );
 };

@@ -59,6 +59,14 @@ export async function queryRule(params?: TableListParams) {
   });
 }
 
+export async function screen(params: any) {
+  return request('api/illCase/screen', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function removeRule(params: { key: number[] }) {
   return request('/api/rule', {
     method: 'POST',
