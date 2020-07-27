@@ -574,12 +574,19 @@ class Statistic extends React.Component {
           confirmLoading={confirmLoading}
           onCancel={this.handleCancel}
           onOk={this.handleOk}
+          footer={[]}
         >
           <Form
             name="statistic"
             {...layout}
             onFinish={async value => {
-              await screen(value);
+              const res = await screen(value);
+              if (res.code == 200) {
+                this.props.setDataSource(res.data);
+                console.log('查询成功');
+              } else {
+                console.log(res);
+              }
             }}
             ref={this.formRef}
             initialValues={this.initialValues}

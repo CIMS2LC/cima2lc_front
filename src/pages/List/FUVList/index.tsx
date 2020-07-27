@@ -100,6 +100,7 @@ const TableList: React.FC<{}> = () => {
   const [stepFormValues, setStepFormValues] = useState({});
   const [queryParms, setqueryParms] = useState({});
   const [staticvisible, setStaticvisible] = useState(false);
+  const [dataSourceList, setDataSourceList] = useState([]);
   const actionRef = useRef<ActionType>();
   const handleDelete = async record => {
     console.log('删除');
@@ -163,9 +164,6 @@ const TableList: React.FC<{}> = () => {
   const state = {
     select: 'all',
     visible: false,
-  };
-  const showModel = () => {
-    setVisible(true);
   };
   return (
     <PageHeaderWrapper>
@@ -269,6 +267,7 @@ const TableList: React.FC<{}> = () => {
         request={(params, sorter, filter) => {
           return queryRule({ ...params, sorter, filter });
         }}
+        dataSource={dataSourceList}
         columns={columns}
         rowSelection={{}}
       />
@@ -297,6 +296,12 @@ const TableList: React.FC<{}> = () => {
           visible={staticvisible}
           onCancel={() => {
             setStaticvisible(false);
+          }}
+          setDataSource={data => {
+            setDataSourceList(data);
+            if (actionRef.current) {
+              actionRef.current.reload();
+            }
           }}
         />
       ) : null}
