@@ -583,6 +583,9 @@ class Statistic extends React.Component {
               const res = await screen(value);
               if (res.code == 200) {
                 this.props.setDataSource(res.data);
+                this.setState({
+                  visible: false,
+                });
                 console.log('查询成功');
               } else {
                 console.log(res);

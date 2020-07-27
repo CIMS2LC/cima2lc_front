@@ -299,9 +299,9 @@ const TableList: React.FC<{}> = () => {
           }}
           setDataSource={data => {
             setDataSourceList(data);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
+            // if (actionRef.current) {
+            //   actionRef.current.reload();
+            // }
           }}
         />
       ) : null}
