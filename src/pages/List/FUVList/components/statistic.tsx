@@ -617,7 +617,7 @@ class Statistic extends React.Component {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                保存
+                搜索
               </Button>
             </Form.Item>
           </Form>
