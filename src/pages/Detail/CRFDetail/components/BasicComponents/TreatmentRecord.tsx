@@ -60,15 +60,19 @@ class TreatmentRecord extends React.Component {
         this.TreRec['proDate'] = moment(this.TreRec.proDate);
       if (this.TreRec.trement) {
         this.state.trement_name = this.TreRec.trement;
-        var treVal = this.props.initialValues[
-          treatment_map[this.TreRec.trement]
-        ][this.props.treNum - 1];
-        console.log(treVal);
+        var treVal =
+          ['surgery', 'radiotherapy'].indexOf(this.state.trement_name) != -1
+            ? this.props.initialValues[treatment_map[this.TreRec.trement]][
+                this.props.treNum - 1
+              ]
+            : this.props.initialValues['OneToFive'][this.props.treNum - 1];
         if (
           ['one', 'two', 'three', 'four', 'five', 'other'].indexOf(
             this.state.trement_name,
           ) != -1
         ) {
+          if (treVal.begDate) treVal.begDate = moment(treVal.begDate);
+          if (treVal.endDate) treVal.endDate = moment(treVal.endDate);
         }
         if (['surgery'].indexOf(this.state.trement_name) != -1) {
           if (treVal.surDate) treVal.surDate = moment(treVal.surDate);
@@ -80,10 +84,6 @@ class TreatmentRecord extends React.Component {
         }
         console.log(treVal);
         this.TreRec[this.TreRec.trement] = treVal;
-        // this.TreRec = {
-        //   ...this.TreRec,
-        //   ...this.props.initialValues[treatment_map[this.TreRec.trement]][this.props.treNum-1]
-        // };
       }
     }
     console.log(this.TreRec);
@@ -242,7 +242,7 @@ class TreatmentRecord extends React.Component {
         {['one', 'two', 'three', 'four', 'five', 'other'].indexOf(
           this.state.trement_name,
         ) != -1 ? (
-          <div>
+          <Form.Item name={this.state.trement_name}>
             <Form.Item
               label="是否加入临床治疗"
               name={[this.state.trement_name, 'isTre']}
@@ -399,7 +399,7 @@ class TreatmentRecord extends React.Component {
             >
               <Input />
             </Form.Item>
-          </div>
+          </Form.Item>
         ) : null}
 
         {['surgery'].indexOf(this.state.trement_name) != -1 ? (
