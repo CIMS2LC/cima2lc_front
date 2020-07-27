@@ -71,12 +71,14 @@ class TreatmentRecord extends React.Component {
         ) {
         }
         if (['surgery'].indexOf(this.state.trement_name) != -1) {
-          console.log(treVal.surDate);
           if (treVal.surDate) treVal.surDate = moment(treVal.surDate);
           if (treVal.proDate) treVal.proDate = moment(treVal.proDate);
         }
         if (['radiotherapy'].indexOf(this.state.trement_name) != -1) {
+          if (treVal.begDate) treVal.begDate = moment(treVal.begDate);
+          if (treVal.endDate) treVal.endDate = moment(treVal.endDate);
         }
+        console.log(treVal);
         this.TreRec[this.TreRec.trement] = treVal;
         // this.TreRec = {
         //   ...this.TreRec,

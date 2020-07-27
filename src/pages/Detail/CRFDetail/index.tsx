@@ -57,6 +57,7 @@ class CRFDetail extends React.Component {
       for (var i = 0; i < count; i++) {
         treatment_infos.push({ treNum: i + 1 });
       }
+      console.log(treatment_infos);
       this.state.treatment_infos = treatment_infos;
     }
   }
