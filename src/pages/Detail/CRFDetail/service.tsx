@@ -89,7 +89,7 @@ export async function IniDiaupdate(params?: any) {
   });
 }
 export async function treRecsave(params?: any) {
-  return request('http://localhost:8001/api/treRec/add', {
+  return request('http://localhost:8001/api/treatment/add', {
     method: 'POST',
     data: {
       ...params,
@@ -97,7 +97,7 @@ export async function treRecsave(params?: any) {
   });
 }
 export async function treRecupdate(params?: any) {
-  return request('http://localhost:8001/api/treRec/update', {
+  return request('http://localhost:8001/api/treatment/update', {
     method: 'PUT',
     data: {
       ...params,
@@ -105,7 +105,7 @@ export async function treRecupdate(params?: any) {
   });
 }
 export async function sideEffectsave(params?: any) {
-  return request('http://localhost:8001/api/sideEffect/add', {
+  return request('http://localhost:8001/api/SideEffect/add', {
     method: 'POST',
     data: {
       ...params,
@@ -113,7 +113,7 @@ export async function sideEffectsave(params?: any) {
   });
 }
 export async function sideEffectupdate(params?: any) {
-  return request('http://localhost:8001/api/sideEffect/update', {
+  return request('http://localhost:8001/api/SideEffect/update', {
     method: 'PUT',
     data: {
       ...params,
@@ -121,7 +121,7 @@ export async function sideEffectupdate(params?: any) {
   });
 }
 export async function signssave(params?: any) {
-  return request('http://localhost:8001/api/signs/add', {
+  return request('http://localhost:8001/api/Signs/add', {
     method: 'POST',
     data: {
       ...params,
@@ -129,7 +129,7 @@ export async function signssave(params?: any) {
   });
 }
 export async function signsupdate(params?: any) {
-  return request('http://localhost:8001/api/signs/update', {
+  return request('http://localhost:8001/api/Signs/update', {
     method: 'PUT',
     data: {
       ...params,

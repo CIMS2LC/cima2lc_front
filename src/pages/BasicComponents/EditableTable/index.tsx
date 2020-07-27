@@ -199,7 +199,7 @@ class EditableTable extends React.Component {
               const res = await this.props.save({
                 pid: this.props.pid,
                 treNum: this.props.treNum,
-                dataSource: this.state.dataSource,
+                data: this.state.dataSource,
               });
               console.log(this.state.dataSource);
             }}
