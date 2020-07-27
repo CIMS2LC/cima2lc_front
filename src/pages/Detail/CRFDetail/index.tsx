@@ -48,6 +48,17 @@ class CRFDetail extends React.Component {
     this.state.id = props.location.query.id || -1;
     this.state.pid = props.location.query.id || -1;
     this.update_detail();
+    if (this.props.crfDetail.data) {
+      //this.state.currTre = ;
+      if (this.props.crfDetail.data.TreRec)
+        var count = this.props.crfDetail.data.TreRec.length;
+      this.state.treNum = count;
+      var treatment_infos = [];
+      for (var i = 0; i < count; i++) {
+        treatment_infos.push({ treNum: i + 1 });
+      }
+      this.state.treatment_infos = treatment_infos;
+    }
   }
   update_detail = () => {
     const id = this.state.id;
@@ -138,6 +149,7 @@ class CRFDetail extends React.Component {
                     this.setState({
                       selectedKeys: item.keyPath,
                     });
+                    console.log(this.state.treatment_infos);
                   }}
                 >
                   <Menu.Item key="baseline">基线资料</Menu.Item>
@@ -168,6 +180,7 @@ class CRFDetail extends React.Component {
                         });
                       }
                     }}
+                    //defaultSelectedKeys={this.state.currTre}
                   >
                     {treatment_infos.map(v => {
                       return (
