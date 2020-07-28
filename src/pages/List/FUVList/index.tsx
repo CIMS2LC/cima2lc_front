@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   Popconfirm,
+  Table,
 } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -31,30 +32,6 @@ import { history } from 'umi';
 
 const { Option } = Select;
 const { Search } = Input;
-
-/**
- * 更新节点
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('正在配置');
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
-
 /**
  *  删除节点
  * @param selectedRows
@@ -93,26 +70,35 @@ function getTitle(datas, key, path) {
   }
 }
 
-const TableList: React.FC<{}> = () => {
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(
-    false,
-  );
-  const [stepFormValues, setStepFormValues] = useState({});
-  const [queryParms, setqueryParms] = useState({});
-  const [staticvisible, setStaticvisible] = useState(false);
-  const [dataSourceList, setDataSourceList] = useState([]);
-  const actionRef = useRef<ActionType>();
-  const handleDelete = async record => {
-    console.log('删除');
-    console.log(record);
-    await deletelist({
-      id: record.id,
-    });
-    if (actionRef.current) {
-      actionRef.current.reload();
-    }
+class FULList extends React.Component {
+  state = {
+    select: 'all',
+    data: [
+      {
+        key: 0,
+        pid: 0,
+        hospitalNumber: 1,
+        name: '123',
+        idNumber: 123,
+        phoneNumber: '123',
+        gender: '0',
+      },
+      {
+        key: 1,
+        pid: 1,
+        hospitalNumber: 1,
+        name: '123',
+        idNumber: 123,
+        phoneNumber: '123',
+        gender: '0',
+      },
+    ],
+    selectedRowKeys: [],
+    total: 10, //  数据总数量
+    pageSize: 10,
+    visible: false,
   };
-  const columns: ProColumns<TableListItem>[] = [
+  columns = [
     {
       title: '住院号/就诊号',
       dataIndex: 'hospitalNumber',
@@ -151,7 +137,7 @@ const TableList: React.FC<{}> = () => {
             <Divider type="vertical" />
             <Popconfirm
               title="确认删除（不可恢复）？"
-              onConfirm={() => handleDelete(record)}
+              onConfirm={() => this.handleDelete(record)}
             >
               <a>删除</a>
             </Popconfirm>
@@ -160,153 +146,156 @@ const TableList: React.FC<{}> = () => {
       },
     },
   ];
-
-  const state = {
-    select: 'all',
-    visible: false,
+  onSelectChange = selectedRowKeys => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    this.setState({ selectedRowKeys });
   };
-  return (
-    <PageHeaderWrapper>
-      <Select
-        defaultValue="all"
-        style={{ width: 120 }}
-        onChange={value => {
-          state.select = value;
-        }}
-      >
-        <Option value="all">全部</Option>
-        <Option value="name">姓名</Option>
-        <Option value="idNumber">身份证号</Option>
-        <Option value="hospitalNumber">住院号</Option>
-      </Select>
-      <Search
-        placeholder="input search text"
-        enterButton="Search"
-        style={{ width: 400 }}
-        onSearch={value => {
-          var key = state.select;
-          console.log('123');
-          query({ key, value });
-          if (actionRef.current) {
-            actionRef.current.reload();
-          }
-        }}
-      />
-      <Button
-        //className={styles.btn_return}
-        style={{ float: 'right' }}
-        id="btn_questionnaire"
-        onClick={() => {
-          history.push('/Questionnaire');
-        }}
-      >
-        调查问卷
-      </Button>
-      <ProTable<TableListItem>
-        headerTitle="查询表格"
-        actionRef={actionRef}
-        rowKey="id"
-        search={false}
-        toolBarRender={(action, { selectedRows }) => [
-          <Button
-            type="primary"
-            onClick={() => {
-              history.push('/detail/crf_detail');
-            }}
-          >
-            <PlusOutlined /> 添加
-          </Button>,
-          <Button
-            type="primary"
-            onClick={() => {
-              setStaticvisible(true);
-            }}
-          >
-            <PlusOutlined /> 统计分析
-          </Button>,
-          selectedRows && selectedRows.length > 0 && (
-            <Dropdown
-              overlay={
-                <Menu
-                  onClick={async e => {
-                    if (e.key === 'remove') {
-                      await handleRemove(selectedRows);
-                      action.reload();
-                    }
-                    console.log(selectedRows);
-                    if (e.key === 'csv') {
-                      var pids = [];
-                      selectedRows.map(item => pids.push(item.id));
-                      await exportExcel({ pid: pids });
-                      action.reload();
-                    }
-                  }}
-                  selectedKeys={[]}
-                >
-                  <Menu.Item key="approval">批量审批</Menu.Item>
-                  <Menu.Item key="csv">CSV导出</Menu.Item>
-                </Menu>
-              }
-            >
-              <Button>
-                批量操作 <DownOutlined />
-              </Button>
-            </Dropdown>
-          ),
-        ]}
-        tableAlertRender={({ selectedRowKeys, selectedRows }) => (
-          <div>
-            已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a>{' '}
-            项&nbsp;&nbsp;
-            <span>
-              服务调用次数总计{' '}
-              {selectedRows.reduce((pre, item) => pre + item.callNo, 0)} 万
-            </span>
-          </div>
-        )}
-        request={(params, sorter, filter) => {
-          return queryRule({ ...params, sorter, filter });
-        }}
-        dataSource={dataSourceList}
-        columns={columns}
-        rowSelection={{}}
-      />
-      {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async value => {
-            const success = await handleUpdate(value);
-            if (success) {
-              handleUpdateModalVisible(false);
-              setStepFormValues({});
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setStepFormValues({});
-          }}
-          updateModalVisible={updateModalVisible}
-          values={stepFormValues}
-        />
-      ) : null}
-      {staticvisible ? (
-        <Statistic
-          visible={staticvisible}
-          onCancel={() => {
-            setStaticvisible(false);
-          }}
-          setDataSource={data => {
-            setDataSourceList(data);
-            // if (actionRef.current) {
-            //   actionRef.current.reload();
-            // }
-          }}
-        />
-      ) : null}
-    </PageHeaderWrapper>
-  );
-};
+  componentDidMount = async () => {
+    //初始化界面的请求操作
+    const res = await queryRule({
+      currentPage: 1,
+      pageSize: this.state.pageSize,
+      sorter: {},
+    });
+    if (res.success) {
+      if (res.data) {
+        res.data.map(item => {
+          item.key = item.id;
+        });
+      }
+      this.setState({ data: res.data });
+    } else {
+      console.log('请求失败', res);
+    }
+  };
 
-export default TableList;
+  handleDelete = async (key: number) => {
+    await deletelist({
+      id: key,
+    });
+  };
+  OnSearch = async (key: string, value: string) => {
+    const res = await query({ key, value });
+    if (res.code == 200) {
+      if (res.data) {
+        res.data.map(item => {
+          item.key = item.id;
+        });
+      }
+      this.setState({ data: res.data });
+    } else {
+      console.log('请求失败', res);
+    }
+  };
+  handleTableChange = (pagination: any) => {
+    //换页的数据申请
+  };
+  render() {
+    const { loading, selectedRowKeys } = this.state;
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+    };
+    const hasSelected = selectedRowKeys.length > 0;
+    return (
+      <PageHeaderWrapper>
+        <Select
+          defaultValue="all"
+          style={{ width: 120 }}
+          onChange={value => {
+            this.state.select = value;
+          }}
+        >
+          <Option value="all">全部</Option>
+          <Option value="name">姓名</Option>
+          <Option value="idNumber">身份证号</Option>
+          <Option value="hospitalNumber">住院号</Option>
+        </Select>
+        <Search
+          placeholder="input search text"
+          enterButton="Search"
+          style={{ width: 400 }}
+          onSearch={value => {
+            this.OnSearch(this.state.select, value);
+          }}
+        />
+        <Button
+          //className={styles.btn_return}
+          style={{ float: 'right' }}
+          id="btn_questionnaire"
+          onClick={() => {
+            history.push('/Questionnaire');
+          }}
+        >
+          调查问卷
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            history.push('/detail/crf_detail');
+          }}
+        >
+          <PlusOutlined /> 添加
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            this.setState({ visible: true });
+          }}
+        >
+          <PlusOutlined /> 统计分析
+        </Button>
+        {hasSelected && (
+          <Dropdown
+            overlay={
+              <Menu
+                onClick={async e => {
+                  if (e.key === 'remove') {
+                    await this.handleRemove(selectedRowKeys);
+                  }
+                  console.log(selectedRowKeys);
+                  if (e.key === 'csv') {
+                    var pids = [];
+                    selectedRowKeys.map(item => pids.push(item));
+                    await exportExcel({ pid: pids });
+                  }
+                }}
+                selectedRowKeys={[]}
+              >
+                <Menu.Item key="csv">CSV导出</Menu.Item>
+              </Menu>
+            }
+          >
+            <Button>
+              批量操作 <DownOutlined />
+            </Button>
+          </Dropdown>
+        )}
+        <Table
+          columns={this.columns}
+          dataSource={this.state.data}
+          pagination={{
+            defaultCurrent: 1,
+            pageSize: this.state.pageSize,
+            total: this.state.total,
+          }}
+          rowSelection={rowSelection}
+          onChange={this.handleTableChange}
+        ></Table>
+        {this.state.visible ? (
+          <Statistic
+            visible={this.state.visible}
+            onCancel={() => {
+              this.setState({ visible: false });
+            }}
+            setDataSource={data => {
+              this.setState({ data });
+            }}
+          />
+        ) : null}
+      </PageHeaderWrapper>
+    );
+  }
+}
+
+export default FULList;
