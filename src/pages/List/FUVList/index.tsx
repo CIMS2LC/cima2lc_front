@@ -216,104 +216,110 @@ class FULList extends React.Component {
     };
     const hasSelected = selectedRowKeys.length > 0;
     return (
-      <PageHeaderWrapper>
-        <Select
-          defaultValue="all"
-          style={{ width: 120 }}
-          onChange={value => {
-            this.state.select = value;
-          }}
-        >
-          <Option value="all">全部</Option>
-          <Option value="name">姓名</Option>
-          <Option value="idNumber">身份证号</Option>
-          <Option value="hospitalNumber">住院号</Option>
-        </Select>
-        <Search
-          placeholder="input search text"
-          enterButton="Search"
-          style={{ width: 400 }}
-          onSearch={value => {
-            this.OnSearch(this.state.select, value);
-          }}
+      <div>
+        <img
+          src={require('@/img/logo.png')}
+          style={{ height: 60, width: 120 }}
         />
-        <Button
-          //className={styles.btn_return}
-          style={{ float: 'right' }}
-          id="btn_questionnaire"
-          onClick={() => {
-            history.push('/Questionnaire');
-          }}
-        >
-          调查问卷
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            history.push('/detail/crf_detail');
-          }}
-        >
-          <PlusOutlined /> 添加
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            this.setState({ visible: true });
-          }}
-        >
-          <PlusOutlined /> 统计分析
-        </Button>
-        {hasSelected && (
-          <Dropdown
-            overlay={
-              <Menu
-                onClick={async e => {
-                  if (e.key === 'remove') {
-                    await this.handleRemove(selectedRowKeys);
-                  }
-                  console.log(selectedRowKeys);
-                  if (e.key === 'csv') {
-                    var pids = [];
-                    selectedRowKeys.map(item => pids.push(item));
-                    await exportExcel({ pid: pids });
-                  }
-                }}
-                selectedRowKeys={[]}
-              >
-                <Menu.Item key="csv">CSV导出</Menu.Item>
-              </Menu>
-            }
-          >
-            <Button>
-              批量操作 <DownOutlined />
-            </Button>
-          </Dropdown>
-        )}
-        <Table
-          columns={this.columns}
-          dataSource={this.state.data}
-          pagination={{
-            current: this.state.current,
-            pageSize: this.state.pageSize,
-            total: this.state.total,
-            onChange: this.paginationChange,
-            onShowSizeChange: this.showSizeChange,
-          }}
-          rowSelection={rowSelection}
-          onChange={this.handleTableChange}
-        ></Table>
-        {this.state.visible ? (
-          <Statistic
-            visible={this.state.visible}
-            onCancel={() => {
-              this.setState({ visible: false });
+        <div>
+          <Select
+            defaultValue="all"
+            style={{ width: 120 }}
+            onChange={value => {
+              this.state.select = value;
             }}
-            setDataSource={data => {
-              this.setState({ data });
+          >
+            <Option value="all">全部</Option>
+            <Option value="name">姓名</Option>
+            <Option value="idNumber">身份证号</Option>
+            <Option value="hospitalNumber">住院号</Option>
+          </Select>
+          <Search
+            placeholder="input search text"
+            enterButton="Search"
+            style={{ width: 400 }}
+            onSearch={value => {
+              this.OnSearch(this.state.select, value);
             }}
           />
-        ) : null}
-      </PageHeaderWrapper>
+          <Button
+            //className={styles.btn_return}
+            style={{ float: 'right' }}
+            id="btn_questionnaire"
+            onClick={() => {
+              history.push('/Questionnaire');
+            }}
+          >
+            调查问卷
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              history.push('/detail/crf_detail');
+            }}
+          >
+            <PlusOutlined /> 添加
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              this.setState({ visible: true });
+            }}
+          >
+            <PlusOutlined /> 统计分析
+          </Button>
+          {hasSelected && (
+            <Dropdown
+              overlay={
+                <Menu
+                  onClick={async e => {
+                    if (e.key === 'remove') {
+                      await this.handleRemove(selectedRowKeys);
+                    }
+                    console.log(selectedRowKeys);
+                    if (e.key === 'csv') {
+                      var pids = [];
+                      selectedRowKeys.map(item => pids.push(item));
+                      await exportExcel({ pid: pids });
+                    }
+                  }}
+                  selectedRowKeys={[]}
+                >
+                  <Menu.Item key="csv">CSV导出</Menu.Item>
+                </Menu>
+              }
+            >
+              <Button>
+                批量操作 <DownOutlined />
+              </Button>
+            </Dropdown>
+          )}
+          <Table
+            columns={this.columns}
+            dataSource={this.state.data}
+            pagination={{
+              current: this.state.current,
+              pageSize: this.state.pageSize,
+              total: this.state.total,
+              onChange: this.paginationChange,
+              onShowSizeChange: this.showSizeChange,
+            }}
+            rowSelection={rowSelection}
+            onChange={this.handleTableChange}
+          ></Table>
+          {this.state.visible ? (
+            <Statistic
+              visible={this.state.visible}
+              onCancel={() => {
+                this.setState({ visible: false });
+              }}
+              setDataSource={data => {
+                this.setState({ data });
+              }}
+            />
+          ) : null}
+        </div>
+      </div>
     );
   }
 }
