@@ -52,62 +52,64 @@ const treatment_map = {
 class TreatmentRecord extends React.Component {
   constructor(props: any) {
     super(props);
-    this.TreRec = this.props.initialValues.TreRec[this.props.treNum - 1];
-    if (this.TreRec) {
-      if (this.TreRec.beEffEvaDate)
-        this.TreRec['beEffEvaDate'] = moment(this.TreRec.beEffEvaDate);
-      if (this.TreRec.proDate)
-        this.TreRec['proDate'] = moment(this.TreRec.proDate);
-      if (this.TreRec.trement) {
-        this.state.trement_name = this.TreRec.trement;
-        var treVal =
-          ['surgery', 'radiotherapy'].indexOf(this.state.trement_name) != -1
-            ? this.props.initialValues[treatment_map[this.TreRec.trement]][
-                this.props.treNum - 1
-              ]
-            : this.props.initialValues['OneToFive'][this.props.treNum - 1];
-        if (
-          ['one', 'two', 'three', 'four', 'five', 'other'].indexOf(
-            this.state.trement_name,
-          ) != -1
-        ) {
-          if (treVal.begDate) treVal.begDate = moment(treVal.begDate);
-          if (treVal.endDate) treVal.endDate = moment(treVal.endDate);
-          if (treVal.treSolu) {
-            if (treVal.treSolu.indexOf('Chemotherapy') != -1)
-              this.state.chemotherapy = true;
-            if (treVal.treSolu.indexOf('TargetedTherapy') != -1)
-              this.state.targetedtherapy = true;
-            if (treVal.treSolu.indexOf('ImmunityTherapy') != -1)
-              this.state.immunotherapy = true;
-            if (treVal.treSolu.indexOf('AntivascularTherapy') != -1)
-              this.state.antivasculartherapy = true;
-            if (treVal.treSolu.indexOf('Other') != -1)
-              this.state.othertherapy = true;
-          }
-          if (this.props.initialValues.DetailTrePlan) {
-            this.props.initialValues.DetailTrePlan.map(item => {
-              if (item.treNum == this.props.treNum) {
-                if (treVal[item.treSolu]) {
-                  treVal[item.treSolu].push(item);
-                } else {
-                  treVal[item.treSolu] = [];
-                  treVal[item.treSolu].push(item);
+    if (this.props.initialValues) {
+      this.TreRec = this.props.initialValues.TreRec[this.props.treNum - 1];
+      if (this.TreRec) {
+        if (this.TreRec.beEffEvaDate)
+          this.TreRec['beEffEvaDate'] = moment(this.TreRec.beEffEvaDate);
+        if (this.TreRec.proDate)
+          this.TreRec['proDate'] = moment(this.TreRec.proDate);
+        if (this.TreRec.trement) {
+          this.state.trement_name = this.TreRec.trement;
+          var treVal =
+            ['surgery', 'radiotherapy'].indexOf(this.state.trement_name) != -1
+              ? this.props.initialValues[treatment_map[this.TreRec.trement]][
+                  this.props.treNum - 1
+                ]
+              : this.props.initialValues['OneToFive'][this.props.treNum - 1];
+          if (
+            ['one', 'two', 'three', 'four', 'five', 'other'].indexOf(
+              this.state.trement_name,
+            ) != -1
+          ) {
+            if (treVal.begDate) treVal.begDate = moment(treVal.begDate);
+            if (treVal.endDate) treVal.endDate = moment(treVal.endDate);
+            if (treVal.treSolu) {
+              if (treVal.treSolu.indexOf('Chemotherapy') != -1)
+                this.state.chemotherapy = true;
+              if (treVal.treSolu.indexOf('TargetedTherapy') != -1)
+                this.state.targetedtherapy = true;
+              if (treVal.treSolu.indexOf('ImmunityTherapy') != -1)
+                this.state.immunotherapy = true;
+              if (treVal.treSolu.indexOf('AntivascularTherapy') != -1)
+                this.state.antivasculartherapy = true;
+              if (treVal.treSolu.indexOf('Other') != -1)
+                this.state.othertherapy = true;
+            }
+            if (this.props.initialValues.DetailTrePlan) {
+              this.props.initialValues.DetailTrePlan.map(item => {
+                if (item.treNum == this.props.treNum) {
+                  if (treVal[item.treSolu]) {
+                    treVal[item.treSolu].push(item);
+                  } else {
+                    treVal[item.treSolu] = [];
+                    treVal[item.treSolu].push(item);
+                  }
                 }
-              }
-            });
+              });
+            }
           }
+          if (['surgery'].indexOf(this.state.trement_name) != -1) {
+            if (treVal.surDate) treVal.surDate = moment(treVal.surDate);
+            if (treVal.proDate) treVal.proDate = moment(treVal.proDate);
+          }
+          if (['radiotherapy'].indexOf(this.state.trement_name) != -1) {
+            if (treVal.begDate) treVal.begDate = moment(treVal.begDate);
+            if (treVal.endDate) treVal.endDate = moment(treVal.endDate);
+          }
+          console.log(treVal);
+          this.TreRec[this.TreRec.trement] = treVal;
         }
-        if (['surgery'].indexOf(this.state.trement_name) != -1) {
-          if (treVal.surDate) treVal.surDate = moment(treVal.surDate);
-          if (treVal.proDate) treVal.proDate = moment(treVal.proDate);
-        }
-        if (['radiotherapy'].indexOf(this.state.trement_name) != -1) {
-          if (treVal.begDate) treVal.begDate = moment(treVal.begDate);
-          if (treVal.endDate) treVal.endDate = moment(treVal.endDate);
-        }
-        console.log(treVal);
-        this.TreRec[this.TreRec.trement] = treVal;
       }
     }
     console.log(this.TreRec);

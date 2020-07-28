@@ -95,7 +95,6 @@ class CRFDetail extends React.Component {
     });
   };
   render() {
-    var { treatment_infos } = this.state;
     return (
       <Layout>
         <Header
@@ -153,7 +152,6 @@ class CRFDetail extends React.Component {
                     this.setState({
                       selectedKeys: item.keyPath,
                     });
-                    console.log(this.state.treatment_infos);
                   }}
                 >
                   <Menu.Item key="baseline">基线资料</Menu.Item>
@@ -184,16 +182,13 @@ class CRFDetail extends React.Component {
                         });
                       }
                     }}
-                    //defaultSelectedKeys={this.state.currTre}
                   >
-                    {this.update_treatment_infos() &&
-                      treatment_infos.map(v => {
-                        return (
-                          <Menu.Item key={v.treNum}>
-                            治疗信息{v.treNum}
-                          </Menu.Item>
-                        );
-                      })}
+                    {//this.add_update_treatment_infos() &&
+                    this.state.treatment_infos.map(v => {
+                      return (
+                        <Menu.Item key={v.treNum}>治疗信息{v.treNum}</Menu.Item>
+                      );
+                    })}
                     <Menu.Item key="add" icon={<PlusCircleOutlined />}>
                       添加
                     </Menu.Item>
@@ -246,7 +241,12 @@ class CRFDetail extends React.Component {
                           }}
                         >
                           <Form.Item label="身份证号" name="idNumber">
-                            <Input maxLength={18} />
+                            <Input
+                              maxLength={18}
+                              onBlur={e => {
+                                console.log(e.target.value);
+                              }}
+                            />
                           </Form.Item>
 
                           <Form.Item

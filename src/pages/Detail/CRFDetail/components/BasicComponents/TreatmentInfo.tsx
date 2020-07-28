@@ -40,16 +40,18 @@ class TreatmentInfo extends React.Component {
   constructor(props) {
     super(props);
     console.log(this.props.initialValues);
-    this.props.initialValues.SideEffect.map(item => {
-      if (item.treNum == this.props.treNum) {
-        this.sideEffectList.push(item);
-      }
-    });
-    this.props.initialValues.Signs.map(item => {
-      if (item.treNum == this.props.treNum) {
-        this.signList.push(item);
-      }
-    });
+    if (this.props.initialValues) {
+      this.props.initialValues.SideEffect.map(item => {
+        if (item.treNum == this.props.treNum) {
+          this.sideEffectList.push(item);
+        }
+      });
+      this.props.initialValues.Signs.map(item => {
+        if (item.treNum == this.props.treNum) {
+          this.signList.push(item);
+        }
+      });
+    }
     console.log(this.signList);
     console.log(this.sideEffectList);
   }
@@ -79,7 +81,9 @@ class TreatmentInfo extends React.Component {
               pid={this.props.pid}
               treNum={this.props.treNum}
               initialValues={
-                this.props.initialValues.Immunohis[this.props.treNum]
+                this.props.initialValues
+                  ? this.props.initialValues.Immunohis[this.props.treNum]
+                  : {}
               }
             />
           </TabPane>
@@ -88,7 +92,9 @@ class TreatmentInfo extends React.Component {
               pid={this.props.pid}
               treNum={this.props.treNum}
               initialValues={
-                this.props.initialValues.MoleDetec[this.props.treNum]
+                this.props.initialValues
+                  ? this.props.initialValues.MoleDetec[this.props.treNum]
+                  : {}
               }
             />
           </TabPane>

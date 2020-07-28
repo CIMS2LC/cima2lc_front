@@ -165,3 +165,8 @@ export async function querydetail(params?: QueryParams) {
     params,
   });
 }
+export async function illCaseFind(params?: QueryParams) {
+  return request('/api/illCase/find', {
+    params,
+  });
+}
