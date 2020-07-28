@@ -60,7 +60,7 @@ export async function queryRule(params?: TableListParams) {
 }
 
 export async function screen(params: any) {
-  return request('api/illCase/screen', {
+  return request('/api/illCase/screen', {
     method: 'POST',
     data: {
       ...params,
