@@ -51,6 +51,7 @@ class CRFDetail extends React.Component {
     this.update_treatment_infos();
   }
   update_treatment_infos = () => {
+    if (this.state.treatment_infos.length != 0) return true;
     if (this.props.crfDetail.data) {
       if (this.props.crfDetail.data.TreRec)
         var count = this.props.crfDetail.data.TreRec.length;
@@ -137,18 +138,8 @@ class CRFDetail extends React.Component {
                   defaultOpenKeys={['sub1']}
                   style={{ height: '100%' }}
                   selectedKeys={this.state.selectedKeys}
-                  openKeys={this.state.openKeys}
+                  // openKeys={this.state.openKeys}
                   onClick={item => {
-                    if (item.key === 'add') {
-                      const { treNum, treatment_infos } = this.state;
-                      const newData = { treNum: treNum + 1 };
-                      this.setState({
-                        treNum: treNum + 1,
-                        treatment_infos: [...treatment_infos, newData],
-                        currTre: treNum + 1,
-                      });
-                      item.keyPath[0] = String(treNum + 1);
-                    }
                     this.setState({
                       selectedKeys: item.keyPath,
                     });
@@ -176,19 +167,36 @@ class CRFDetail extends React.Component {
                       }
                     }}
                     onClick={item => {
-                      if (item.key != 'add') {
+                      if (item.key == 'add') {
+                        const { treNum, treatment_infos } = this.state;
+                        const newData = { treNum: treNum + 1 };
+                        this.setState({
+                          treNum: treNum + 1,
+                          treatment_infos: [...treatment_infos, newData],
+                          currTre: treNum + 1,
+                        });
+                        item.keyPath[0] = String(treNum + 1);
+                      } else {
+                        console.log(this.state.currTre);
+                        this.state.currTre = item.key;
                         this.setState({
                           currTre: item.key,
                         });
+                        console.log(this.state.currTre);
                       }
+                      this.setState({
+                        selectedKeys: item.keyPath,
+                      });
                     }}
                   >
-                    {//this.add_update_treatment_infos() &&
-                    this.state.treatment_infos.map(v => {
-                      return (
-                        <Menu.Item key={v.treNum}>治疗信息{v.treNum}</Menu.Item>
-                      );
-                    })}
+                    {this.update_treatment_infos() &&
+                      this.state.treatment_infos.map(v => {
+                        return (
+                          <Menu.Item key={v.treNum}>
+                            治疗信息{v.treNum}
+                          </Menu.Item>
+                        );
+                      })}
                     <Menu.Item key="add" icon={<PlusCircleOutlined />}>
                       添加
                     </Menu.Item>
@@ -353,7 +361,7 @@ class CRFDetail extends React.Component {
                         }
                       />
                     </div>
-                  ) : this.state.selectedKeys[0] === this.state.currTre ? (
+                  ) : (
                     <TreatmentInfo
                       key="treatment_info"
                       pid={this.state.pid}
@@ -364,7 +372,8 @@ class CRFDetail extends React.Component {
                           : undefined
                       }
                     />
-                  ) : null}
+                  )}
+                  {}
                 </Content>
               </Content>
             </Layout>

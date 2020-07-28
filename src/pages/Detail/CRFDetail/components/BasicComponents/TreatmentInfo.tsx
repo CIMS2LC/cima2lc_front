@@ -39,7 +39,7 @@ const layout = {
 class TreatmentInfo extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props.initialValues);
+    console.log(this.props.treNum);
     if (this.props.initialValues) {
       this.props.initialValues.SideEffect.map(item => {
         if (item.treNum == this.props.treNum) {
