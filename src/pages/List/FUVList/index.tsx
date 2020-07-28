@@ -73,28 +73,10 @@ function getTitle(datas, key, path) {
 class FULList extends React.Component {
   state = {
     select: 'all',
-    data: [
-      {
-        key: 0,
-        pid: 0,
-        hospitalNumber: 1,
-        name: '123',
-        idNumber: 123,
-        phoneNumber: '123',
-        gender: '0',
-      },
-      {
-        key: 1,
-        pid: 1,
-        hospitalNumber: 1,
-        name: '123',
-        idNumber: 123,
-        phoneNumber: '123',
-        gender: '0',
-      },
-    ],
+    data: [],
     selectedRowKeys: [],
     total: 10, //  数据总数量
+    current: 1,
     pageSize: 10,
     visible: false,
   };
@@ -153,17 +135,17 @@ class FULList extends React.Component {
   componentDidMount = async () => {
     //初始化界面的请求操作
     const res = await queryRule({
-      currentPage: 1,
+      current: 1,
       pageSize: this.state.pageSize,
       sorter: {},
     });
-    if (res.success) {
+    if (res.code == 200) {
       if (res.data) {
         res.data.map(item => {
           item.key = item.id;
         });
       }
-      this.setState({ data: res.data });
+      this.setState({ data: res.data, total: res.total });
     } else {
       console.log('请求失败', res);
     }
@@ -182,7 +164,43 @@ class FULList extends React.Component {
           item.key = item.id;
         });
       }
-      this.setState({ data: res.data });
+      this.setState({ data: res.data, total: res.total });
+    } else {
+      console.log('请求失败', res);
+    }
+  };
+  paginationChange = async (page: number, pageSize: number | undefined) => {
+    this.setState({ current: page, pageSize });
+    const res = await queryRule({
+      current: page,
+      pageSize: pageSize,
+      sorter: {},
+    });
+    if (res.code == 200) {
+      if (res.data) {
+        res.data.map(item => {
+          item.key = item.id;
+        });
+      }
+      this.setState({ data: res.data, total: res.total });
+    } else {
+      console.log('请求失败', res);
+    }
+  };
+  showSizeChange = async (current: number, size: number) => {
+    this.setState({ current, pageSize: size });
+    const res = await queryRule({
+      current: current,
+      pageSize: size,
+      sorter: {},
+    });
+    if (res.code == 200) {
+      if (res.data) {
+        res.data.map(item => {
+          item.key = item.id;
+        });
+      }
+      this.setState({ data: res.data, total: res.total });
     } else {
       console.log('请求失败', res);
     }
@@ -275,9 +293,11 @@ class FULList extends React.Component {
           columns={this.columns}
           dataSource={this.state.data}
           pagination={{
-            defaultCurrent: 1,
+            current: this.state.current,
             pageSize: this.state.pageSize,
             total: this.state.total,
+            onChange: this.paginationChange,
+            onShowSizeChange: this.showSizeChange,
           }}
           rowSelection={rowSelection}
           onChange={this.handleTableChange}

@@ -13,7 +13,7 @@ const genList = (current: number, pageSize: number) => {
       id: index,
       age: 20,
       gender: '男',
-      hospitalNumber: '1234',
+      hospitalNumber: `hos${i}`,
       idNumber: '1234',
       name: 'test',
       phoneNumber: '123456',
@@ -90,7 +90,7 @@ function getRule(req: Request, res: Response, u: string) {
   const result = {
     data: dataSource,
     total: tableListDataSource.length,
-    success: true,
+    code: 200,
     pageSize,
     current: parseInt(`${params.currentPage}`, 10) || 1,
   };
