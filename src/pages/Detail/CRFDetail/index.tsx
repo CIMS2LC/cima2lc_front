@@ -361,19 +361,21 @@ class CRFDetail extends React.Component {
                         }
                       />
                     </div>
-                  ) : (
-                    <TreatmentInfo
-                      key="treatment_info"
-                      pid={this.state.pid}
-                      treNum={this.state.currTre}
-                      initialValues={
-                        this.props.crfDetail.data
-                          ? this.props.crfDetail.data
-                          : undefined
-                      }
-                    />
+                  ) : null}
+                  {this.state.treatment_infos.map(value =>
+                    value.treNum === this.state.currTre ? (
+                      <TreatmentInfo
+                        key="treatment_info"
+                        pid={this.state.pid}
+                        treNum={this.state.currTre}
+                        initialValues={
+                          this.props.crfDetail.data
+                            ? this.props.crfDetail.data
+                            : undefined
+                        }
+                      />
+                    ) : null,
                   )}
-                  {}
                 </Content>
               </Content>
             </Layout>
