@@ -47,7 +47,7 @@ function download(blobData: Blob, forDownLoadFileName: string | null): any {
 }
 
 export async function exportExcel(params) {
-  return excelDownload('http://localhost:8001/api/export', {
+  return excelDownload('/api/export', {
     method: 'POST',
     body: params,
   });
@@ -64,35 +64,6 @@ export async function screen(params: any) {
     method: 'POST',
     data: {
       ...params,
-    },
-  });
-}
-export async function removeRule(params: { key: number[] }) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'delete',
-    },
-  });
-}
-
-export async function addRule(params: TableListParams) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'post',
-    },
-  });
-}
-
-export async function updateRule(params: TableListParams) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'update',
     },
   });
 }

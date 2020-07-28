@@ -73,7 +73,7 @@ export async function MoleDetecupdate(params?: MoleDetecItem) {
   });
 }
 export async function IniDiaProsave(params?: any) {
-  return request('http://localhost:8001/api/IniDiaPro/add', {
+  return request('/api/IniDiaPro/add', {
     method: 'POST',
     data: {
       ...params,
@@ -81,7 +81,7 @@ export async function IniDiaProsave(params?: any) {
   });
 }
 export async function IniDiaupdate(params?: any) {
-  return request('http://localhost:8001/api/IniDiaPro/update', {
+  return request('/api/IniDiaPro/update', {
     method: 'PUT',
     data: {
       ...params,
@@ -89,7 +89,7 @@ export async function IniDiaupdate(params?: any) {
   });
 }
 export async function treRecsave(params?: any) {
-  return request('http://localhost:8001/api/treatment/add', {
+  return request('/api/treatment/add', {
     method: 'POST',
     data: {
       ...params,
@@ -97,7 +97,7 @@ export async function treRecsave(params?: any) {
   });
 }
 export async function treRecupdate(params?: any) {
-  return request('http://localhost:8001/api/treatment/update', {
+  return request('/api/treatment/update', {
     method: 'PUT',
     data: {
       ...params,
@@ -105,7 +105,7 @@ export async function treRecupdate(params?: any) {
   });
 }
 export async function sideEffectsave(params?: any) {
-  return request('http://localhost:8001/api/SideEffect/add', {
+  return request('/api/SideEffect/add', {
     method: 'POST',
     data: {
       ...params,
@@ -113,7 +113,7 @@ export async function sideEffectsave(params?: any) {
   });
 }
 export async function sideEffectupdate(params?: any) {
-  return request('http://localhost:8001/api/SideEffect/update', {
+  return request('/api/SideEffect/update', {
     method: 'PUT',
     data: {
       ...params,
@@ -121,7 +121,7 @@ export async function sideEffectupdate(params?: any) {
   });
 }
 export async function signssave(params?: any) {
-  return request('http://localhost:8001/api/Signs/add', {
+  return request('/api/Signs/add', {
     method: 'POST',
     data: {
       ...params,
@@ -129,7 +129,7 @@ export async function signssave(params?: any) {
   });
 }
 export async function signsupdate(params?: any) {
-  return request('http://localhost:8001/api/Signs/update', {
+  return request('/api/Signs/update', {
     method: 'PUT',
     data: {
       ...params,
@@ -137,7 +137,7 @@ export async function signsupdate(params?: any) {
   });
 }
 export async function follInfosave(params?: any) {
-  return request('http://localhost:8001/api/FollInfo/add', {
+  return request('/api/FollInfo/add', {
     method: 'POST',
     data: {
       ...params,
@@ -145,7 +145,7 @@ export async function follInfosave(params?: any) {
   });
 }
 export async function follInfoupdate(params?: any) {
-  return request('http://localhost:8001/api/FollInfo/update', {
+  return request('/api/FollInfo/update', {
     method: 'PUT',
     data: {
       ...params,
@@ -153,7 +153,7 @@ export async function follInfoupdate(params?: any) {
   });
 }
 export async function follInfodelete(params?: any) {
-  return request('http://localhost:8001/api/FollInfo/delete', {
+  return request('/api/FollInfo/delete', {
     method: 'DELETE',
     data: {
       ...params,
@@ -163,35 +163,5 @@ export async function follInfodelete(params?: any) {
 export async function querydetail(params?: QueryParams) {
   return request('/api/illCase/allinfo/find', {
     params,
-  });
-}
-
-export async function removeRule(params: { key: number[] }) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'delete',
-    },
-  });
-}
-
-export async function addRule(params: TableListParams) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'post',
-    },
-  });
-}
-
-export async function updateRule(params: TableListParams) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'update',
-    },
   });
 }

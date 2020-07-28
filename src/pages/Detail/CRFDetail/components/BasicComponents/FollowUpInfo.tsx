@@ -150,7 +150,7 @@ class FollowUpInfo extends React.Component {
           <Upload
             name="file[]" //发到后端的文件参数名
             //action="/api/upload" //上传的地址
-            action="http://localhost:8001/api/upload" //上传的地址
+            action="/api/upload" //上传的地址
             headers={{
               authorization: 'authorization-text',
               token: getCookie('token'),
