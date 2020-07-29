@@ -2,8 +2,6 @@ import React from 'react';
 import {
   Tabs,
   Form,
-  Row,
-  Col,
   Divider,
   Radio,
   Rate,
