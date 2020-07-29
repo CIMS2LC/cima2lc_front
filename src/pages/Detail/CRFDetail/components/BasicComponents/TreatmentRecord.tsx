@@ -16,6 +16,8 @@ import {
   InputNumber,
   Switch,
   Popconfirm,
+  Row,
+  Col,
 } from 'antd';
 import TreatSchedule from './TreatSchedule';
 import { treRecsave, treRecupdate } from '../../service';

@@ -98,6 +98,7 @@ const validateMessages = {
 class App extends React.Component {
   state = {
     data: {}, //表单数据
+    forty_three: 1,
     current: 0,
     display1: 'block',
     display2: 'none',
@@ -129,6 +130,7 @@ class App extends React.Component {
 
             if (res.data.data.isLunSur) this.setState({ display4: 'block' });
             if (res.data.data.isChem) this.setState({ display5: 'block' });
+            if (res.data.data.effect == 2) this.setState({ forty_three: 2 });
           } else message.error('数据加载失败');
         });
     }
@@ -343,17 +345,17 @@ class App extends React.Component {
             <Form.Item {...radio} name="work" label="工作情况">
               <Radio.Group>
                 <Radio value={1}>有工作</Radio>&emsp;&emsp;
-                <Radio value={0}>无工作</Radio>&emsp;&emsp;
-                <Radio value={2}>退休</Radio>
+                <Radio value={2}>无工作</Radio>&emsp;&emsp;
+                <Radio value={3}>退休</Radio>
               </Radio.Group>
             </Form.Item>
 
             <Form.Item {...radio} name="income" label="年收入情况">
               <Radio.Group>
-                <Radio value={0}>低于3万元</Radio>&emsp;&emsp;
-                <Radio value={1}>3-5万元</Radio>&emsp;
-                <Radio value={2}>5-10万元</Radio>&emsp;
-                <Radio value={3}>高于10万元</Radio>
+                <Radio value={1}>低于3万元</Radio>&emsp;&emsp;
+                <Radio value={2}>3-5万元</Radio>&emsp;
+                <Radio value={3}>5-10万元</Radio>&emsp;
+                <Radio value={4}>高于10万元</Radio>
               </Radio.Group>
             </Form.Item>
 
@@ -382,10 +384,10 @@ class App extends React.Component {
             <div style={{ display: this.state.display4 }}>
               <Form.Item {...radio} name="postTime" label="如果有，术后多久？">
                 <Radio.Group>
-                  <Radio value={0}>1周</Radio>&emsp;&emsp;
-                  <Radio value={1}>2-4周</Radio>&emsp;
-                  <Radio value={2}>1-3个月</Radio>&emsp;
-                  <Radio value={3}>3个月以上</Radio>
+                  <Radio value={1}>1周</Radio>&emsp;&emsp;
+                  <Radio value={2}>2-4周</Radio>&emsp;
+                  <Radio value={3}>1-3个月</Radio>&emsp;
+                  <Radio value={4}>3个月以上</Radio>
                 </Radio.Group>
               </Form.Item>
             </div>
@@ -419,10 +421,10 @@ class App extends React.Component {
                 label="如果有，目前在第几个疗程"
               >
                 <Radio.Group>
-                  <Radio value={0}>第1个</Radio>&emsp;&emsp;
-                  <Radio value={1}>第2-4个</Radio>&emsp;
-                  <Radio value={2}>第5个以上</Radio>&emsp;
-                  <Radio value={3}>放化疗结束</Radio>
+                  <Radio value={1}>第1个</Radio>&emsp;&emsp;
+                  <Radio value={2}>第2-4个</Radio>&emsp;
+                  <Radio value={3}>第5个以上</Radio>&emsp;
+                  <Radio value={4}>放化疗结束</Radio>
                 </Radio.Group>
               </Form.Item>
             </div>
@@ -1110,11 +1112,31 @@ class App extends React.Component {
               name="forty_three"
               label="43、您服用过止疼药吗？"
             >
-              <Radio.Group>
+              <Radio.Group
+                onChange={value => {
+                  this.setState({ forty_three: value.target.value });
+                }}
+              >
                 <Radio value={1}>1、没有&emsp;&emsp;</Radio>
                 <Radio value={2}>2、有</Radio>
               </Radio.Group>
             </Form.Item>
+
+            {this.state.forty_three === 2 ? (
+              <Form.Item
+                {...radio3}
+                labelAlign="left"
+                name="effect"
+                label="如果用过，止痛作用大吗？"
+              >
+                <Radio.Group>
+                  <Radio value={1}>1、没有</Radio>
+                  <Radio value={2}>2、有一点</Radio>
+                  <Radio value={3}>3、有一些</Radio>
+                  <Radio value={4}>4、非常大</Radio>
+                </Radio.Group>
+              </Form.Item>
+            ) : null}
 
             <div className={styles.subtitle}>六、音乐治疗方面：</div>
             <div className={styles.Checkboxlabel}>1、您平时听音乐的频率</div>
