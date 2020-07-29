@@ -138,7 +138,6 @@ class CRFDetail extends React.Component {
                   defaultOpenKeys={['sub1']}
                   style={{ height: '100%' }}
                   selectedKeys={this.state.selectedKeys}
-                  // openKeys={this.state.openKeys}
                   onClick={item => {
                     this.setState({
                       selectedKeys: item.keyPath,
@@ -173,9 +172,10 @@ class CRFDetail extends React.Component {
                         this.setState({
                           treNum: treNum + 1,
                           treatment_infos: [...treatment_infos, newData],
-                          currTre: treNum + 1,
+                          selectedKeys: [treNum + 1, treNum + 1],
                         });
-                        item.keyPath[0] = String(treNum + 1);
+                        (this.state.currTre = `${treNum + 1}`),
+                          (item.keyPath[0] = String(treNum + 1));
                       } else {
                         console.log(this.state.currTre);
                         this.state.currTre = item.key;
@@ -361,9 +361,20 @@ class CRFDetail extends React.Component {
                         }
                       />
                     </div>
+                  ) : this.state.selectedKeys[0] === this.state.currTre ? (
+                    <TreatmentInfo
+                      key={`treatment_info${this.state.currTre}`}
+                      pid={this.state.pid}
+                      treNum={this.state.selectedKeys[0]}
+                      initialValues={
+                        this.props.crfDetail.data
+                          ? this.props.crfDetail.data
+                          : undefined
+                      }
+                    />
                   ) : null}
-                  {this.state.treatment_infos.map(value =>
-                    value.treNum === this.state.currTre ? (
+                  {/* {this.state.treatment_infos.map(value =>
+                    value.treNum == this.state.currTre ? (
                       <TreatmentInfo
                         key="treatment_info"
                         pid={this.state.pid}
@@ -375,7 +386,7 @@ class CRFDetail extends React.Component {
                         }
                       />
                     ) : null,
-                  )}
+                  )} */}
                 </Content>
               </Content>
             </Layout>

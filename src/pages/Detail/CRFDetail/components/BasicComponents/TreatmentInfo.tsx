@@ -40,25 +40,46 @@ class TreatmentInfo extends React.Component {
   constructor(props) {
     super(props);
     console.log(this.props.treNum);
+    this.update();
+  }
+  update = () => {
+    this.treNum = this.props.treNum;
     if (this.props.initialValues) {
+      var sideEffectList = [];
+      var signList = [];
       this.props.initialValues.SideEffect.map(item => {
         if (item.treNum == this.props.treNum) {
-          this.sideEffectList.push(item);
+          sideEffectList.push(item);
         }
       });
       this.props.initialValues.Signs.map(item => {
         if (item.treNum == this.props.treNum) {
-          this.signList.push(item);
+          signList.push(item);
         }
       });
+      this.state.sideEffectList = sideEffectList;
+      this.state.signList = signList;
+      this.setState({ sideEffectList, signList });
     }
-    console.log(this.signList);
-    console.log(this.sideEffectList);
-  }
-  signList = [];
-  sideEffectList = [];
+    return true;
+  };
+  treNumOnchange = () => {
+    if (this.treNum != this.props.treNum) {
+      console.log(this.treNum);
+      console.log(this.props.treNum);
+      this.update();
+      this.treNum = this.props.treNum;
+    }
+    return true;
+  };
+  treNum = '';
+  state = {
+    signList: [],
+    sideEffectList: [],
+  };
+
   render() {
-    return (
+    return this.treNumOnchange() ? (
       <div>
         <Tabs tabPosition="top">
           <TabPane tab="治疗记录" key="treatment_record">
@@ -98,30 +119,23 @@ class TreatmentInfo extends React.Component {
               }
             />
           </TabPane>
-
-          {/* <TabPane tab="疗效评估" key="effect_evalution">
-            <EffectEvalution
-              pid={this.props.pid}
-              initialValues={this.props.initialValues}
-            />
-          </TabPane> */}
           <TabPane tab="症状体征" key="system_sign">
             <SystemSign
               pid={this.props.pid}
               treNum={this.props.treNum}
-              initialValues={this.signList}
+              initialValues={this.state.signList}
             />
           </TabPane>
           <TabPane tab="副反应" key="side_reaction">
             <SideReaction
               pid={this.props.pid}
               treNum={this.props.treNum}
-              initialValues={this.sideEffectList}
+              initialValues={this.state.sideEffectList}
             />
           </TabPane>
         </Tabs>
       </div>
-    );
+    ) : null;
   }
 }
 export default TreatmentInfo;
