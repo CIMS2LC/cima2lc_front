@@ -94,6 +94,7 @@ class TreatSchedule extends React.Component {
   constructor(props: TreatScheduleProps) {
     super(props);
     this.treat_schedule_name = props.treat_schedule_name;
+
     Object.keys(treat_schedule_medicine_options[this.treat_schedule_name]).map(
       item => {
         this.scheme_list.push({ value: item });
@@ -105,6 +106,9 @@ class TreatSchedule extends React.Component {
   };
   treat_schedule_name = '';
   scheme_list = [];
+  passData = (data: any) => {
+    this.props.passData(data);
+  };
   render() {
     return (
       <div>
@@ -123,7 +127,7 @@ class TreatSchedule extends React.Component {
               render: () => {
                 return (
                   <Select
-                    style={{ width: 120 }}
+                    style={{ width: 250 }}
                     onChange={value => {
                       this.setState({
                         scheme: value,
@@ -192,6 +196,8 @@ class TreatSchedule extends React.Component {
             },
           ]}
           operColumns={[]}
+          dataSource={this.props.dataSource}
+          passData={this.passData}
         />
       </div>
     );

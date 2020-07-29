@@ -14,6 +14,8 @@ import {
   InputNumber,
   Switch,
   Popconfirm,
+  Row,
+  Col,
 } from 'antd';
 import TreatSchedule from './TreatSchedule';
 const layout = {
@@ -24,6 +26,14 @@ const layout = {
     span: 8,
   },
 };
+const layout1 = {
+  labelCol: {
+    span: 3,
+  },
+  wrapperCol: {
+    span: 4,
+  },
+};
 
 const { Option } = Select;
 class TreatmentRecord extends React.Component {
@@ -31,12 +41,15 @@ class TreatmentRecord extends React.Component {
     super(props);
   }
   state = {
+    clinTri: false, //临床实验名称
     treatment: -1,
     chemotherapy: false,
     targetedtherapy: false,
     immunotherapy: false,
     othertherapy: false,
     antivasculartherapy: false,
+    posAdjChem: false, //术后辅助化疗
+    isPro: true, //是否进展
   };
   trement = [
     { label: '1线', value: 1 },
@@ -66,8 +79,26 @@ class TreatmentRecord extends React.Component {
     '淋巴结',
     '其他',
   ];
-  onfinish = (values: any) => {
-    console.log(values);
+
+  onfinish = async (values: any) => {
+    if (this.state.treatment == 6) {
+      values.surSco = (values.surSco || []).toString();
+      values.lymDis = (values.lymDis || []).toString();
+      if (values.surDate) values.surDate = values.surDate.format('YYYY-MM-DD');
+      if (values.proDate) values.proDate = values.proDate.format('YYYY-MM-DD');
+      values.posAdjChem = this.state.posAdjChem; //不修改switch，form就获取不到值，因此通过state获取比较好
+      values.isPro = this.state.isPro;
+      console.log(values); //补充pid跟treNum就再提交
+    }
+
+    if (this.state.treatment == 7) {
+      //提交放疗表单
+      if (values.begDate) values.begDate = values.begDate.format('YYYY-MM-DD');
+
+      if (values.endDate) values.endDate = values.endDate.format('YYYY-MM-DD');
+      values.radSite = (values.radSite || []).toString();
+      console.log(values); //未写请求，需补充pid跟treNum再提交
+    }
   };
   render() {
     return (
@@ -83,13 +114,24 @@ class TreatmentRecord extends React.Component {
         </Form.Item>
         {this.state.treatment < 6 && this.state.treatment >= 0 ? (
           <div>
-            <Form.Item label="是否加入临床治疗">
-              <Radio.Group>
+            <Form.Item label="是否加入临床治疗" name="isTre">
+              <Radio.Group
+                onChange={v => {
+                  if (v.target.value == 1) this.setState({ clinTri: true });
+                  else this.setState({ clinTri: false });
+                }}
+              >
                 <Radio value={1}>是</Radio>
                 <Radio value={0}>否</Radio>
                 <Radio value={-1}>不详</Radio>
               </Radio.Group>
             </Form.Item>
+
+            {this.state.clinTri ? (
+              <Form.Item label="临床实验名称" name="clinTri">
+                <Input />
+              </Form.Item>
+            ) : null}
 
             <label>治疗方案:</label>
             <Form.Item label="化疗">
@@ -159,109 +201,134 @@ class TreatmentRecord extends React.Component {
               />
             </Form.Item>
 
-            <Form.Item label="开始日期">
+            <Form.Item label="开始日期" name="begDate">
               <DatePicker />
             </Form.Item>
-            <Form.Item label="结束日期">
+            <Form.Item label="结束日期" name="endDate">
               <DatePicker />
             </Form.Item>
 
-            <Form.Item label="是否重复活检">
+            <Form.Item label="是否重复活检" name="isRepBio">
               <Radio.Group>
-                <Radio value={1}>是</Radio>
-                <Radio value={0}>否</Radio>
+                <Radio value={true}>是</Radio>
+                <Radio value={false}>否</Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item label="活检方式">
+            <Form.Item label="活检方式" name="bioMet">
               <Input />
             </Form.Item>
-            <Form.Item label="取材部位">
+            <Form.Item label="取材部位" name="matPart">
               <Input />
             </Form.Item>
-            <Form.Item label="标本库流水号">
+            <Form.Item label="标本库流水号" name="specNum">
               <Input />
             </Form.Item>
-            <Form.Item label="病理诊断结果">
+            <Form.Item label="病理诊断结果" name="patDiaRes">
               <Input />
             </Form.Item>
           </div>
         ) : null}
 
-        {this.state.treatment == 6 ? (
+        {this.state.treatment == 6 ? ( //手术
           <div>
-            <div>
-              <label>手术范围</label>
+            <Form.Item label="手术范围" name="surSco">
               <Checkbox.Group>
-                <Checkbox value={1}>肺叶</Checkbox>
-                <Checkbox value={2}>肺段</Checkbox>
-                <Checkbox value={3}>楔形</Checkbox>
-                <Checkbox value={4}>双肺叶</Checkbox>
-                <Checkbox value={5}>全肺</Checkbox>
-                <Checkbox value={6}>其他</Checkbox>
+                <Checkbox value="1">肺叶</Checkbox>
+                <Checkbox value="2">肺段</Checkbox>
+                <Checkbox value="3">楔形</Checkbox>
+                <Checkbox value="4">双肺叶</Checkbox>
+                <Checkbox value="5">全肺</Checkbox>
+                <Checkbox value="6">其他</Checkbox>
               </Checkbox.Group>
-            </div>
-            <div>
-              <label>淋巴清扫范围</label>
+            </Form.Item>
+
+            <Form.Item label="淋巴清扫范围" name="lymDis">
               <Checkbox.Group>
-                <Checkbox value={1}>系统性清扫</Checkbox>
-                <Checkbox value={2}>取样</Checkbox>
+                <Checkbox value="1">系统性清扫</Checkbox>
+                <Checkbox value="2">取样</Checkbox>
               </Checkbox.Group>
-              <InputNumber placeholder="清扫组数"></InputNumber>
-            </div>
-            <div>
-              <label>手术日期</label>
+            </Form.Item>
+
+            <Form.Item label="清扫组数" name="cleGro">
+              <InputNumber />
+            </Form.Item>
+
+            <Form.Item label="手术日期" name="surDate">
               <DatePicker />
-            </div>
-            <div>
-              <label>术后辅助化疗</label>
+            </Form.Item>
+
+            <Form.Item label="术后辅助化疗" name="posAdjChem">
               <Switch
-                defaultChecked
+                defaultChecked={this.state.posAdjChem}
                 checkedChildren="有"
                 unCheckedChildren="无"
+                onChange={checked => {
+                  this.setState({ posAdjChem: checked });
+                }}
               />
-            </div>
-            <div>
-              <label>是否进展</label>
+            </Form.Item>
+            {this.state.posAdjChem ? (
+              <TreatSchedule treat_schedule_name="chemotherapy" /> //辅助化疗的表格(名字需要改)
+            ) : null}
+
+            <Form.Item label="是否进展" name="isPro">
               <Switch
-                defaultChecked
+                defaultChecked={this.state.isPro}
                 checkedChildren="有"
                 unCheckedChildren="无"
+                onChange={checked => {
+                  this.setState({ isPro: checked });
+                }}
               />
-            </div>
+            </Form.Item>
+            {this.state.isPro ? (
+              <div>
+                <Form.Item label="进展日期" name="proDate">
+                  <DatePicker />
+                </Form.Item>
+                <Form.Item label="进展描述" name="proDes">
+                  <Input />
+                </Form.Item>
+              </div>
+            ) : null}
           </div>
         ) : null}
-        {this.state.treatment == 7 ? (
+
+        {this.state.treatment == 7 ? ( //放疗
           <div>
-            <div>
-              <label>开始日期</label>
+            <Form.Item label="开始日期" name="begDate">
               <DatePicker />
-            </div>
-            <div>
-              <label>结束日期</label>
+            </Form.Item>
+            <Form.Item label="结束日期" name="endDate">
               <DatePicker />
-            </div>
-            <div>
-              <label>放疗部位</label>
+            </Form.Item>
+            <Form.Item label="放疗部位" name="radSite">
               <Checkbox.Group options={this.radiation_area} />
-            </div>
-            <div>
-              <label>放疗剂量</label>
+            </Form.Item>
+
+            <Form.Item label="放疗剂量" name="radDose" {...layout1}>
+              <Row>
+                <Col span={12}>
+                  <InputNumber />
+                </Col>
+                <Col span={12}>
+                  <Form.Item name="dosUnit">
+                    <Select
+                      defaultValue="Gy"
+                      onChange={e => {
+                        console.log('');
+                      }}
+                    >
+                      <Option value={false}>Gy</Option>
+                      <Option value={true}>cGy</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form.Item>
+            <Form.Item label="分割次数">
               <InputNumber />
-              <Select
-                defaultValue="Gy"
-                style={{ width: 120 }}
-                onChange={e => {
-                  console.log('');
-                }}
-              >
-                <Option value="Gy">Gy</Option>
-                <Option value="cGy">cGy</Option>
-              </Select>
-            </div>
-            <div>
-              <label>分割次数</label>
-              <InputNumber />
-            </div>
+            </Form.Item>
           </div>
         ) : null}
         <Form.Item>

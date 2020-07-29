@@ -162,8 +162,8 @@ function getillCase(req: Request, res: Response, u: string) {
         },
       ],
       MyocardialEnzyme: [],
-      OneToFive: [],
-      OtherExams: [],
+      OneToFive: [], //1-5线
+      OtherExams: [], //其他
       Patient: [
         {
           account: ',54,',
@@ -179,12 +179,38 @@ function getillCase(req: Request, res: Response, u: string) {
           updateTime: null,
         },
       ],
-      Radiotherapy: [],
+      Radiotherapy: [
+        {
+          treNum: 1, //第一条记录
+          begDate: null,
+          dosUnit: false,
+          endDate: null,
+          radDose: 'yity',
+          radSite: null,
+          trement: 7,
+        },
+        {
+          treNum: 1, //第一条记录
+          begDate: null,
+          dosUnit: false,
+          endDate: null,
+          radDose: 'yity',
+          radSite: null,
+          trement: 7,
+        },
+      ], //放疗
       SideEffect: [],
       Signs: [],
-      Surgery: [],
+      Surgery: [], //手术
       Thyroid: [],
-      TreRec: [],
+      TreRec: [
+        {
+          beEffEva: 3,
+          beEffEvaDate: '2020-07-14',
+          proDate: '2020-07-07',
+          proDes: 'wetew',
+        },
+      ],
       TumorMarker: [],
       UrineRoutine: [],
       pastHis: [

@@ -235,7 +235,14 @@ class CRFDetail extends React.Component {
                 <FollowUpInfo />
               </TabPane>
               <TabPane tab="治疗信息" key="treatment_info">
-                <TreatmentInfo />
+                <TreatmentInfo
+                  pid={this.state.pid}
+                  initialValues={
+                    this.props.crfDetail.data
+                      ? this.props.crfDetail.data.Radiotherapy[0] ////////////////传入参数(这里暂时传入第一组治疗信息)
+                      : undefined
+                  }
+                />
               </TabPane>
             </Tabs>
           ) : null}
