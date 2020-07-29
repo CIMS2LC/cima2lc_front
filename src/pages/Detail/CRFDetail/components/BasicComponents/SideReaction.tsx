@@ -1,7 +1,8 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 import { Radio, DatePicker, Cascader, Rate } from 'antd';
-import { sideEffectsave } from '../../service';
+import { sideEffectsave, sideEffectupdate } from '../../service';
+import moment from 'moment';
 
 const options = [
   {
@@ -276,6 +277,7 @@ const SideReaction = props => {
                 options={options}
                 expandTrigger="hover"
                 displayRender={displayRender}
+                defaultValue={(record['sidReaName'] || '').split(',')}
                 onChange={e => {
                   onChange(e.toString(), record, 'sidReaName');
                 }}
@@ -291,6 +293,7 @@ const SideReaction = props => {
           render: (text, record, index) => (
             <Rate
               count={4}
+              defaultValue={record['sidRecCla'] || 0}
               onChange={e => {
                 onChange(e, record, 'sidRecCla');
               }}
@@ -304,6 +307,7 @@ const SideReaction = props => {
           width: '10%',
           render: (text, record, index) => (
             <DatePicker
+              defaultValue={moment(record['begDate'])}
               onChange={(e, eString) => {
                 onChange(eString, record, 'begDate');
               }}
@@ -317,12 +321,13 @@ const SideReaction = props => {
           width: '10%',
           render: (text, record, index) => (
             <Radio.Group
+              defaultValue={record['isExe']}
               onChange={e => {
                 onChange(e.target.value, record, 'isExe');
               }}
             >
-              <Radio value={0}>否</Radio>
-              <Radio value={1}>是</Radio>
+              <Radio value={false}>否</Radio>
+              <Radio value={true}>是</Radio>
             </Radio.Group>
           ),
         },
@@ -333,6 +338,7 @@ const SideReaction = props => {
           width: '10%',
           render: (text, record, index) => (
             <DatePicker
+              defaultValue={moment(record['endDate'])}
               onChange={(e, eString) => {
                 onChange(eString, record, 'endDate');
               }}
@@ -341,10 +347,12 @@ const SideReaction = props => {
         },
       ]}
       hassave={true}
-      save={sideEffectsave}
-      dataSource={props.dataSource}
+      save={sideEffectupdate}
+      dataSource={props.initialValues}
       operColumns={[]}
       passData={passData}
+      pid={props.pid}
+      treNum={props.treNum}
     />
   );
 };

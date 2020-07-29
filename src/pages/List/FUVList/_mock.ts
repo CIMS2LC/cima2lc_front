@@ -13,7 +13,7 @@ const genList = (current: number, pageSize: number) => {
       id: index,
       age: 20,
       gender: '男',
-      hospitalNumber: '1234',
+      hospitalNumber: `hos${i}`,
       idNumber: '1234',
       name: 'test',
       phoneNumber: '123456',
@@ -90,7 +90,7 @@ function getRule(req: Request, res: Response, u: string) {
   const result = {
     data: dataSource,
     total: tableListDataSource.length,
-    success: true,
+    code: 200,
     pageSize,
     current: parseInt(`${params.currentPage}`, 10) || 1,
   };
@@ -168,7 +168,34 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
   res.json(result);
 }
 
+function deletelist(req: Request, res: Response, u: string, b: Request) {
+  const result = {
+    code: 200,
+    msg: '病例删除操作成功',
+  };
+  return res.json(result);
+}
+function screen(req: Request, res: Response, u: string, b: Request) {
+  const result = {
+    code: 200,
+    data: [
+      {
+        gender: null,
+        hospitalNumber: null,
+        id: 19,
+        idNumber: 'test11',
+        name: null,
+        patDia: null,
+        phoneNumber: null,
+      },
+    ],
+    total: 16,
+  };
+  return res.json(result);
+}
 export default {
   'GET /api/list': getRule,
   'POST /api/rule': postRule,
+  'DELETE /api/illCase/delete': deletelist,
+  'POST /api/illCase/screen': screen,
 };

@@ -25,8 +25,43 @@ function getillCase(req: Request, res: Response, u: string) {
       BloodRoutine: [],
       Coagulation: [],
       Cytokines: [],
-      DetailTrePlan: [],
-      FollInfo: [],
+      DetailTrePlan: [
+        {
+          begDate: '2020-07-13',
+          currPeriod: 1,
+          drugs: {
+            紫杉醇: {
+              drugDosa: 1,
+              unit: 'g',
+            },
+          },
+          endDate: '2020-07-06',
+          id: 3,
+          pid: 2,
+          treNum: 1,
+          treSche: '常用药物',
+          treSolu: 'Chemotherapy',
+          treatName: 'xxx1',
+        },
+      ],
+      FollInfo: [
+        {
+          date: 'Wed, 08 Jul 2020 00:00:00 GMT',
+          effEva: 3,
+          examArea: null,
+          folMet: 2,
+          id: 1,
+          imaFilType: '2',
+          livSta: 2,
+          number: 0,
+          pid: 16,
+          remarks: null,
+          savFilPath: 'static/16/icon_48.png',
+          tumorDesc: null,
+          tumorLD: null,
+          tumorSD: null,
+        },
+      ],
       ImageExams: [],
       Immunohis: [
         {
@@ -162,8 +197,25 @@ function getillCase(req: Request, res: Response, u: string) {
         },
       ],
       MyocardialEnzyme: [],
-      OneToFive: [], //1-5线
-      OtherExams: [], //其他
+      OneToFive: [
+        {
+          begDate: '2020-07-14',
+          bioMet: '1',
+          clinTri: null,
+          endDate: '2020-07-07',
+          id: 4,
+          isRepBio: true,
+          isTre: 1,
+          matPart: '2',
+          patDiaRes: '4',
+          pid: 2,
+          spePlan: null,
+          specNum: 3,
+          treNum: 1,
+          treSolu: 'Chemotherapy',
+        },
+      ],
+      OtherExams: [],
       Patient: [
         {
           account: ',54,',
@@ -181,34 +233,79 @@ function getillCase(req: Request, res: Response, u: string) {
       ],
       Radiotherapy: [
         {
-          treNum: 1, //第一条记录
-          begDate: null,
-          dosUnit: false,
-          endDate: null,
-          radDose: 'yity',
-          radSite: null,
-          trement: 7,
+          begDate: '2020-07-13',
+          dosUnit: 0,
+          endDate: '2020-07-14',
+          id: 1,
+          pid: 2,
+          radDose: 1.0,
+          radSite: ['\u8111', '\u9501\u9aa8\u4e0a'],
+          splTim: 1,
+          treNum: 1,
+        },
+      ],
+      SideEffect: [
+        {
+          begDate: '2020-07-16',
+          endDate: '2020-07-20',
+          id: 1,
+          isExe: false,
+          pid: 2,
+          sidReaName: '循环系统副作用,心率失常',
+          sidRecCla: 2,
+          treNum: 1,
         },
         {
-          treNum: 1, //第一条记录
-          begDate: null,
-          dosUnit: false,
-          endDate: null,
-          radDose: 'yity',
-          radSite: null,
-          trement: 7,
+          begDate: '2020-07-06',
+          endDate: '2020-07-19',
+          id: 2,
+          isExe: false,
+          pid: 2,
+          sidReaName: '呼吸系统副作用,呼吸系统纤维化',
+          sidRecCla: 2,
+          treNum: 1,
         },
-      ], //放疗
-      SideEffect: [],
-      Signs: [],
-      Surgery: [], //手术
+      ],
+      Signs: [
+        {
+          begDate: '2020-07-20',
+          endDate: '2020-07-16',
+          id: 1,
+          isExe: false,
+          pid: 2,
+          symName: '12',
+          treNum: 1,
+        },
+      ],
+      Surgery: [
+        {
+          cleGro: null,
+          id: 1,
+          isPro: null,
+          lymDis: ['系统性清扫', '取样'],
+          pid: 2,
+          posAdjChem: true,
+          proDate: null,
+          proDes: null,
+          surDate: '2020-07-15',
+          surSco: ['肺叶', '双肺叶'],
+          treNum: 1,
+        },
+      ],
       Thyroid: [],
       TreRec: [
         {
-          beEffEva: 3,
-          beEffEvaDate: '2020-07-14',
+          beEffEva: '1',
+          beEffEvaDate: '2020-07-16',
+          date: null,
+          id: 5,
+          pid: 2,
           proDate: '2020-07-07',
-          proDes: 'wetew',
+          proDes: 'e2e22ee2e',
+          treNum: 1,
+          //trement: 'surgery',
+          //trement: 'radiotherapy',
+          trement: 'one',
         },
       ],
       TumorMarker: [],
@@ -269,6 +366,15 @@ function getillCase(req: Request, res: Response, u: string) {
   return res.json(result);
 }
 
+function upload(req: Request, res: Response, u: string) {
+  const result = {
+    code: 200,
+    msg: '上传成功',
+    path: ['static/2/1_hetuanceng_tx0.h5.png'],
+  };
+  return res.json(result);
+}
 export default {
   'GET /api/illCase/allinfo/find': getillCase,
+  'POST /api/upload ': upload,
 };

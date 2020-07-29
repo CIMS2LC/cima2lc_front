@@ -1,7 +1,8 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 import { Radio, DatePicker, Cascader, Rate, Input } from 'antd';
-import { sideEffectsave, signssave } from '../../service';
+import { sideEffectsave, signssave, signsupdate } from '../../service';
+import moment from 'moment';
 
 const SystemSign = props => {
   const passData = data => {
@@ -29,6 +30,7 @@ const SystemSign = props => {
           width: '10%',
           render: (text, record, index) => (
             <Input
+              defaultValue={record['symName']}
               onChange={e => {
                 onChange(e.target.value, record, 'symName');
               }}
@@ -42,6 +44,7 @@ const SystemSign = props => {
           width: '10%',
           render: (text, record, index) => (
             <DatePicker
+              defaultValue={moment(record['begDate'])}
               onChange={(e, eString) => {
                 onChange(eString, record, 'begDate');
               }}
@@ -55,12 +58,13 @@ const SystemSign = props => {
           width: '10%',
           render: (text, record, index) => (
             <Radio.Group
+              defaultValue={record['isExe']}
               onChange={e => {
                 onChange(e.target.value, record, 'isExe');
               }}
             >
-              <Radio value={0}>否</Radio>
-              <Radio value={1}>是</Radio>
+              <Radio value={false}>否</Radio>
+              <Radio value={true}>是</Radio>
             </Radio.Group>
           ),
         },
@@ -71,6 +75,7 @@ const SystemSign = props => {
           width: '10%',
           render: (text, record, index) => (
             <DatePicker
+              defaultValue={moment(record['begDate'])}
               onChange={(e, eString) => {
                 onChange(eString, record, 'endDate');
               }}
@@ -79,10 +84,12 @@ const SystemSign = props => {
         },
       ]}
       hassave={true}
-      save={signssave}
-      dataSource={props.dataSource}
+      save={signsupdate}
+      dataSource={props.initialValues}
       operColumns={[]}
       passData={passData}
+      pid={props.pid}
+      treNum={props.treNum}
     />
   );
 };

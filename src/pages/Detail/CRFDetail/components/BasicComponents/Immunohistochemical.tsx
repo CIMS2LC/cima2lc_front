@@ -72,30 +72,31 @@ class Immunohistochemical extends React.Component {
         {...layout}
         initialValues={this.initialValues}
         onFinish={async values => {
-          if (this.id != -1) {
-            const res = await Immunohisupdate({
-              id: this.id,
-              pid: this.props.pid,
-              ...values,
-            });
-            if (res.code == 200) {
-              console.log('更新成功');
-            } else {
-              console.log('更新失败');
-            }
+          //if (this.id != -1) {
+          const res = await Immunohisupdate({
+            id: this.id,
+            pid: this.props.pid,
+            treNum: this.props.treNum,
+            ...values,
+          });
+          if (res.code == 200) {
+            console.log('更新成功');
           } else {
-            const res = await Immunohissave({
-              pid: this.props.pid,
-              treNum: 0,
-              ...values,
-            });
-            if (res.code == 200) {
-              this.id = res.id;
-              console.log('提交成功');
-            } else {
-              console.log('提交失败');
-            }
+            console.log('更新失败');
           }
+          // } else {
+          //   const res = await Immunohissave({
+          //     pid: this.props.pid,
+          //     treNum: this.props.treNum,
+          //     ...values,
+          //   });
+          //   if (res.code == 200) {
+          //     this.id = res.id;
+          //     console.log('提交成功');
+          //   } else {
+          //     console.log('提交失败');
+          //   }
+          // }
         }}
       >
         {immunohistochemical_labels.map(item => (

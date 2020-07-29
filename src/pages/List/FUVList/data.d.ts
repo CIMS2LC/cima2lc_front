@@ -26,7 +26,7 @@ export interface TableListParams {
   desc?: string;
   key?: number;
   pageSize?: number;
-  currentPage?: number;
+  current?: number;
   filter?: { [key: string]: any[] };
   sorter?: { [key: string]: any };
 }

@@ -39,37 +39,103 @@ const layout = {
 class TreatmentInfo extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props.treNum);
+    this.update();
   }
+  update = () => {
+    this.treNum = this.props.treNum;
+    if (this.props.initialValues) {
+      var sideEffectList = [];
+      var signList = [];
+      this.props.initialValues.SideEffect.map(item => {
+        if (item.treNum == this.props.treNum) {
+          sideEffectList.push(item);
+        }
+      });
+      this.props.initialValues.Signs.map(item => {
+        if (item.treNum == this.props.treNum) {
+          signList.push(item);
+        }
+      });
+      this.state.sideEffectList = sideEffectList;
+      this.state.signList = signList;
+      this.setState({ sideEffectList, signList });
+    }
+    return true;
+  };
+  treNumOnchange = () => {
+    if (this.treNum != this.props.treNum) {
+      console.log(this.treNum);
+      console.log(this.props.treNum);
+      this.update();
+      this.treNum = this.props.treNum;
+    }
+    return true;
+  };
+  treNum = '';
+  state = {
+    signList: [],
+    sideEffectList: [],
+  };
+
   render() {
-    return (
+    return this.treNumOnchange() ? (
       <div>
         <Tabs tabPosition="top">
           <TabPane tab="治疗记录" key="treatment_record">
-            <TreatmentRecord />
+            <TreatmentRecord
+              treNum={this.props.treNum}
+              pid={this.props.pid}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
 
           <TabPane tab="实验室检查" key="labor_inspect">
-            <LaborInspect />
+            <LaborInspect
+              pid={this.props.pid}
+              treNum={this.props.treNum}
+              initialValues={this.props.initialValues}
+            />
           </TabPane>
           <TabPane tab="免疫组化" key="immunohistochemical">
-            <Immunohistochemical />
+            <Immunohistochemical
+              pid={this.props.pid}
+              treNum={this.props.treNum}
+              initialValues={
+                this.props.initialValues
+                  ? this.props.initialValues.Immunohis[this.props.treNum]
+                  : {}
+              }
+            />
           </TabPane>
           <TabPane tab="分子检测" key="molecular_detection">
-            <MolecularDetection />
-          </TabPane>
-
-          <TabPane tab="疗效评估" key="effect_evalution">
-            <EffectEvalution />
+            <MolecularDetection
+              pid={this.props.pid}
+              treNum={this.props.treNum}
+              initialValues={
+                this.props.initialValues
+                  ? this.props.initialValues.MoleDetec[this.props.treNum]
+                  : {}
+              }
+            />
           </TabPane>
           <TabPane tab="症状体征" key="system_sign">
-            <SystemSign />
+            <SystemSign
+              pid={this.props.pid}
+              treNum={this.props.treNum}
+              initialValues={this.state.signList}
+            />
           </TabPane>
           <TabPane tab="副反应" key="side_reaction">
-            <SideReaction />
+            <SideReaction
+              pid={this.props.pid}
+              treNum={this.props.treNum}
+              initialValues={this.state.sideEffectList}
+            />
           </TabPane>
         </Tabs>
       </div>
-    );
+    ) : null;
   }
 }
 export default TreatmentInfo;

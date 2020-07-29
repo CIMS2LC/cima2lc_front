@@ -85,26 +85,31 @@ class MolecularDetection extends React.Component {
         initialValues={this.initialValues}
         onFinish={async values => {
           values.path = this.state.file_list.toString();
-          if (this.id != -1) {
-            const res = await MoleDetecupdate({
-              id: this.id,
-              pid: this.props.pid,
-              ...values,
-            });
-            if (res.code == 200) {
-              console.log('更新成功');
-            } else {
-              console.log('更新失败');
-            }
+          //if (this.id != -1) {
+          const res = await MoleDetecupdate({
+            id: this.id,
+            pid: this.props.pid,
+            treNum: this.props.treNum,
+            ...values,
+          });
+          if (res.code == 200) {
+            console.log('更新成功');
           } else {
-            const res = await MoleDetecsave({ pid: this.props.pid, ...values });
-            if (res.code == 200) {
-              this.id = res.id;
-              console.log('提交成功');
-            } else {
-              console.log('提交失败');
-            }
+            console.log('更新失败');
           }
+          // } else {
+          //   const res = await MoleDetecsave({
+          //     pid: this.props.pid,
+          //     treNum: this.props.treNum,
+          //     ...values,
+          //   });
+          //   if (res.code == 200) {
+          //     this.id = res.id;
+          //     console.log('提交成功');
+          //   } else {
+          //     console.log('提交失败');
+          //   }
+          // }
         }}
       >
         {Object.keys(this.state.molecular_detection_labels).map(
@@ -180,7 +185,7 @@ class MolecularDetection extends React.Component {
         <Form.Item label="上传" name="upload">
           <Upload
             name="file[]" //发到后端的文件参数名
-            action="https://localhost:8001/api/upload" //上传的地址
+            action="/api/upload" //上传的地址
             headers={{
               authorization: 'authorization-text',
               token: getCookie('token'),
