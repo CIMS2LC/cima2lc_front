@@ -295,7 +295,11 @@ class TreatmentRecord extends React.Component {
                 passData={data => {
                   this.setState({ Chemotherapy: data });
                 }}
-                dataSource={this.TreRec[this.TreRec.trement]['Chemotherapy']}
+                dataSource={
+                  this.TreRec
+                    ? this.TreRec[this.TreRec.trement]['Chemotherapy']
+                    : null
+                }
               />
             ) : null}
 
@@ -315,7 +319,11 @@ class TreatmentRecord extends React.Component {
                 passData={data => {
                   this.setState({ TargetedTherapy: data });
                 }}
-                dataSource={this.TreRec[this.TreRec.trement]['TargetedTherapy']}
+                dataSource={
+                  this.TreRec
+                    ? this.TreRec[this.TreRec.trement]['TargetedTherapy']
+                    : null
+                }
               />
             ) : null}
 
@@ -335,7 +343,11 @@ class TreatmentRecord extends React.Component {
                 passData={data => {
                   this.setState({ ImmunityTherapy: data });
                 }}
-                dataSource={this.TreRec[this.TreRec.trement]['ImmunityTherapy']}
+                dataSource={
+                  this.TreRec
+                    ? this.TreRec[this.TreRec.trement]['ImmunityTherapy']
+                    : null
+                }
               />
             ) : null}
 
@@ -356,7 +368,9 @@ class TreatmentRecord extends React.Component {
                   this.setState({ AntivascularTherapy: data });
                 }}
                 dataSource={
-                  this.TreRec[this.TreRec.trement]['AntivascularTherapy']
+                  this.TreRec
+                    ? this.TreRec[this.TreRec.trement]['AntivascularTherapy']
+                    : null
                 }
               />
             ) : null}
