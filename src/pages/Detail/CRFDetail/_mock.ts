@@ -374,7 +374,15 @@ function upload(req: Request, res: Response, u: string) {
   };
   return res.json(result);
 }
+function update(req: Request, res: Response, u: string) {
+  const result = {
+    code: 200,
+    msg: '更新成功',
+  };
+  return res.json(result);
+}
 export default {
   'GET /api/illCase/allinfo/find': getillCase,
   'POST /api/upload ': upload,
+  'PUT /api/Patient/update ': update,
 };

@@ -43,23 +43,6 @@ const Model: ModelType = {
           patient['birthday'] = moment(patient['birthday']);
         patient['gender'] = patient['gender'] == 1 ? true : false;
         payload.data['Patient'] = patient;
-        //处理随访信息
-        // var follinfo_list = payload.data.FollInfo;
-        // var new_follinfo_list=[];
-        // follinfo_list.map(item=>{
-        //   const path = item['savFilPath'].split(',');
-        //   const filename = path[path.length-1];
-        //   defaultFileList
-        //   defaultFileList.push({
-        //     uid: `${index}`,
-        //     name: filename,
-        //     status: 'done',
-        //     url: `http://localhost:8088/file/${item['pid']}/${filename}`,
-        //   });
-
-        //   new_follinfo_list.push(item);
-        // });
-        // payload.data['FollInfo'] = new_follinfo_list;
         return { ...state, data: payload.data };
       } else {
         return { ...state, data: undefined };

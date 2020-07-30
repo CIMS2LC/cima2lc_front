@@ -66,6 +66,7 @@ class CRFDetail extends React.Component {
     }
   };
   update_detail = () => {
+    console.log('123');
     const id = this.state.id;
     const { dispatch } = this.props;
     dispatch({
@@ -241,6 +242,9 @@ class CRFDetail extends React.Component {
                                 ...values,
                               });
                               if (res.code == 200) {
+                                //重新获取数据，之后将这一步合并至update的返回值中
+                                this.update_detail();
+                                this.update_treatment_infos();
                                 console.log('更新成功');
                               } else {
                                 console.log('更新失败');
