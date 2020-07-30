@@ -22,9 +22,16 @@ import Immunohistochemical from './components/BasicComponents/Immunohistochemica
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
 import PreHistory from './components/BasicComponents/PreHistory';
 import InitialDiagnosisProcess from './components/BasicComponents/InitialDiagnosisProcess';
-import { Patientsave, Patientupdate } from './service';
+import {
+  Patientsave,
+  Patientupdate,
+  illCaseFind,
+  querydetail,
+} from './service';
 import { StateType } from './model';
 import { ActionType } from '@ant-design/pro-table';
+import SearchOtherSystem from './components/BasicComponents/SearchOtherSystem';
+import moment from 'moment';
 
 const { Header, Content, Sider } = Layout;
 const { TabPane } = Tabs;
@@ -53,8 +60,9 @@ class CRFDetail extends React.Component {
   update_treatment_infos = () => {
     if (this.state.treatment_infos.length != 0) return true;
     if (this.props.crfDetail.data) {
-      if (this.props.crfDetail.data.TreRec)
-        var count = this.props.crfDetail.data.TreRec.length;
+      this.state.crfDetail = this.props.crfDetail.data;
+      if (this.state.crfDetail.TreRec)
+        var count = this.state.crfDetail.TreRec.length;
       this.state.treNum = count;
       var treatment_infos = [];
       for (var i = 0; i < count; i++) {
@@ -86,6 +94,10 @@ class CRFDetail extends React.Component {
     openKeys: [],
     selectedKeys: ['baseline'],
     currTre: '',
+    SORModelVisible: false,
+    SORModelValue: [],
+    crfDetail: {},
+    basicInfoFormKey: 'basicInfoFormKey',
   };
   idNumber_onChange = (value: any) => {
     console.log('changed', value);
@@ -96,6 +108,10 @@ class CRFDetail extends React.Component {
       value: e.target.value,
     });
   };
+  setcrfDetail() {
+    this.state.crfDetail = this.props.crfDetail.data;
+    return true;
+  }
   render() {
     return (
       <Layout>
@@ -113,7 +129,7 @@ class CRFDetail extends React.Component {
               className={styles.btn_return}
               id="btn_return"
               onClick={() => {
-                this.props.crfDetail.data = undefined;
+                this.state.crfDetail.data = undefined;
                 history.push('/list/fuv_list');
               }}
             >
@@ -127,7 +143,8 @@ class CRFDetail extends React.Component {
             marginTop: 64,
           }}
         >
-          {this.props.crfDetail.data || this.state.id == -1 ? (
+          {(this.props.crfDetail.data && this.setcrfDetail()) ||
+          this.state.id == -1 ? (
             <Layout
               className="site-layout-background"
               style={{ padding: '24px 0' }}
@@ -210,11 +227,12 @@ class CRFDetail extends React.Component {
                     <Tabs tabPosition="top">
                       <TabPane tab="基本信息" key="basic_info">
                         <Form
+                          key={this.state.basicInfoFormKey}
                           name="basic_info"
                           {...layout}
                           initialValues={
-                            this.props.crfDetail.data
-                              ? this.props.crfDetail.data.Patient
+                            this.state.crfDetail
+                              ? this.state.crfDetail.Patient
                               : undefined
                           }
                           onFinish={async values => {
@@ -255,8 +273,17 @@ class CRFDetail extends React.Component {
                           <Form.Item label="身份证号" name="idNumber">
                             <Input
                               maxLength={18}
-                              onBlur={e => {
+                              onBlur={async e => {
                                 console.log(e.target.value);
+                                const res = await illCaseFind({
+                                  key: 'idNumber',
+                                  value: e.target.value,
+                                  share_add: true,
+                                });
+                                if (res.code == 200) {
+                                  this.state.SORModelValue = res.data;
+                                  this.setState({ SORModelVisible: true });
+                                }
                               }}
                             />
                           </Form.Item>
@@ -265,11 +292,37 @@ class CRFDetail extends React.Component {
                             label="住院号/就诊号"
                             name="hospitalNumber"
                           >
-                            <Input />
+                            <Input
+                              onBlur={async e => {
+                                console.log(e.target.value);
+                                const res = await illCaseFind({
+                                  key: 'hospitalNumber',
+                                  value: e.target.value,
+                                  share_add: true,
+                                });
+                                if (res.code == 200) {
+                                  this.state.SORModelValue = res.data;
+                                  this.setState({ SORModelVisible: true });
+                                }
+                              }}
+                            />
                           </Form.Item>
 
                           <Form.Item label="姓名" name="patientName">
-                            <Input />
+                            <Input
+                              onBlur={async e => {
+                                console.log(e.target.value);
+                                const res = await illCaseFind({
+                                  key: 'hospitalNumber',
+                                  value: e.target.value,
+                                  share_add: true,
+                                });
+                                if (res.code == 200) {
+                                  this.state.SORModelValue = res.data;
+                                  this.setState({ SORModelVisible: true });
+                                }
+                              }}
+                            />
                           </Form.Item>
 
                           <Form.Item label="性别" name="gender">
@@ -311,8 +364,8 @@ class CRFDetail extends React.Component {
                         <PreHistory
                           pid={this.state.pid}
                           initialValues={
-                            this.props.crfDetail.data
-                              ? this.props.crfDetail.data.pastHis[0]
+                            this.state.crfDetail
+                              ? this.state.crfDetail.pastHis[0]
                               : undefined
                           }
                         />
@@ -321,8 +374,8 @@ class CRFDetail extends React.Component {
                         <InitialDiagnosisProcess
                           pid={this.state.pid}
                           initialValues={
-                            this.props.crfDetail.data
-                              ? this.props.crfDetail.data.IniDiaPro[0]
+                            this.state.crfDetail
+                              ? this.state.crfDetail.IniDiaPro[0]
                               : undefined
                           }
                         />
@@ -335,8 +388,8 @@ class CRFDetail extends React.Component {
                           pid={this.state.pid}
                           treNum={0}
                           initialValues={
-                            this.props.crfDetail.data
-                              ? this.props.crfDetail.data.Immunohis[0]
+                            this.state.crfDetail
+                              ? this.state.crfDetail.Immunohis[0]
                               : undefined
                           }
                         />
@@ -346,8 +399,8 @@ class CRFDetail extends React.Component {
                           pid={this.state.pid}
                           treNum={0}
                           initialValues={
-                            this.props.crfDetail.data
-                              ? this.props.crfDetail.data.MoleDetec[0]
+                            this.state.crfDetail
+                              ? this.state.crfDetail.MoleDetec[0]
                               : undefined
                           }
                         />
@@ -359,8 +412,8 @@ class CRFDetail extends React.Component {
                         key="followUp_info"
                         pid={this.state.pid}
                         initialValues={
-                          this.props.crfDetail.data
-                            ? this.props.crfDetail.data.FollInfo
+                          this.state.crfDetail
+                            ? this.state.crfDetail.FollInfo
                             : undefined
                         }
                       />
@@ -370,31 +423,33 @@ class CRFDetail extends React.Component {
                       key={`treatment_info${this.state.currTre}`}
                       pid={this.state.pid}
                       treNum={this.state.selectedKeys[0]}
-                      initialValues={
-                        this.props.crfDetail.data
-                          ? this.props.crfDetail.data
-                          : undefined
-                      }
+                      initialValues={this.state.crfDetail}
                     />
                   ) : null}
-                  {/* {this.state.treatment_infos.map(value =>
-                    value.treNum == this.state.currTre ? (
-                      <TreatmentInfo
-                        key="treatment_info"
-                        pid={this.state.pid}
-                        treNum={this.state.currTre}
-                        initialValues={
-                          this.props.crfDetail.data
-                            ? this.props.crfDetail.data
-                            : undefined
-                        }
-                      />
-                    ) : null,
-                  )} */}
                 </Content>
               </Content>
             </Layout>
           ) : null}
+          <SearchOtherSystem
+            onCancel={() => {
+              this.setState({
+                SORModelVisible: false,
+              });
+            }}
+            modalVisible={this.state.SORModelVisible}
+            children={this.state.SORModelValue}
+            passData={async value => {
+              const res = await querydetail({ id: value.id });
+              console.log(res);
+              this.state.crfDetail = res.data;
+              this.setState({
+                basicInfoFormKey: `basic_info_form${moment(
+                  new Date(),
+                ).valueOf()}`,
+              });
+              console.log(value);
+            }}
+          />
         </Content>
       </Layout>
     );

@@ -381,8 +381,38 @@ function update(req: Request, res: Response, u: string) {
   };
   return res.json(result);
 }
+function getdetail(req: Request, res: Response, u: string) {
+  const result = {
+    code: 200,
+    msg: '获取成功',
+    data: [
+      {
+        id: 1,
+        age: 20,
+        gender: '男',
+        hospitalNumber: `hos22333`,
+        idNumber: '12345',
+        name: 'test',
+        phoneNumber: '123456',
+        patDia: '比较牛逼，还活着',
+      },
+      {
+        id: 2,
+        age: 20,
+        gender: '男',
+        hospitalNumber: `hos44999`,
+        idNumber: '12346',
+        name: 'test',
+        phoneNumber: '123456',
+        patDia: '比较牛逼，还活着',
+      },
+    ],
+  };
+  return res.json(result);
+}
 export default {
   'GET /api/illCase/allinfo/find': getillCase,
   'POST /api/upload ': upload,
   'PUT /api/Patient/update ': update,
+  'GET /api/illCase/find': getdetail,
 };
