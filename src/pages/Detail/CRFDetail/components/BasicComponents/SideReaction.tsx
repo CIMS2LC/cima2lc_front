@@ -1,6 +1,6 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
-import { Radio, DatePicker, Cascader, Rate } from 'antd';
+import { Radio, DatePicker, Cascader, Rate, Select } from 'antd';
 import { sideEffectsave, sideEffectupdate } from '../../service';
 import moment from 'moment';
 
@@ -242,7 +242,12 @@ const options = [
     ],
   },
 ];
-
+const grade_ops = [
+  { value: 1, label: 1 },
+  { value: 2, label: 2 },
+  { value: 3, label: 3 },
+  { value: 4, label: 4 },
+];
 const SideReaction = props => {
   const passData = data => {
     props.passData(data);
@@ -291,9 +296,9 @@ const SideReaction = props => {
           key: 'sidRecCla',
           width: '10%',
           render: (text, record, index) => (
-            <Rate
-              count={4}
-              defaultValue={record['sidRecCla'] || 0}
+            <Select
+              defaultValue={record['sidRecCla']}
+              options={grade_ops}
               onChange={e => {
                 onChange(e, record, 'sidRecCla');
               }}
