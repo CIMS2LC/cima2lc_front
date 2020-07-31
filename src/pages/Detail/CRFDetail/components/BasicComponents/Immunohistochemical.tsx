@@ -4,6 +4,7 @@ import { ImmunohisItem } from '../../data';
 import { Immunohissave, Immunohisupdate } from '../../service';
 
 const layout = {
+  labelAlign: 'left',
   labelCol: {
     span: 2,
   },
@@ -84,19 +85,6 @@ class Immunohistochemical extends React.Component {
           } else {
             console.log('更新失败');
           }
-          // } else {
-          //   const res = await Immunohissave({
-          //     pid: this.props.pid,
-          //     treNum: this.props.treNum,
-          //     ...values,
-          //   });
-          //   if (res.code == 200) {
-          //     this.id = res.id;
-          //     console.log('提交成功');
-          //   } else {
-          //     console.log('提交失败');
-          //   }
-          // }
         }}
       >
         {immunohistochemical_labels.map(item => (

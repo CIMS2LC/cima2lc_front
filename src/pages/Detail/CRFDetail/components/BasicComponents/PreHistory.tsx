@@ -13,6 +13,7 @@ import Medicine from './Medicine';
 import { PastHissave, PastHisupdate } from '../../service';
 
 const layout = {
+  labelAlign: 'left',
   labelCol: {
     span: 4,
   },

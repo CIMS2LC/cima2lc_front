@@ -17,6 +17,7 @@ import { getCookie } from '@/pages/BasicComponents/request';
 const { Option } = Select;
 
 const layout = {
+  labelAlign: 'left',
   labelCol: {
     span: 2,
   },

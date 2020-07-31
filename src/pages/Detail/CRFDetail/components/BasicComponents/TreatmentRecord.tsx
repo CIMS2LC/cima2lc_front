@@ -21,6 +21,7 @@ import TreatSchedule from './TreatSchedule';
 import { treRecsave, treRecupdate } from '../../service';
 import moment from 'moment';
 const layout = {
+  labelAlign: 'left',
   labelCol: {
     span: 3,
   },
@@ -29,6 +30,7 @@ const layout = {
   },
 };
 const layout1 = {
+  labelAlign: 'left',
   labelCol: {
     span: 3,
   },

@@ -37,6 +37,7 @@ const { Header, Content, Sider } = Layout;
 const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 const layout = {
+  labelAlign: 'left',
   labelCol: {
     span: 2,
   },
