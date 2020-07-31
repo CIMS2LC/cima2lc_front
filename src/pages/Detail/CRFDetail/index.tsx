@@ -49,18 +49,21 @@ const mapStateToProps = (values: StateType) => {
   return { ...values };
 };
 
+const ModelList = ['basicInfoFormKey', 'preHistory', ''];
 class CRFDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state.id = props.location.query.id || -1;
     this.state.pid = props.location.query.id || -1;
     this.update_detail();
+    this.setcrfDetail();
     this.update_treatment_infos();
   }
   update_treatment_infos = () => {
+    console.log(this.state);
     if (this.state.treatment_infos.length != 0) return true;
     if (this.props.crfDetail.data) {
-      this.state.crfDetail = this.props.crfDetail.data;
+      //this.state.crfDetail = this.props.crfDetail.data;
       if (this.state.crfDetail.TreRec)
         var count = this.state.crfDetail.TreRec.length;
       this.state.treNum = count;
@@ -68,13 +71,11 @@ class CRFDetail extends React.Component {
       for (var i = 0; i < count; i++) {
         treatment_infos.push({ treNum: i + 1 });
       }
-      console.log(treatment_infos);
       this.state.treatment_infos = treatment_infos;
       return true;
     }
   };
   update_detail = () => {
-    console.log('123');
     const id = this.state.id;
     const { dispatch } = this.props;
     dispatch({
@@ -83,6 +84,18 @@ class CRFDetail extends React.Component {
         id,
       },
     });
+  };
+  //各模块数据格式处理
+  //1 基线信息处理
+  BITranslate = (datas: any) => {
+    console.log(this.state);
+    console.log(datas);
+    if (!datas || datas.length == 0) return {};
+    var data = datas[0];
+    data['birthday'] = moment(data['birthday']);
+    data['gender'] = data['gender'] == 1;
+    console.log(data);
+    return data;
   };
   data = {};
   state = {
@@ -96,7 +109,7 @@ class CRFDetail extends React.Component {
     currTre: '',
     SORModelVisible: false,
     SORModelValue: [],
-    crfDetail: {},
+    crfDetail: undefined,
     basicInfoFormKey: 'basicInfoFormKey',
   };
   idNumber_onChange = (value: any) => {
@@ -109,7 +122,9 @@ class CRFDetail extends React.Component {
     });
   };
   setcrfDetail() {
-    this.state.crfDetail = this.props.crfDetail.data;
+    console.log(this.state);
+    if (!this.state.crfDetail) this.state.crfDetail = this.props.crfDetail.data;
+    console.log(this.state);
     return true;
   }
   render() {
@@ -222,211 +237,193 @@ class CRFDetail extends React.Component {
                 </Menu>
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 280 }}>
-                <Content>
-                  {this.state.selectedKeys[0] === 'baseline' ? (
-                    <Tabs tabPosition="top">
-                      <TabPane tab="基本信息" key="basic_info">
-                        <Form
-                          key={this.state.basicInfoFormKey}
-                          name="basic_info"
-                          {...layout}
-                          initialValues={
-                            this.state.crfDetail
-                              ? this.state.crfDetail.Patient
-                              : undefined
-                          }
-                          onFinish={async values => {
-                            if (values.birthday)
-                              values.birthday = values['birthday'].format(
-                                'YYYY-MM-DD',
-                              );
-                            if (this.state.pid == -1) {
-                              const res = await Patientsave({
-                                id: this.state.pid,
-                                treNum: this.props.treNum,
-                                ...values,
-                              });
-                              this.update_detail();
-                              if (res.code == 200) {
-                                this.setState({ pid: res.id });
-                                console.log('提交成功');
-                              } else {
-                                console.log('提交失败');
-                              }
+                {this.state.selectedKeys[0] === 'baseline' ? (
+                  <Tabs tabPosition="top">
+                    <TabPane tab="基本信息" key="basic_info">
+                      <Form
+                        key={this.state.basicInfoFormKey}
+                        name="basic_info"
+                        {...layout}
+                        initialValues={this.BITranslate(
+                          this.state.crfDetail.Patient,
+                        )}
+                        onFinish={async values => {
+                          if (values.birthday)
+                            values.birthday = values['birthday'].format(
+                              'YYYY-MM-DD',
+                            );
+                          if (this.state.pid == -1) {
+                            const res = await Patientsave({
+                              id: this.state.pid,
+                              treNum: this.props.treNum,
+                              ...values,
+                            });
+                            this.update_detail();
+                            if (res.code == 200) {
+                              this.setState({ pid: res.id });
+                              console.log('提交成功');
                             } else {
-                              const res = await Patientupdate({
-                                id: this.state.pid,
-                                pid: this.state.pid,
-                                ...values,
+                              console.log('提交失败');
+                            }
+                          } else {
+                            const res = await Patientupdate({
+                              id: this.state.pid,
+                              pid: this.state.pid,
+                              ...values,
+                            });
+                            if (res.code == 200) {
+                              //重新获取数据，之后将这一步合并至update的返回值中
+                              this.update_detail();
+                              this.update_treatment_infos();
+                              console.log('更新成功');
+                            } else {
+                              console.log('更新失败');
+                            }
+                          }
+                        }}
+                      >
+                        <Form.Item label="身份证号" name="idNumber">
+                          <Input
+                            maxLength={18}
+                            onBlur={async e => {
+                              const res = await illCaseFind({
+                                key: 'idNumber',
+                                value: e.target.value,
+                                share_add: true,
                               });
                               if (res.code == 200) {
-                                //重新获取数据，之后将这一步合并至update的返回值中
-                                this.update_detail();
-                                this.update_treatment_infos();
-                                console.log('更新成功');
-                              } else {
-                                console.log('更新失败');
+                                this.state.SORModelValue = res.data;
+                                this.setState({ SORModelVisible: true });
                               }
-                            }
-                          }}
-                        >
-                          <Form.Item label="身份证号" name="idNumber">
-                            <Input
-                              maxLength={18}
-                              onBlur={async e => {
-                                console.log(e.target.value);
-                                const res = await illCaseFind({
-                                  key: 'idNumber',
-                                  value: e.target.value,
-                                  share_add: true,
-                                });
-                                if (res.code == 200) {
-                                  this.state.SORModelValue = res.data;
-                                  this.setState({ SORModelVisible: true });
-                                }
-                              }}
-                            />
-                          </Form.Item>
+                            }}
+                          />
+                        </Form.Item>
 
-                          <Form.Item
-                            label="住院号/就诊号"
-                            name="hospitalNumber"
+                        <Form.Item label="住院号/就诊号" name="hospitalNumber">
+                          <Input
+                            onBlur={async e => {
+                              console.log(e.target.value);
+                              const res = await illCaseFind({
+                                key: 'hospitalNumber',
+                                value: e.target.value,
+                                share_add: true,
+                              });
+                              if (res.code == 200) {
+                                this.state.SORModelValue = res.data;
+                                this.setState({ SORModelVisible: true });
+                              }
+                            }}
+                          />
+                        </Form.Item>
+
+                        <Form.Item label="姓名" name="patientName">
+                          <Input
+                            onBlur={async e => {
+                              console.log(e.target.value);
+                              const res = await illCaseFind({
+                                key: 'hospitalNumber',
+                                value: e.target.value,
+                                share_add: true,
+                              });
+                              if (res.code == 200) {
+                                this.state.SORModelValue = res.data;
+                                this.setState({ SORModelVisible: true });
+                              }
+                            }}
+                          />
+                        </Form.Item>
+
+                        <Form.Item label="性别" name="gender">
+                          <Radio.Group
+                            onChange={this.sex_onChange}
+                            value={this.state.value}
                           >
-                            <Input
-                              onBlur={async e => {
-                                console.log(e.target.value);
-                                const res = await illCaseFind({
-                                  key: 'hospitalNumber',
-                                  value: e.target.value,
-                                  share_add: true,
-                                });
-                                if (res.code == 200) {
-                                  this.state.SORModelValue = res.data;
-                                  this.setState({ SORModelVisible: true });
-                                }
-                              }}
-                            />
-                          </Form.Item>
+                            <Radio value={true}>男</Radio>
+                            <Radio value={false}>女</Radio>
+                          </Radio.Group>
+                        </Form.Item>
 
-                          <Form.Item label="姓名" name="patientName">
-                            <Input
-                              onBlur={async e => {
-                                console.log(e.target.value);
-                                const res = await illCaseFind({
-                                  key: 'hospitalNumber',
-                                  value: e.target.value,
-                                  share_add: true,
-                                });
-                                if (res.code == 200) {
-                                  this.state.SORModelValue = res.data;
-                                  this.setState({ SORModelVisible: true });
-                                }
-                              }}
-                            />
-                          </Form.Item>
+                        <Form.Item label="出生日期" name="birthday">
+                          <DatePicker />
+                        </Form.Item>
 
-                          <Form.Item label="性别" name="gender">
-                            <Radio.Group
-                              onChange={this.sex_onChange}
-                              value={this.state.value}
-                            >
-                              <Radio value={true}>男</Radio>
-                              <Radio value={false}>女</Radio>
-                            </Radio.Group>
-                          </Form.Item>
+                        <Form.Item label="电话号码（必填）" name="phoneNumber1">
+                          <Input />
+                        </Form.Item>
 
-                          <Form.Item label="出生日期" name="birthday">
-                            <DatePicker />
-                          </Form.Item>
+                        <Form.Item label="电话号码（选填）" name="phoneNumber2">
+                          <Input />
+                        </Form.Item>
 
-                          <Form.Item
-                            label="电话号码（必填）"
-                            name="phoneNumber1"
-                          >
-                            <Input />
-                          </Form.Item>
-
-                          <Form.Item
-                            label="电话号码（选填）"
-                            name="phoneNumber2"
-                          >
-                            <Input />
-                          </Form.Item>
-
-                          <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                              保存
-                            </Button>
-                          </Form.Item>
-                        </Form>
-                      </TabPane>
-                      <TabPane tab="既往史" key="pre_history">
-                        <PreHistory
-                          pid={this.state.pid}
-                          initialValues={
-                            this.state.crfDetail
-                              ? this.state.crfDetail.pastHis[0]
-                              : undefined
-                          }
-                        />
-                      </TabPane>
-                      <TabPane tab="初诊过程" key="diag_procedure">
-                        <InitialDiagnosisProcess
-                          pid={this.state.pid}
-                          initialValues={
-                            this.state.crfDetail
-                              ? this.state.crfDetail.IniDiaPro[0]
-                              : undefined
-                          }
-                        />
-                      </TabPane>
-                      <TabPane tab="实验室检查" key="labor_inspect">
-                        <LaborInspect pid={this.state.pid} />
-                      </TabPane>
-                      <TabPane tab="免疫组化" key="immunohistochemical">
-                        <Immunohistochemical
-                          pid={this.state.pid}
-                          treNum={0}
-                          initialValues={
-                            this.state.crfDetail
-                              ? this.state.crfDetail.Immunohis[0]
-                              : undefined
-                          }
-                        />
-                      </TabPane>
-                      <TabPane tab="分子检测" key="molecular_detection">
-                        <MolecularDetection
-                          pid={this.state.pid}
-                          treNum={0}
-                          initialValues={
-                            this.state.crfDetail
-                              ? this.state.crfDetail.MoleDetec[0]
-                              : undefined
-                          }
-                        />
-                      </TabPane>
-                    </Tabs>
-                  ) : this.state.selectedKeys[0] === 'followUp' ? (
-                    <div>
-                      <FollowUpInfo
-                        key="followUp_info"
+                        <Form.Item>
+                          <Button type="primary" htmlType="submit">
+                            保存
+                          </Button>
+                        </Form.Item>
+                      </Form>
+                    </TabPane>
+                    <TabPane tab="既往史" key="pre_history">
+                      <PreHistory
                         pid={this.state.pid}
                         initialValues={
-                          this.state.crfDetail
-                            ? this.state.crfDetail.FollInfo
+                          this.state.crfDetail.pastHis
+                            ? this.state.crfDetail.pastHis[0]
                             : undefined
                         }
                       />
-                    </div>
-                  ) : this.state.selectedKeys[0] === this.state.currTre ? (
-                    <TreatmentInfo
-                      key={`treatment_info${this.state.currTre}`}
+                    </TabPane>
+                    <TabPane tab="初诊过程" key="diag_procedure">
+                      <InitialDiagnosisProcess
+                        pid={this.state.pid}
+                        initialValues={
+                          this.state.crfDetail.IniDiaPro
+                            ? this.state.crfDetail.IniDiaPro[0]
+                            : undefined
+                        }
+                      />
+                    </TabPane>
+                    <TabPane tab="实验室检查" key="labor_inspect">
+                      <LaborInspect pid={this.state.pid} />
+                    </TabPane>
+                    <TabPane tab="免疫组化" key="immunohistochemical">
+                      <Immunohistochemical
+                        pid={this.state.pid}
+                        treNum={0}
+                        initialValues={
+                          this.state.crfDetail.Immunohis
+                            ? this.state.crfDetail.Immunohis[0]
+                            : undefined
+                        }
+                      />
+                    </TabPane>
+                    <TabPane tab="分子检测" key="molecular_detection">
+                      <MolecularDetection
+                        pid={this.state.pid}
+                        treNum={0}
+                        initialValues={
+                          this.state.crfDetail.MoleDetec
+                            ? this.state.crfDetail.MoleDetec[0]
+                            : undefined
+                        }
+                      />
+                    </TabPane>
+                  </Tabs>
+                ) : this.state.selectedKeys[0] === 'followUp' ? (
+                  <div>
+                    <FollowUpInfo
+                      key="followUp_info"
                       pid={this.state.pid}
-                      treNum={this.state.selectedKeys[0]}
-                      initialValues={this.state.crfDetail}
+                      initialValues={this.state.crfDetail.FollInfo}
                     />
-                  ) : null}
-                </Content>
+                  </div>
+                ) : this.state.selectedKeys[0] === this.state.currTre ? (
+                  <TreatmentInfo
+                    key={`treatment_info${this.state.currTre}`}
+                    pid={this.state.pid}
+                    treNum={this.state.selectedKeys[0]}
+                    initialValues={this.state.crfDetail}
+                  />
+                ) : null}
               </Content>
             </Layout>
           ) : null}
@@ -440,14 +437,14 @@ class CRFDetail extends React.Component {
             children={this.state.SORModelValue}
             passData={async value => {
               const res = await querydetail({ id: value.id });
-              console.log(res);
               this.state.crfDetail = res.data;
+              const dataValue = `${moment(new Date()).valueOf()}`;
+              const key = `${ModelList[0]}${dataValue}`;
+              console.log(this.state);
+              console.log(ModelList[0]);
               this.setState({
-                basicInfoFormKey: `basic_info_form${moment(
-                  new Date(),
-                ).valueOf()}`,
+                [ModelList[0]]: key,
               });
-              console.log(value);
             }}
           />
         </Content>
