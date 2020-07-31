@@ -375,6 +375,7 @@ class TreatSchedule extends React.Component {
           添加
         </Button>
         <Table
+          scroll={{ x: '100%' }}
           components={components}
           rowClassName={() => 'editable-row'}
           bordered

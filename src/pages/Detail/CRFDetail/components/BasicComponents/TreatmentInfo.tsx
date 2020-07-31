@@ -32,7 +32,7 @@ const layout = {
     span: 2,
   },
   wrapperCol: {
-    span: 8,
+    span: 20,
   },
 };
 

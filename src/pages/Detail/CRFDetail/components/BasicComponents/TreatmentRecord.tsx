@@ -23,10 +23,10 @@ import moment from 'moment';
 const layout = {
   labelAlign: 'left',
   labelCol: {
-    span: 3,
+    span: 4,
   },
   wrapperCol: {
-    span: 8,
+    span: 24,
   },
 };
 const layout1 = {
@@ -387,7 +387,11 @@ class TreatmentRecord extends React.Component {
                 }}
               />
             </Form.Item>
-
+            <Form.Item label="备注" name={[this.state.trement_name, 'note']}>
+                              
+              <Input.TextArea rows={4} />
+                            
+            </Form.Item>
             <Form.Item
               label="开始日期"
               name={[this.state.trement_name, 'begDate']}
@@ -460,6 +464,14 @@ class TreatmentRecord extends React.Component {
                 <Checkbox value="系统性清扫">系统性清扫</Checkbox>
                 <Checkbox value="取样">取样</Checkbox>
               </Checkbox.Group>
+            </Form.Item>
+            <Form.Item
+              label="清扫组数"
+              name={[this.state.trement_name, 'cleGro']}
+            >
+                            
+              <Input />
+                          
             </Form.Item>
             <Form.Item
               label="手术日期"
@@ -557,8 +569,26 @@ class TreatmentRecord extends React.Component {
             <Form.Item
               label="分割次数"
               name={[this.state.trement_name, 'splTim']}
+              {...layout1}
             >
-              <InputNumber />
+              <Row>
+                <Col span={12}>
+                  <InputNumber />
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name={[this.state.trement_name, 'method']}
+                    initialValue={'qd'}
+                  >
+                    <Select>
+                      <Option value={'qd'}>qd</Option>
+                                            <Option value={'bid'}>bid</Option>
+                                            <Option value={'tid'}>tid</Option>
+                                            <Option value={'qid'}>qid</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
             </Form.Item>
           </div>
         ) : null}
