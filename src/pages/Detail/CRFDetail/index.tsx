@@ -56,14 +56,12 @@ class CRFDetail extends React.Component {
     this.state.id = props.location.query.id || -1;
     this.state.pid = props.location.query.id || -1;
     this.update_detail();
-    this.setcrfDetail();
+    this.setcrfDetail(this.state.isInit);
     this.update_treatment_infos();
   }
   update_treatment_infos = () => {
-    console.log(this.state);
     if (this.state.treatment_infos.length != 0) return true;
-    if (this.props.crfDetail.data) {
-      //this.state.crfDetail = this.props.crfDetail.data;
+    if (this.state.crfDetail) {
       if (this.state.crfDetail.TreRec)
         var count = this.state.crfDetail.TreRec.length;
       this.state.treNum = count;
@@ -94,7 +92,6 @@ class CRFDetail extends React.Component {
     var data = datas[0];
     data['birthday'] = moment(data['birthday']);
     data['gender'] = data['gender'] == 1;
-    console.log(data);
     return data;
   };
   data = {};
@@ -111,6 +108,7 @@ class CRFDetail extends React.Component {
     SORModelValue: [],
     crfDetail: undefined,
     basicInfoFormKey: 'basicInfoFormKey',
+    isInit: true,
   };
   idNumber_onChange = (value: any) => {
     console.log('changed', value);
@@ -121,10 +119,18 @@ class CRFDetail extends React.Component {
       value: e.target.value,
     });
   };
-  setcrfDetail() {
+  setcrfDetail(isInit: boolean) {
     console.log(this.state);
-    if (!this.state.crfDetail) this.state.crfDetail = this.props.crfDetail.data;
-    console.log(this.state);
+    console.log(this.props.crfDetail);
+    if (isInit)
+      // this.setState({
+      //   crfDetail:this.props.crfDetail.data
+      // });
+      this.state.crfDetail = this.props.crfDetail.data;
+    return true;
+  }
+  consoleData(data: any) {
+    console.log(data);
     return true;
   }
   render() {
@@ -144,7 +150,9 @@ class CRFDetail extends React.Component {
               className={styles.btn_return}
               id="btn_return"
               onClick={() => {
-                this.state.crfDetail.data = undefined;
+                this.props.crfDetail.data = undefined;
+                this.state.crfDetail = undefined;
+                this.state.isInit = true;
                 history.push('/list/fuv_list');
               }}
             >
@@ -158,8 +166,10 @@ class CRFDetail extends React.Component {
             marginTop: 64,
           }}
         >
-          {(this.props.crfDetail.data && this.setcrfDetail()) ||
-          this.state.id == -1 ? (
+          {this.state.id == -1 ||
+          (this.props.crfDetail.data &&
+            this.state.crfDetail &&
+            this.setcrfDetail(this.state.isInit)) ? (
             <Layout
               className="site-layout-background"
               style={{ padding: '24px 0' }}
@@ -245,7 +255,7 @@ class CRFDetail extends React.Component {
                         name="basic_info"
                         {...layout}
                         initialValues={this.BITranslate(
-                          this.state.crfDetail.Patient,
+                          (this.state.crfDetail || {}).Patient,
                         )}
                         onFinish={async values => {
                           if (values.birthday)
@@ -366,7 +376,7 @@ class CRFDetail extends React.Component {
                       <PreHistory
                         pid={this.state.pid}
                         initialValues={
-                          this.state.crfDetail.pastHis
+                          (this.state.crfDetail || {}).pastHis
                             ? this.state.crfDetail.pastHis[0]
                             : undefined
                         }
@@ -376,7 +386,7 @@ class CRFDetail extends React.Component {
                       <InitialDiagnosisProcess
                         pid={this.state.pid}
                         initialValues={
-                          this.state.crfDetail.IniDiaPro
+                          (this.state.crfDetail || {}).IniDiaPro
                             ? this.state.crfDetail.IniDiaPro[0]
                             : undefined
                         }
@@ -390,7 +400,7 @@ class CRFDetail extends React.Component {
                         pid={this.state.pid}
                         treNum={0}
                         initialValues={
-                          this.state.crfDetail.Immunohis
+                          (this.state.crfDetail || {}).Immunohis
                             ? this.state.crfDetail.Immunohis[0]
                             : undefined
                         }
@@ -401,7 +411,7 @@ class CRFDetail extends React.Component {
                         pid={this.state.pid}
                         treNum={0}
                         initialValues={
-                          this.state.crfDetail.MoleDetec
+                          (this.state.crfDetail || {}).MoleDetec
                             ? this.state.crfDetail.MoleDetec[0]
                             : undefined
                         }
@@ -413,7 +423,7 @@ class CRFDetail extends React.Component {
                     <FollowUpInfo
                       key="followUp_info"
                       pid={this.state.pid}
-                      initialValues={this.state.crfDetail.FollInfo}
+                      initialValues={(this.state.crfDetail || {}).FollInfo}
                     />
                   </div>
                 ) : this.state.selectedKeys[0] === this.state.currTre ? (
@@ -421,7 +431,7 @@ class CRFDetail extends React.Component {
                     key={`treatment_info${this.state.currTre}`}
                     pid={this.state.pid}
                     treNum={this.state.selectedKeys[0]}
-                    initialValues={this.state.crfDetail}
+                    initialValues={this.state.crfDetail || {}}
                   />
                 ) : null}
               </Content>
@@ -440,8 +450,7 @@ class CRFDetail extends React.Component {
               this.state.crfDetail = res.data;
               const dataValue = `${moment(new Date()).valueOf()}`;
               const key = `${ModelList[0]}${dataValue}`;
-              console.log(this.state);
-              console.log(ModelList[0]);
+              this.state.isInit = false;
               this.setState({
                 [ModelList[0]]: key,
               });
