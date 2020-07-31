@@ -197,7 +197,7 @@ class TreatSchedule extends React.Component {
                   this.state.treSolu
                 ]
               }
-              defaultValue={Object.keys(record['drugs'])}
+              defaultValue={record['drugs'] ? Object.keys(record['drugs']) : []}
               onChange={values => {
                 var drugs = record['drugs'];
                 if (!drugs) drugs = {};
@@ -205,7 +205,6 @@ class TreatSchedule extends React.Component {
                   if (!drugs[[item]]) drugs[[item]] = {};
                 });
                 record['drugs'] = drugs;
-                console.log(record);
               }}
               tagRender={tagvalue => (
                 <Popover
