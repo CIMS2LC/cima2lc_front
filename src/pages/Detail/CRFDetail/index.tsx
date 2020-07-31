@@ -189,7 +189,6 @@ class CRFDetail extends React.Component {
                   }}
                 >
                   <Menu.Item key="baseline">基线资料</Menu.Item>
-                  <Menu.Item key="followUp">随访信息</Menu.Item>
                   <SubMenu
                     key="treatment"
                     title="治疗信息"
@@ -245,6 +244,7 @@ class CRFDetail extends React.Component {
                       添加
                     </Menu.Item>
                   </SubMenu>
+                  <Menu.Item key="followUp">随访信息</Menu.Item>
                 </Menu>
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 280 }}>

@@ -9,6 +9,8 @@ import {
   Table,
   Upload,
   message,
+  InputNumber,
+  Input,
 } from 'antd';
 import PicturesWall from './PicturesWall';
 import {
@@ -142,6 +144,18 @@ class FollowUpInfo extends React.Component {
         ),
       },
       {
+        title: 'suv',
+        dataIndex: 'suv',
+        width: '10%',
+        render: (text, record, index) => (
+          <InputNumber
+            onChange={e => {
+              onChange(e, record, 'suv');
+            }}
+          />
+        ),
+      },
+      {
         title: '影像',
         dataIndex: 'savFilPath',
         key: 'savFilPath',
@@ -187,6 +201,18 @@ class FollowUpInfo extends React.Component {
               <UploadOutlined /> 上传报告
             </Button>
           </Upload>
+        ),
+      },
+      {
+        title: '备注',
+        dataIndex: 'remarks',
+        width: '10%',
+        render: (text, record, index) => (
+          <Input
+            onChange={e => {
+              onChange(e.target.value, record, 'remarks');
+            }}
+          />
         ),
       },
       {
