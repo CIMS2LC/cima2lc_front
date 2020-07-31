@@ -149,6 +149,7 @@ class FollowUpInfo extends React.Component {
         width: '10%',
         render: (text, record, index) => (
           <InputNumber
+            defaultValue={record['suv']}
             onChange={e => {
               onChange(e, record, 'suv');
             }}
@@ -209,6 +210,7 @@ class FollowUpInfo extends React.Component {
         width: '10%',
         render: (text, record, index) => (
           <Input
+            defaultValue={record['remarks']}
             onChange={e => {
               onChange(e.target.value, record, 'remarks');
             }}
