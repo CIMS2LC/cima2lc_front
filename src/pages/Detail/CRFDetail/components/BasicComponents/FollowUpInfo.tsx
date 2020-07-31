@@ -314,6 +314,7 @@ class FollowUpInfo extends React.Component {
         </Button>
         <Table
           //components={components}
+          scroll={{ x: '120%' }}
           rowClassName={() => 'editable-row'}
           bordered
           dataSource={dataSource}
