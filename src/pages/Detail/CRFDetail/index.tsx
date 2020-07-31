@@ -284,7 +284,13 @@ class CRFDetail extends React.Component {
                             if (res.code == 200) {
                               //重新获取数据，之后将这一步合并至update的返回值中
                               this.update_detail();
-                              this.update_treatment_infos();
+                              const dataValue = `${moment(
+                                new Date(),
+                              ).valueOf()}`;
+                              const key = `${ModelList[0]}${dataValue}`;
+                              this.setState({
+                                [ModelList[0]]: key,
+                              });
                               console.log('更新成功');
                             } else {
                               console.log('更新失败');
