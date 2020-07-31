@@ -167,8 +167,8 @@ class CRFDetail extends React.Component {
           }}
         >
           {this.state.id == -1 ||
-          (this.props.crfDetail.data &&
-            this.state.crfDetail &&
+          (this.props.crfDetail.data != undefined &&
+            //this.state.crfDetail != undefined &&
             this.setcrfDetail(this.state.isInit)) ? (
             <Layout
               className="site-layout-background"
