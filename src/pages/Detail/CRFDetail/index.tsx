@@ -400,7 +400,78 @@ class CRFDetail extends React.Component {
                       />
                     </TabPane>
                     <TabPane tab="实验室检查" key="labor_inspect">
-                      <LaborInspect pid={this.state.pid} />
+                      <LaborInspect
+                        pid={this.state.pid}
+                        treNum={0}
+                        BloodRoutine={
+                          this.state.crfDetail &&
+                          this.state.crfDetail.BloodRoutine
+                            ? this.state.crfDetail.BloodRoutine[0]
+                            : {}
+                        }
+                        BloodBio={
+                          this.state.crfDetail && this.state.crfDetail.BloodBio
+                            ? this.state.crfDetail.BloodBio[0]
+                            : undefined
+                        }
+                        Thyroid={
+                          this.state.crfDetail && this.state.crfDetail.Thyroid
+                            ? this.state.crfDetail.Thyroid[0]
+                            : undefined
+                        }
+                        Coagulation={
+                          this.state.crfDetail &&
+                          this.state.crfDetail.Coagulation
+                            ? this.state.crfDetail.Coagulation[0]
+                            : undefined
+                        }
+                        MyocardialEnzyme={
+                          this.state.crfDetail &&
+                          this.state.crfDetail.MyocardialEnzyme
+                            ? this.state.crfDetail.MyocardialEnzyme[0]
+                            : undefined
+                        }
+                        Cytokines={
+                          this.state.crfDetail && this.state.crfDetail.Cytokines
+                            ? this.state.crfDetail.Cytokines[0]
+                            : undefined
+                        }
+                        LymSubsets={
+                          this.state.crfDetail &&
+                          this.state.crfDetail.LymSubsets
+                            ? this.state.crfDetail.LymSubsets[0]
+                            : undefined
+                        }
+                        UrineRoutine={
+                          this.state.crfDetail &&
+                          this.state.crfDetail.UrineRoutine
+                            ? this.state.crfDetail.UrineRoutine[0]
+                            : undefined
+                        }
+                        TumorMarker={
+                          this.state.crfDetail &&
+                          this.state.crfDetail.TumorMarker
+                            ? this.state.crfDetail.TumorMarker[0]
+                            : undefined
+                        }
+                        Lung={
+                          this.state.crfDetail && this.state.crfDetail.Lung
+                            ? this.state.crfDetail.Lung[0]
+                            : undefined
+                        }
+                        OtherExams={
+                          this.state.crfDetail &&
+                          this.state.crfDetail.OtherExams
+                            ? this.state.crfDetail.OtherExams[0]
+                            : undefined
+                        }
+                        ImageExams={
+                          this.state.crfDetail &&
+                          this.state.crfDetail.ImageExams
+                            ? this.state.crfDetail.ImageExams[0]
+                            : undefined
+                        }
+                      />
                     </TabPane>
                     <TabPane tab="免疫组化" key="immunohistochemical">
                       <Immunohistochemical

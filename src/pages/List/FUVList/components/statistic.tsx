@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-//import "./index.css";
+import './index.less';
 import { screen } from '../service';
 import {
   Modal,
@@ -12,6 +12,10 @@ import {
   Tree,
   Radio,
   TreeSelect,
+  Row,
+  InputNumber,
+  Col,
+  Input,
 } from 'antd';
 const layout = {
   labelAlign: 'left',
@@ -614,6 +618,114 @@ class Statistic extends React.Component {
               </Radio.Group>
             </Form.Item>
             <Form.Item>
+              <Form.Item
+                label="年龄"
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 16 }}
+              >
+                <Row gutter={0} className="site-input-group-wrapper">
+                  <Col span={8}>
+                    <Form.Item name="age1" noStyle>
+                      <InputNumber
+                        className="site-input-left"
+                        style={{ width: '100%', textAlign: 'center' }}
+                        placeholder="Minimum"
+                        precision={0}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={3}>
+                    <Input
+                      className="site-input-split"
+                      style={{
+                        width: 40,
+                        borderLeft: 0,
+                        borderRight: 0,
+                        pointerEvents: 'none',
+                      }}
+                      placeholder="~"
+                      disabled
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item name="age2" noStyle>
+                      <InputNumber
+                        className="site-input-right"
+                        style={{ width: '100%', textAlign: 'center' }}
+                        placeholder="Maximum"
+                        precision={0}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form.Item>
+              <Form.Item label="吸烟史" name="smoke">
+                <Radio.Group>
+                  <Radio value={true}>有</Radio>
+                  <Radio value={false}>无</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item label="饮酒史" name="drink">
+                <Radio.Group>
+                  <Radio value={true}>有</Radio>
+                  <Radio value={false}>无</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item label="激素使用史" name="hormone">
+                <Radio.Group>
+                  <Radio value={true}>有</Radio>
+                  <Radio value={false}>无</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item
+                label="PD-L1"
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 16 }}
+              >
+                <Row gutter={0} className="site-input-group-wrapper">
+                  <Col span={8}>
+                    <Form.Item name="PDL1_1" noStyle>
+                      <InputNumber
+                        min={0}
+                        max={100}
+                        className="site-input-left"
+                        style={{ width: '100%', textAlign: 'center' }}
+                        placeholder="Minimum"
+                        formatter={value => `${value}%`}
+                        parser={value => value.replace('%', '')}
+                        precision={0}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={3}>
+                    <Input
+                      className="site-input-split"
+                      style={{
+                        width: 40,
+                        borderLeft: 0,
+                        borderRight: 0,
+                        pointerEvents: 'none',
+                      }}
+                      placeholder="~"
+                      disabled
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item name="PDL1_2" noStyle>
+                      <InputNumber
+                        min={0}
+                        max={100}
+                        className="site-input-right"
+                        style={{ width: '100%', textAlign: 'center' }}
+                        placeholder="Maximum"
+                        formatter={value => `${value}%`}
+                        parser={value => value.replace('%', '')}
+                        precision={0}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form.Item>
               <Button type="primary" htmlType="submit">
                 搜索
               </Button>
