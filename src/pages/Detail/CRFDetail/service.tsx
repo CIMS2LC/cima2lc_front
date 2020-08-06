@@ -170,3 +170,99 @@ export async function illCaseFind(params?: any) {
     params,
   });
 }
+export async function imageExamsupdate(params?: any) {
+  return request('/api/ImageExams/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function otherExamsupdate(params?: any) {
+  return request('/api/OtherExams/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function lungupdate(params?: any) {
+  return request('/api/Lung/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function tumorMarkerupdate(params?: any) {
+  return request('/api/TumorMarker/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function urineRoutineupdate(params?: any) {
+  return request('/api/UrineRoutine/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function lymSubsetsupdate(params?: any) {
+  return request('/api/LymSubsets/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function cytokinesupdate(params?: any) {
+  return request('/api/Cytokines/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function myocardialEnzymeupdate(params?: any) {
+  return request('/api/MyocardialEnzyme/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function coagulationupdate(params?: any) {
+  return request('/api/Coagulation/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function thyroidupdate(params?: any) {
+  return request('/api/Thyroid/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function bloodBioupdate(params?: any) {
+  return request('/api/BloodBio/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function bloodRoutineupdate(params?: any) {
+  return request('/api/BloodRoutine/update', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}

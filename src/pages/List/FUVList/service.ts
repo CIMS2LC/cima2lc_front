@@ -67,3 +67,17 @@ export async function screen(params: any) {
     },
   });
 }
+export async function queryFollowUp(params: any) {
+  return request('/api/illCase/followup', {
+    params,
+  });
+}
+
+export async function alarmOff(params: any) {
+  return request('/api/illCase/alarmoff', {
+    method: 'PUT',
+    data: {
+      ...params,
+    },
+  });
+}

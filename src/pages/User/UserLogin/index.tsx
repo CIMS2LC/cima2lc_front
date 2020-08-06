@@ -1,9 +1,9 @@
-import { Alert, Checkbox } from 'antd';
+import { Alert, Checkbox, Modal, message } from 'antd';
 import React, { useState } from 'react';
 import { Dispatch, Link, connect } from 'umi';
 import { StateType } from './model';
 import styles from './style.less';
-import { LoginParamsType } from './service';
+import { LoginParamsType, modifyPassword } from './service';
 import LoginFrom from './components/Login';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginFrom;
@@ -18,6 +18,27 @@ const UserLogin: React.FC<UserLoginProps> = props => {
   const { status, type: loginType } = userAndUserLogin;
   const [autoLogin, setAutoLogin] = useState(true);
   const [type, setType] = useState<string>('account');
+  const [visible, setVisible] = useState(false);
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const handleModifyPwdSubmit = async (values: LoginParamsType) => {
+    if (values.newPassword !== values.newPasswordConfirm) {
+      message.error('两次输入的新密码不一致');
+      return;
+    }
+    const res = await modifyPassword(values);
+    if (res.code === 200) {
+      setVisible(false);
+      message.success('修改成功');
+    } else return message.error('修改失败');
+  };
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
@@ -57,8 +78,65 @@ const UserLogin: React.FC<UserLoginProps> = props => {
           ]}
         />
         <Submit loading={submitting}>登录</Submit>
-        <a className={styles.other}>修改密码</a>
       </LoginFrom>
+      <a className={styles.other} onClick={showModal}>
+        修改密码
+      </a>
+      <Modal
+        title="修改密码"
+        visible={visible}
+        // onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <LoginFrom
+          activeKey={type}
+          onTabChange={setType}
+          onSubmit={handleModifyPwdSubmit}
+        >
+          <UserName
+            name="account"
+            placeholder="用户名"
+            rules={[
+              {
+                required: true,
+                message: '请输入用户名!',
+              },
+            ]}
+          />
+          <Password
+            name="password"
+            placeholder="密码"
+            rules={[
+              {
+                required: true,
+                message: '请输入密码！',
+              },
+            ]}
+          />
+          <Password
+            name="newPassword"
+            placeholder="新密码"
+            rules={[
+              {
+                required: true,
+                message: '请输入新密码！',
+              },
+            ]}
+          />
+          <Password
+            name="newPasswordConfirm"
+            placeholder="确认新密码"
+            rules={[
+              {
+                required: true,
+                message: '请再次输入新密码！',
+              },
+            ]}
+          />
+          <Submit loading={submitting}>修改</Submit>
+        </LoginFrom>
+      </Modal>
     </div>
   );
 };

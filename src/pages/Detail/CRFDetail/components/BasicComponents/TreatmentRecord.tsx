@@ -55,7 +55,9 @@ class TreatmentRecord extends React.Component {
   constructor(props: any) {
     super(props);
     if (this.props.initialValues) {
-      this.TreRec = this.props.initialValues.TreRec[this.props.treNum - 1];
+      this.TreRec = this.props.initialValues.TreRec.filter(
+        x => Number(x.treNum) === Number(this.props.treNum),
+      )[0];
       if (this.TreRec) {
         if (this.TreRec.beEffEvaDate)
           this.TreRec['beEffEvaDate'] = moment(this.TreRec.beEffEvaDate);
@@ -65,10 +67,12 @@ class TreatmentRecord extends React.Component {
           this.state.trement_name = this.TreRec.trement;
           var treVal =
             ['surgery', 'radiotherapy'].indexOf(this.state.trement_name) != -1
-              ? this.props.initialValues[treatment_map[this.TreRec.trement]][
-                  this.props.treNum - 1
-                ]
-              : this.props.initialValues['OneToFive'][this.props.treNum - 1];
+              ? this.props.initialValues[
+                  treatment_map[this.TreRec.trement]
+                ].filter(x => Number(x.treNum) === Number(this.props.treNum))[0]
+              : this.props.initialValues['OneToFive'].filter(
+                  x => Number(x.treNum) === Number(this.props.treNum),
+                )[0];
           if (
             ['one', 'two', 'three', 'four', 'five', 'other'].indexOf(
               this.state.trement_name,

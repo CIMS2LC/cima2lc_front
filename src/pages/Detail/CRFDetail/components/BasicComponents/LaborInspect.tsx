@@ -13,11 +13,27 @@ import {
   Popconfirm,
   InputNumber,
   Select,
+  message,
 } from 'antd';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 import { UploadOutlined } from '@ant-design/icons';
 import './table.less';
 import moment from 'moment';
+import { getCookie } from '@/pages/BasicComponents/request';
+import {
+  imageExamsupdate,
+  otherExamsupdate,
+  lungupdate,
+  tumorMarkerupdate,
+  urineRoutineupdate,
+  lymSubsetsupdate,
+  cytokinesupdate,
+  myocardialEnzymeupdate,
+  coagulationupdate,
+  thyroidupdate,
+  bloodBioupdate,
+  bloodRoutineupdate,
+} from '../../service';
 
 const labor_inspect = {
   血常规: {
@@ -403,7 +419,7 @@ const labor_inspect = {
       unit: 'cells/uL',
       key: 'CD8_',
     },
-    'CD16+56': {
+    CD1656: {
       name: '自然杀伤细胞绝对值',
       unit: 'cells/uL',
       key: 'CD16_56',
@@ -443,78 +459,78 @@ const labor_inspect = {
       unit: '%',
       key: 'CD56',
     },
-    'CD3+CD8+#': {
-      name: 'CD3+CD8+绝对值',
+    'CD3CD8#': {
+      name: 'CD3CD8绝对值',
       unit: 'cells/uL',
       key: 'CD3_CD8__',
     },
-    'CD3+CD8+': {
-      name: 'CD3+CD8+',
+    CD3CD8: {
+      name: 'CD3CD8',
       unit: '%',
       key: 'CD3_CD8_',
     },
-    'CD3+CD4+#': {
-      name: 'CD3+CD4+绝对值',
+    'CD3CD4#': {
+      name: 'CD3CD4绝对值',
       unit: 'cells/uL',
       key: 'CD3_CD4__',
     },
-    'CD3+CD4+': {
-      name: 'CD3+CD4+',
+    CD3CD4: {
+      name: 'CD3CD4',
       unit: '%',
       key: 'CD3_CD4_',
     },
-    'CD3-CD(16+56)#': {
-      name: 'CD3-CD(16+56)绝对值',
+    'CD3-CD(1656)#': {
+      name: 'CD3-CD(1656)绝对值',
       unit: 'cells/uL',
       key: 'CD3_CD16_56_',
     },
-    'CD3-CD(16+56)': {
-      name: 'CD3-CD(16+56)',
+    'CD3-CD(1656)': {
+      name: 'CD3-CD(1656)',
       unit: '%',
       key: 'CD3_CD16_56',
     },
-    'CD3-CD19+#': {
-      name: 'CD3-CD19+绝对值',
+    'CD3-CD19#': {
+      name: 'CD3-CD19绝对值',
       unit: 'cells/uL',
       key: 'CD3_CD19__',
     },
-    'CD3-CD19+': {
-      name: 'CD3-CD19+',
+    'CD3-CD19': {
+      name: 'CD3-CD19',
       unit: '%',
       key: 'CD3_CD19_',
     },
-    'CD8+CD28+': {
-      name: 'CD8+CD28+',
+    CD8CD28: {
+      name: 'CD8CD28',
       unit: '%',
       key: 'CD8_CD28_',
     },
-    'CD20+': {
-      name: 'CD20+',
+    CD20: {
+      name: 'CD20',
       unit: '%',
       key: 'CD20_',
     },
-    'HLA-DR+': {
-      name: 'HLA-DR+',
+    'HLA-DR': {
+      name: 'HLA-DR',
       unit: '%',
       key: 'HLA_DR_',
     },
-    'CD3+/HLA-DR+': {
-      name: 'CD3+/HLA-DR+',
+    'CD3/HLA-DR': {
+      name: 'CD3/HLA-DR',
       unit: '%',
       key: 'CD3_HLA_DR1',
     },
-    'CD3+/HLA-DR-': {
-      name: 'CD3+/HLA-DR-',
+    'CD3/HLA-DR-': {
+      name: 'CD3/HLA-DR-',
       unit: '%',
       key: 'CD3_HLA_DR2',
     },
-    'CD3-/HLA-DR+': {
-      name: 'CD3-/HLA-DR+',
+    'CD3-/HLA-DR': {
+      name: 'CD3-/HLA-DR',
       unit: '%',
       key: 'CD3_HLA_DR3',
     },
-    'CD4+CD25+CD127low': {
-      name: 'CD4+CD25+CD127low',
+    CD4CD25CD127low: {
+      name: 'CD4CD25CD127low',
       unit: '%',
       key: 'CD4_CD25_CD127low',
     },
@@ -625,15 +641,42 @@ const labor_inspect = {
   },
 };
 const tableMap = {
-  血常规: 'BloodRoutine',
-  血生化: 'BloodBio',
-  甲状腺功能: 'Thyroid',
-  凝血功能: 'Coagulation',
-  心肌酶谱: 'MyocardialEnzyme',
-  细胞因子: 'Cytokines',
-  淋巴细胞亚群: 'LymSubsets',
-  尿常规: 'UrineRoutine',
-  肿瘤标志物: 'TumorMarker',
+  血常规: {
+    name: 'BloodRoutine',
+    updateFun: bloodRoutineupdate,
+  },
+  血生化: {
+    name: 'BloodBio',
+    updateFun: bloodBioupdate,
+  },
+  甲状腺功能: {
+    name: 'Thyroid',
+    updateFun: thyroidupdate,
+  },
+  凝血功能: {
+    name: 'Coagulation',
+    updateFun: coagulationupdate,
+  },
+  心肌酶谱: {
+    name: 'MyocardialEnzyme',
+    updateFun: myocardialEnzymeupdate,
+  },
+  细胞因子: {
+    name: 'Cytokines',
+    updateFun: cytokinesupdate,
+  },
+  淋巴细胞亚群: {
+    name: 'LymSubsets',
+    updateFun: lymSubsetsupdate,
+  },
+  尿常规: {
+    name: 'UrineRoutine',
+    updateFun: urineRoutineupdate,
+  },
+  肿瘤标志物: {
+    name: 'TumorMarker',
+    updateFun: tumorMarkerupdate,
+  },
 };
 // 肺功能
 const Lung = {
@@ -718,24 +761,20 @@ class LaborInspect extends React.Component {
   constructor(prop: any) {
     super(prop);
     Object.keys(labor_inspect).map(item => {
-      if (this.props[tableMap[item]])
+      if (this.props[tableMap[item]['name']])
         Object.keys(labor_inspect[item]).map(para => {
-          this.state[`${item}_${para}`] = this.props[tableMap[item]][
+          this.state[`${item}_${para}`] = this.props[tableMap[item]['name']][
             `${labor_inspect[item][para]['key']}Mea`
           ];
         });
     });
     if (this.props.Lung)
       Object.keys(Lung).map(para => {
-        console.log(
-          `${Lung[para]['key']}Mea`,
-          this.props.Lung[`${Lung[para]['key']}Mea`],
-        );
         this.state[`肺功能_${para}`] = this.props.Lung[
           `${Lung[para]['key']}Mea`
         ];
       });
-
+    const pid = this.props.pid;
     if (this.props.OtherExams) {
       if (this.props.OtherExams.ECGDetTime)
         this.props.OtherExams.ECGDetTime = moment(
@@ -751,7 +790,7 @@ class LaborInspect extends React.Component {
         this.props.ImageExams.detectTime = moment(
           this.props.ImageExams.detectTime,
         );
-      if (this.props.ImageExams.exmaMethod)
+      if (typeof this.props.ImageExams.exmaMethod === 'string')
         this.props.ImageExams.exmaMethod = this.props.ImageExams.exmaMethod.split(
           ',',
         );
@@ -760,13 +799,23 @@ class LaborInspect extends React.Component {
   }
   state = {
     evalution: 0,
+    UCGFiles:
+      this.props.OtherExams && this.props.OtherExams.UCGPath
+        ? this.props.OtherExams.UCGPath.split(',')
+        : [],
+    ECGFiles:
+      this.props.OtherExams && this.props.OtherExams.ECGPath
+        ? this.props.OtherExams.ECGPath.split(',')
+        : [],
+    imageFiles:
+      this.props.ImageExams && this.props.ImageExams.path
+        ? this.props.ImageExams.path.split(',')
+        : [],
   };
   render() {
     return (
       <div>
         {Object.keys(labor_inspect).map(item => {
-          console.log('name', item);
-          console.log('value', this.props[tableMap[item]]);
           return (
             <div>
               <Row className={'my-table-name'}>
@@ -795,21 +844,30 @@ class LaborInspect extends React.Component {
                 </Col>
               </Row>
               <Form
-                name={item}
-                initialValues={this.props[tableMap[item]]}
+                name={tableMap[item]['name']}
+                initialValues={this.props[tableMap[item]['name']]}
                 labelCol={{
                   span: 2,
                 }}
                 wrapperCol={{
                   span: 12,
                 }}
-                onFinish={e => {
+                onFinish={async e => {
                   Object.keys(labor_inspect[item]).map(para => {
                     e[`${labor_inspect[item][para]['key']}Mea`] = this.state[
                       `${item}_${para}`
                     ];
                   });
-                  console.log(e);
+                  e.pid = this.props.pid;
+                  e.treNum = this.props.treNum;
+                  const id_key = tableMap[item]['name']['_id'];
+                  if (this.state[id_key]) e.id = this.state[id_key];
+                  const res = await tableMap[item]['updateFun'](e);
+                  if (res.code === 200) {
+                    message.success(res.msg);
+                    this.setState({ [id_key]: res.id });
+                  } else message.error(res.msg);
+                  console.log(this.state);
                 }}
               >
                 {Object.keys(labor_inspect[item]).map(para => {
@@ -857,7 +915,8 @@ class LaborInspect extends React.Component {
                       </Row>
                       <Row style={{ margin: '0 0 15px' }}>
                         <Col offset={13}>
-                          {this.state[`${item}_${para}`] !== '0' ? (
+                          {this.state[`${item}_${para}`] &&
+                          this.state[`${item}_${para}`] !== '0' ? (
                             <Radio.Group
                               value={this.state[`${item}_${para}`]}
                               onChange={e => {
@@ -926,11 +985,19 @@ class LaborInspect extends React.Component {
             wrapperCol={{
               span: 12,
             }}
-            onFinish={e => {
+            onFinish={async e => {
               Object.keys(Lung).map(para => {
                 e[`${Lung[para]['key']}Mea`] = this.state[`肺功能_${para}`];
               });
-              console.log(e);
+              e.pid = this.props.pid;
+              e.treNum = this.props.treNum;
+              const id_key = 'Lung_id';
+              if (this.state[id_key]) e.id = this.state[id_key];
+              const res = await lungupdate(e);
+              if (res.code === 200) {
+                message.success(res.msg);
+                this.setState({ [id_key]: res.id });
+              } else message.error(res.msg);
             }}
           >
             {Object.keys(Lung).map(para => {
@@ -981,7 +1048,8 @@ class LaborInspect extends React.Component {
                   </Row>
                   <Row style={{ margin: '0 0 15px' }}>
                     <Col offset={16}>
-                      {this.state[`肺功能_${para}`] !== '0' ? (
+                      {this.state[`肺功能_${para}`] &&
+                      this.state[`肺功能_${para}`] !== '0' ? (
                         <Radio.Group
                           value={this.state[`肺功能_${para}`]}
                           onChange={e => {
@@ -1026,19 +1094,30 @@ class LaborInspect extends React.Component {
             <Col span={8}>
               <label>结果描述</label>
             </Col>
-            <Col span={8} style={{ 'text-align': 'center' }}>
+            <Col span={8}>
               <label>操作</label>
             </Col>
           </Row>
           <Form
             name="OtherExams"
             initialValues={this.props.OtherExams}
-            onFinish={e => {
+            onFinish={async e => {
+              e.ECGPath = this.state.ECGFiles.join(',');
+              e.UCGPath = this.state.UCGFiles.join(',');
+
               if (e.ECGDetTime)
                 e.ECGDetTime = e.ECGDetTime.format('YYYY-MM-DD');
               if (e.UCGDetTime)
                 e.UCGDetTime = e.UCGDetTime.format('YYYY-MM-DD');
-              console.log(e);
+              e.pid = this.props.pid;
+              e.treNum = this.props.treNum;
+              const id_key = 'OtherExams_id';
+              if (this.state[id_key]) e.id = this.state[id_key];
+              const res = await otherExamsupdate(e);
+              if (res.code === 200) {
+                message.success(res.msg);
+                this.setState({ [id_key]: res.id });
+              } else message.error(res.msg);
             }}
             wrapperCol={{ span: 16 }}
           >
@@ -1058,23 +1137,58 @@ class LaborInspect extends React.Component {
               </Col>
               <Col span={4}>
                 <Form.Item name={'ECGPath'} wrapperCol={{ span: 24 }}>
-                  <Upload>
+                  <Upload
+                    name="file[]" //发到后端的文件参数名
+                    action="/api/upload" //上传的地址
+                    headers={{
+                      authorization: 'authorization-text',
+                      token: getCookie('token'),
+                    }}
+                    multiple={true}
+                    data={{ pid: this.props.pid }}
+                    defaultFileList={(
+                      (this.props.OtherExams &&
+                        this.props.OtherExams.ECGPath) ||
+                      ''
+                    )
+                      .split(',')
+                      .filter(x => x !== '')
+                      .map(path => ({
+                        uid: `ECG-${path}`,
+                        name: path.split('/')[path.split('/').length - 1],
+                        status: 'done',
+                        url: `/file/${this.props.pid}/${
+                          path.split('/')[path.split('/').length - 1]
+                        }`,
+                      }))}
+                    onChange={info => {
+                      if (info.file.status !== 'uploading') {
+                        console.log(info.file, info.fileList);
+                      }
+                      if (info.file.status === 'done') {
+                        var fileList = this.state.ECGFiles;
+                        fileList = fileList.concat(info.file.response.path);
+                        this.setState({ ECGFiles: fileList });
+                        message.success(
+                          `${info.file.name} file uploaded successfully`,
+                        );
+                      } else if (info.file.status === 'error') {
+                        message.error(`${info.file.name} file upload failed.`);
+                      }
+                    }}
+                    onRemove={info => {
+                      var fileList = this.state.ECGFiles.filter(
+                        x => x.slice(-info.name) !== info.name,
+                      );
+                      this.setState({ ECGFiles: fileList });
+                      console.log(fileList);
+                    }}
+                  >
                     <Button>
-                      <UploadOutlined /> 上传
+                      <UploadOutlined /> 上传报告
                     </Button>
                   </Upload>
                 </Form.Item>
-              </Col>
-              <Col span={4}>
-                <Popconfirm
-                  title="确认删除?"
-                  //onConfirm={confirm}
-                  //onCancel={cancel}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <a href="#">删除</a>
-                </Popconfirm>
               </Col>
             </Row>
             <Row>
@@ -1093,23 +1207,59 @@ class LaborInspect extends React.Component {
               </Col>
               <Col span={4}>
                 <Form.Item name={'UCGPath'} wrapperCol={{ span: 24 }}>
-                  <Upload>
+                  <Upload
+                    name="file[]" //发到后端的文件参数名
+                    action="/api/upload" //上传的地址
+                    headers={{
+                      authorization: 'authorization-text',
+                      token: getCookie('token'),
+                    }}
+                    multiple={true}
+                    data={{ pid: this.props.pid }}
+                    defaultFileList={(
+                      (this.props.OtherExams &&
+                        this.props.OtherExams.UCGPath) ||
+                      ''
+                    )
+                      .split(',')
+                      .filter(x => x !== '')
+                      .map(path => ({
+                        uid: `UCG-${path}`,
+                        name: path.split('/')[path.split('/').length - 1],
+                        status: 'done',
+                        url: `/file/${this.props.pid}/${
+                          path.split('/')[path.split('/').length - 1]
+                        }`,
+                      }))}
+                    onChange={info => {
+                      if (info.file.status !== 'uploading') {
+                        console.log(info.file, info.fileList);
+                      }
+                      if (info.file.status === 'done') {
+                        console.log(info);
+                        var fileList = this.state.UCGFiles;
+                        fileList = fileList.concat(info.file.response.path);
+                        this.setState({ UCGFiles: fileList });
+                        message.success(
+                          `${info.file.name} file uploaded successfully`,
+                        );
+                      } else if (info.file.status === 'error') {
+                        message.error(`${info.file.name} file upload failed.`);
+                      }
+                    }}
+                    onRemove={info => {
+                      var fileList = this.state.UCGFiles.filter(
+                        x => x.slice(-info.name) !== info.name,
+                      );
+                      this.setState({ UCGFiles: fileList });
+                      console.log(fileList);
+                    }}
+                  >
                     <Button>
-                      <UploadOutlined /> 上传
+                      <UploadOutlined /> 上传报告
                     </Button>
                   </Upload>
                 </Form.Item>
-              </Col>
-              <Col span={4}>
-                <Popconfirm
-                  title="确认删除?"
-                  //onConfirm={confirm}
-                  //onCancel={cancel}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <a href="#">删除</a>
-                </Popconfirm>
               </Col>
             </Row>
             <Form.Item>
@@ -1142,18 +1292,27 @@ class LaborInspect extends React.Component {
             <Col span={4}>
               <label>肿瘤描述</label>
             </Col>
-            <Col span={4} style={{ 'text-align': 'center' }}>
+            <Col span={4}>
               <label>操作</label>
             </Col>
           </Row>
           <Form
             name="ImageExams"
             initialValues={this.props.ImageExams}
-            onFinish={e => {
+            onFinish={async e => {
+              e.path = this.state.imageFiles.join(',');
               if (e.detectTime)
                 e.detectTime = e.detectTime.format('YYYY-MM-DD');
               if (e.exmaMethod) e.exmaMethod = e.exmaMethod.join(',');
-              console.log(e);
+              e.pid = this.props.pid;
+              e.treNum = this.props.treNum;
+              const id_key = 'ImageExams_id';
+              if (this.state[id_key]) e.id = this.state[id_key];
+              const res = await imageExamsupdate(e);
+              if (res.code === 200) {
+                message.success(res.msg);
+                this.setState({ [id_key]: res.id });
+              } else message.error(res.msg);
             }}
             wrapperCol={{ span: 20 }}
           >
@@ -1200,25 +1359,59 @@ class LaborInspect extends React.Component {
                   <Input.TextArea rows={2} />
                 </Form.Item>
               </Col>
-              <Col span={2}>
+              <Col span={4}>
                 <Form.Item name={'path'} wrapperCol={{ span: 20 }}>
-                  <Upload>
+                  <Upload
+                    name="file[]" //发到后端的文件参数名
+                    action="/api/upload" //上传的地址
+                    headers={{
+                      authorization: 'authorization-text',
+                      token: getCookie('token'),
+                    }}
+                    multiple={true}
+                    data={{ pid: this.props.pid }}
+                    defaultFileList={(
+                      (this.props.ImageExams && this.props.ImageExams.path) ||
+                      ''
+                    )
+                      .split(',')
+                      .filter(x => x !== '')
+                      .map(path => ({
+                        uid: `image-${path}`,
+                        name: path.split('/')[path.split('/').length - 1],
+                        status: 'done',
+                        url: `/file/${this.props.pid}/${
+                          path.split('/')[path.split('/').length - 1]
+                        }`,
+                      }))}
+                    onChange={info => {
+                      if (info.file.status !== 'uploading') {
+                        console.log(info.file, info.fileList);
+                      }
+                      if (info.file.status === 'done') {
+                        var fileList = this.state.imageFiles;
+                        fileList = fileList.concat(info.file.response.path);
+                        this.setState({ imageFiles: fileList });
+                        message.success(
+                          `${info.file.name} file uploaded successfully`,
+                        );
+                      } else if (info.file.status === 'error') {
+                        message.error(`${info.file.name} file upload failed.`);
+                      }
+                    }}
+                    onRemove={info => {
+                      var fileList = this.state.imageFiles.filter(
+                        x => x.slice(-info.name) !== info.name,
+                      );
+                      this.setState({ imageFiles: fileList });
+                      console.log(fileList);
+                    }}
+                  >
                     <Button>
-                      <UploadOutlined /> 上传
+                      <UploadOutlined /> 上传报告
                     </Button>
                   </Upload>
                 </Form.Item>
-              </Col>
-              <Col span={2}>
-                <Popconfirm
-                  title="确认删除?"
-                  //onConfirm={confirm}
-                  //onCancel={cancel}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <a href="#">删除</a>
-                </Popconfirm>
               </Col>
             </Row>
             <Form.Item>
