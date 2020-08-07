@@ -17,3 +17,10 @@ export async function fakeAccountLogin(params: LoginParamsType) {
 export async function getFakeCaptcha(mobile: string) {
   return request(`/api/login/captcha?mobile=${mobile}`);
 }
+
+export async function modifyPassword(params: any) {
+  return request('/api/modify_password', {
+    method: 'POST',
+    data: params,
+  });
+}

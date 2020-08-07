@@ -26,6 +26,8 @@ import {
   removeRule,
   deletelist,
   exportExcel,
+  queryFollowUp,
+  alarmOff,
 } from './service';
 import { Link } from 'umi';
 import { history } from 'umi';
@@ -79,6 +81,8 @@ class FULList extends React.Component {
     current: 1,
     pageSize: 10,
     visible: false,
+    visableFollowUp: false,
+    followUpList: [],
   };
   columns = [
     {
@@ -146,6 +150,13 @@ class FULList extends React.Component {
         });
       }
       this.setState({ data: res.data, total: res.total });
+      const res1 = await queryFollowUp({});
+      if (res1.code == 200) {
+        if (res1.data && res1.data.length > 0) {
+          this.setState({ followUpList: res1.data });
+          this.setState({ visableFollowUp: true });
+        }
+      }
     } else {
       console.log('请求失败', res);
     }
@@ -221,6 +232,54 @@ class FULList extends React.Component {
           src={require('@/img/logo.png')}
           style={{ height: 60, width: 120 }}
         />
+        <Modal
+          destroyOnClose
+          title="随访提醒"
+          visible={this.state.visableFollowUp}
+          onCancel={() => {
+            this.setState({ visableFollowUp: false });
+          }}
+          footer={null}
+        >
+          <Card title="待随访病人">
+            {this.state.followUpList.map(item => (
+              <Card.Grid
+                key={item.id}
+                style={{
+                  width: '100%',
+                  textAlign: 'left',
+                }}
+                // onTabChange
+              >
+                <p>住院号：{item.hospitalNumber}</p>
+                <p>身份证号：{item.idNumber}</p>
+                <p>姓名：{item.name}</p>
+                <p>电话号码：{item.phoneNumber}</p>
+                <p>
+                  下次随访时间：
+                  {moment(item.nextFollowUpDate).format('YYYY-MM-DD')}
+                </p>
+                <div style={{ 'text-align': 'center' }}>
+                  <StopTwoTone
+                    style={{ fontSize: 30 }}
+                    onClick={async e => {
+                      const res = await alarmOff({ pid: item.id });
+                      if (res.code === 200) {
+                        var list = this.state.followUpList.filter(
+                          x => x.id !== item.id,
+                        );
+                        this.setState({ followUpList: list });
+                        message.success('提醒已关闭');
+                      } else {
+                        message.error('操作失败:' + res.msg);
+                      }
+                    }}
+                  />
+                </div>
+              </Card.Grid>
+            ))}
+          </Card>
+        </Modal>
         <div>
           <Select
             defaultValue="all"

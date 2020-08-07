@@ -164,7 +164,6 @@ class FollowUpInfo extends React.Component {
         render: (text, record, index) => (
           <Upload
             name="file[]" //发到后端的文件参数名
-            //action="/api/upload" //上传的地址
             action="/api/upload" //上传的地址
             headers={{
               authorization: 'authorization-text',
@@ -174,11 +173,12 @@ class FollowUpInfo extends React.Component {
             data={{ pid: this.props.pid }}
             defaultFileList={(record['savFilPath'] || '')
               .split(',')
+              .filter(x => x !== '')
               .map(path => ({
-                uid: `${index}`,
+                uid: `${index}_${path}`,
                 name: path.split('/')[path.split('/').length - 1],
                 status: 'done',
-                url: `http://localhost:8088/file/${this.props.pid}/${
+                url: `/file/${this.props.pid}/${
                   path.split('/')[path.split('/').length - 1]
                 }`,
               }))}
@@ -196,6 +196,12 @@ class FollowUpInfo extends React.Component {
               } else if (info.file.status === 'error') {
                 message.error(`${info.file.name} file upload failed.`);
               }
+            }}
+            onRemove={info => {
+              var fileList = record['savFilPath']
+                .split(',')
+                .filter(x => x.slice(-info.name) !== info.name);
+              record['savFilPath'] = fileList.toString();
             }}
           >
             <Button>

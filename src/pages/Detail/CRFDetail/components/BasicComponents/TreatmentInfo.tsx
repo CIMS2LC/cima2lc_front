@@ -94,7 +94,66 @@ class TreatmentInfo extends React.Component {
             <LaborInspect
               pid={this.props.pid}
               treNum={this.props.treNum}
-              initialValues={this.props.initialValues}
+              BloodRoutine={
+                this.props.initialValues
+                  ? this.props.initialValues.BloodRoutine[this.props.treNum]
+                  : {}
+              }
+              BloodBio={
+                this.props.initialValues
+                  ? this.props.initialValues.BloodBio[this.props.treNum]
+                  : {}
+              }
+              Thyroid={
+                this.props.initialValues
+                  ? this.props.initialValues.Thyroid[this.props.treNum]
+                  : {}
+              }
+              Coagulation={
+                this.props.initialValues
+                  ? this.props.initialValues.Coagulation[this.props.treNum]
+                  : {}
+              }
+              MyocardialEnzyme={
+                this.props.initialValues
+                  ? this.props.initialValues.MyocardialEnzyme[this.props.treNum]
+                  : {}
+              }
+              Cytokines={
+                this.props.initialValues
+                  ? this.props.initialValues.Cytokines[this.props.treNum]
+                  : {}
+              }
+              LymSubsets={
+                this.props.initialValues
+                  ? this.props.initialValues.LymSubsets[this.props.treNum]
+                  : {}
+              }
+              UrineRoutine={
+                this.props.initialValues
+                  ? this.props.initialValues.UrineRoutine[this.props.treNum]
+                  : {}
+              }
+              TumorMarker={
+                this.props.initialValues
+                  ? this.props.initialValues.TumorMarker[this.props.treNum]
+                  : {}
+              }
+              Lung={
+                this.props.initialValues
+                  ? this.props.initialValues.Lung[this.props.treNum]
+                  : {}
+              }
+              OtherExams={
+                this.props.initialValues
+                  ? this.props.initialValues.OtherExams[this.props.treNum]
+                  : {}
+              }
+              ImageExams={
+                this.props.initialValues
+                  ? this.props.initialValues.ImageExams[this.props.treNum]
+                  : {}
+              }
             />
           </TabPane>
           <TabPane tab="免疫组化" key="immunohistochemical">

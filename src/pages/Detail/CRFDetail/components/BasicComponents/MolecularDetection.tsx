@@ -40,18 +40,21 @@ class MolecularDetection extends React.Component {
       });
       this.state.molecular_detection_labels = molecular_detection_state;
       if (this.initialValues['path']) {
-        const path_list = (this.initialValues['path'] || '').split(',');
+        const path_list = (this.initialValues['path'] || '')
+          .split(',')
+          .filter(x => x !== '');
         var index = 0;
         path_list.map(item => {
           const tmp_list = item.split('/');
           const fileName = tmp_list[tmp_list.length - 1];
           console.log(tmp_list);
           this.molDefaultFileList.push({
-            uid: `${index}`,
+            uid: `-${index}`,
             name: fileName,
             status: 'done',
-            url: `http://localhost:8088/file/${this.pid}/${fileName}`,
+            url: `/file/${this.pid}/${fileName}`,
           });
+          index = 1;
         });
         console.log(this.molDefaultFileList);
       }
@@ -61,7 +64,10 @@ class MolecularDetection extends React.Component {
   id = -1;
   pid = -1;
   state = {
-    file_list: [],
+    file_list:
+      this.props.initialValues && this.props.initialValues.path
+        ? this.props.initialValues.path
+        : [],
     TMB_value: false,
     molecular_detection_labels: {
       ALK: 0,
@@ -209,6 +215,12 @@ class MolecularDetection extends React.Component {
               } else if (info.file.status === 'error') {
                 message.error(`${info.file.name} file upload failed.`);
               }
+            }}
+            onRemove={info => {
+              var fileList = this.state.file_list.filter(
+                x => x.slice(-info.name) !== info.name,
+              );
+              this.setState({ file_list: fileList });
             }}
           >
             <Button>
