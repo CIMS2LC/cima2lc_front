@@ -10,6 +10,7 @@ import {
   Checkbox,
   Radio,
   DatePicker,
+  message,
 } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { history, Dispatch, connect } from 'umi';
@@ -22,6 +23,7 @@ import Immunohistochemical from './components/BasicComponents/Immunohistochemica
 import MolecularDetection from './components/BasicComponents/MolecularDetection';
 import PreHistory from './components/BasicComponents/PreHistory';
 import InitialDiagnosisProcess from './components/BasicComponents/InitialDiagnosisProcess';
+import OtherInspect from './components/BasicComponents/OtherInspect';
 import {
   Patientsave,
   Patientupdate,
@@ -37,7 +39,6 @@ const { Header, Content, Sider } = Layout;
 const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 const layout = {
-  labelAlign: 'left',
   labelCol: {
     span: 2,
   },
@@ -110,6 +111,8 @@ class CRFDetail extends React.Component {
     crfDetail: undefined,
     basicInfoFormKey: 'basicInfoFormKey',
     isInit: true,
+    //修改
+    idToDate: '20200203',
   };
   idNumber_onChange = (value: any) => {
     console.log('changed', value);
@@ -189,6 +192,7 @@ class CRFDetail extends React.Component {
                   }}
                 >
                   <Menu.Item key="baseline">基线资料</Menu.Item>
+                  <Menu.Item key="followUp">随访信息</Menu.Item>
                   <SubMenu
                     key="treatment"
                     title="治疗信息"
@@ -244,7 +248,6 @@ class CRFDetail extends React.Component {
                       添加
                     </Menu.Item>
                   </SubMenu>
-                  <Menu.Item key="followUp">随访信息</Menu.Item>
                 </Menu>
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 280 }}>
@@ -259,6 +262,22 @@ class CRFDetail extends React.Component {
                           (this.state.crfDetail || {}).Patient,
                         )}
                         onFinish={async values => {
+                          //修改
+                          if (values.idNumber.length != 18) {
+                            return;
+                          }
+                          if (values.hospitalNumber == '') {
+                            alert('住院号/就诊号为空！');
+                            return;
+                          }
+                          if (values.patientName == '') {
+                            alert('病人姓名为空！');
+                            return;
+                          }
+                          if (values.phoneNumber1 == '') {
+                            alert('电话号码(必填)为空！');
+                            return;
+                          }
                           if (values.birthday)
                             values.birthday = values['birthday'].format(
                               'YYYY-MM-DD',
@@ -266,15 +285,15 @@ class CRFDetail extends React.Component {
                           if (this.state.pid == -1) {
                             const res = await Patientsave({
                               id: this.state.pid,
-                              treNum: this.props.treNum,
                               ...values,
                             });
                             this.update_detail();
                             if (res.code == 200) {
-                              this.setState({ pid: res.id });
-                              console.log('提交成功');
+                              this.setState({ pid: res.id, id: res.id });
+                              this.props.crfDetail = this.state;
+                              message.success('保存成功');
                             } else {
-                              console.log('提交失败');
+                              message.error('保存失败，' + res.msg);
                             }
                           } else {
                             const res = await Patientupdate({
@@ -292,9 +311,10 @@ class CRFDetail extends React.Component {
                               this.setState({
                                 [ModelList[0]]: key,
                               });
-                              console.log('更新成功');
+                              message.success('保存成功');
+                              this.props.crfDetail = this.state;
                             } else {
-                              console.log('更新失败');
+                              message.error('保存失败，' + res.msg);
                             }
                           }
                         }}
@@ -303,11 +323,25 @@ class CRFDetail extends React.Component {
                           <Input
                             maxLength={18}
                             onBlur={async e => {
+                              e.persist();
                               const res = await illCaseFind({
                                 key: 'idNumber',
                                 value: e.target.value,
                                 share_add: true,
                               });
+                              //修改
+                              if (e.target.value.length !== 18) {
+                                console.log('身份证号位数不对！');
+                                alert('身份证号应该为18位！');
+                              } else {
+                                let start = 6;
+                                let end = 14;
+                                let date = e.target.value.slice(start, end);
+                                this.setState({
+                                  idToDate: '1999-10-03',
+                                });
+                                //alert(this.state.idToDate);
+                              }
                               if (res.code == 200) {
                                 this.state.SORModelValue = res.data;
                                 this.setState({ SORModelVisible: true });
@@ -454,6 +488,12 @@ class CRFDetail extends React.Component {
                             ? this.state.crfDetail.TumorMarker[0]
                             : undefined
                         }
+                      />
+                    </TabPane>
+                    <TabPane tab="其他检查" key="other_inspect">
+                      <OtherInspect
+                        pid={this.state.pid}
+                        treNum={0}
                         Lung={
                           this.state.crfDetail && this.state.crfDetail.Lung
                             ? this.state.crfDetail.Lung[0]

@@ -1,7 +1,7 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
-import { Radio, DatePicker, Cascader, Rate, Input } from 'antd';
-import { sideEffectsave, signssave, signsupdate } from '../../service';
+import { Radio, DatePicker, Input } from 'antd';
+import { signsupdate } from '../../service';
 import moment from 'moment';
 
 const SystemSign = props => {
@@ -18,7 +18,7 @@ const SystemSign = props => {
           title: '序号',
           dataIndex: 'key',
           key: 'key',
-          width: '5%',
+          width: 40,
           render: (text, record, index) => {
             return <span>{index + 1}</span>;
           },
@@ -27,8 +27,8 @@ const SystemSign = props => {
           title: '症状名称',
           dataIndex: 'symName',
           key: 'symName',
-          width: '10%',
-          render: (text, record, index) => (
+          width: 120,
+          render: (text, record) => (
             <Input
               defaultValue={record['symName']}
               onChange={e => {
@@ -41,8 +41,8 @@ const SystemSign = props => {
           title: '开始日期',
           dataIndex: 'begDate',
           key: 'begDate',
-          width: '10%',
-          render: (text, record, index) => (
+          width: 120,
+          render: (text, record) => (
             <DatePicker
               defaultValue={moment(record['begDate'])}
               onChange={(e, eString) => {
@@ -55,8 +55,8 @@ const SystemSign = props => {
           title: '目前是否存在',
           dataIndex: 'isExe',
           key: 'isExe',
-          width: '10%',
-          render: (text, record, index) => (
+          width: 120,
+          render: (text, record) => (
             <Radio.Group
               defaultValue={record['isExe']}
               onChange={e => {
@@ -72,8 +72,8 @@ const SystemSign = props => {
           title: '结束日期',
           dataIndex: 'endDate',
           key: 'endDate',
-          width: '10%',
-          render: (text, record, index) => (
+          width: 120,
+          render: (text, record) => (
             <DatePicker
               defaultValue={moment(record['begDate'])}
               onChange={(e, eString) => {

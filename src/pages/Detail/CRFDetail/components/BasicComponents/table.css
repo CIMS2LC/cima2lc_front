@@ -1,0 +1,27 @@
+  .my-col {
+    border: 1px solid #000;
+    border-collapse: inherit;
+    text-align : center;
+    vertical-align: center;
+    margin-right:-1px; 
+    margin-bottom:-1px;
+    display: flex;    
+    justify-content: center;    
+    height: 80px;
+    padding-top: 15px;
+    word-wrap: break-word;
+  }
+  .my-high-col {
+    border: 1px solid #000;
+    border-collapse: inherit;
+    text-align : center;
+    vertical-align: center;
+    margin-right:-1px; 
+    margin-bottom:-1px;
+    height: 120px;
+    padding-top: 15px;    
+    word-wrap: break-word;
+  }
+  .my-input {
+    text-align : center;
+  }

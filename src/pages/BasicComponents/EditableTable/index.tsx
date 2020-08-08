@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, message } from 'antd';
 
 interface EditableRowProps {
   index: number;
@@ -100,6 +100,7 @@ class EditableTable extends React.Component {
       {
         title: '常用操作',
         dataIndex: 'commonOper',
+        width: 120,
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <span>
@@ -190,6 +191,7 @@ class EditableTable extends React.Component {
           bordered
           dataSource={dataSource}
           columns={columns}
+          scroll={{ x: '800px' }}
         />
         {this.props.hassave ? (
           <Button
@@ -201,6 +203,8 @@ class EditableTable extends React.Component {
                 treNum: this.props.treNum,
                 data: this.state.dataSource,
               });
+              if (res.code === 200) message.success('保存成功');
+              else message.error('保存失败，' + res.msg);
               console.log(this.state.dataSource);
             }}
           >

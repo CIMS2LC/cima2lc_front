@@ -9,8 +9,8 @@ import {
   Table,
   Upload,
   message,
-  InputNumber,
   Input,
+  InputNumber,
 } from 'antd';
 import PicturesWall from './PicturesWall';
 import {
@@ -23,28 +23,28 @@ import { follInfosave, follInfoupdate, follInfodelete } from '../../service';
 import moment from 'moment';
 
 const fw_Options = [
-  { label: '电话', value: 1 },
-  { label: '门诊', value: 2 },
-  { label: '住院', value: 3 },
+  { label: '电话', value: '1' },
+  { label: '门诊', value: '2' },
+  { label: '住院', value: '3' },
 ];
 const re_Options = [
-  { label: 'PD-进展', value: 1 },
-  { label: 'SD-稳定', value: 2 },
-  { label: 'PR-部分缓解', value: 3 },
-  { label: 'CR-完全缓解', value: 4 },
-  { label: '术后未发现新病灶', value: 5 },
+  { label: 'PD-进展', value: '1' },
+  { label: 'SD-稳定', value: '2' },
+  { label: 'PR-部分缓解', value: '3' },
+  { label: 'CR-完全缓解', value: '4' },
+  { label: '术后未发现新病灶', value: '5' },
 ];
 const ls_Options = [
-  { label: '死亡', value: 1 },
-  { label: '存活', value: 2 },
-  { label: '失联', value: 3 },
+  { label: '死亡', value: '1' },
+  { label: '存活', value: '2' },
+  { label: '失联', value: '3' },
 ];
 const it_Options = [
-  { label: 'X光', value: 1 },
-  { label: '超声', value: 2 },
-  { label: 'CT', value: 3 },
-  { label: 'MRI', value: 4 },
-  { label: 'PET/CT', value: 5 },
+  { label: 'X光', value: '1' },
+  { label: '超声', value: '2' },
+  { label: 'CT', value: '3' },
+  { label: 'MRI', value: '4' },
+  { label: 'PET/CT', value: '5' },
 ];
 
 function onChange(text, record, index) {
@@ -60,7 +60,7 @@ class FollowUpInfo extends React.Component {
         title: '序号',
         dataIndex: 'key',
         key: 'key',
-        width: '5%',
+        width: 40,
         render: (text, record, index) => {
           return <span>{index + 1}</span>;
         },
@@ -69,7 +69,7 @@ class FollowUpInfo extends React.Component {
         title: '随访日期',
         dataIndex: 'date',
         key: 'date',
-        width: '10%',
+        width: 120,
         render: (text, record, index) => (
           <DatePicker
             defaultValue={moment(record['date'])}
@@ -83,10 +83,10 @@ class FollowUpInfo extends React.Component {
         title: '随访方式',
         dataIndex: 'folMet',
         key: 'folMet',
-        width: '10%',
+        width: 120,
         render: (text, record, index) => (
           <Select
-            defaultValue={record['folMet']}
+            defaultValue={String(record['folMet'])}
             style={{ width: 120 }}
             options={fw_Options}
             onChange={e => {
@@ -99,10 +99,10 @@ class FollowUpInfo extends React.Component {
         title: '疗效评估',
         dataIndex: 'effEva',
         key: 'effEva',
-        width: '10%',
+        width: 120,
         render: (text, record, index) => (
           <Select
-            defaultValue={record['effEva']}
+            defaultValue={String(record['effEva'])}
             style={{ width: 120 }}
             options={re_Options}
             onChange={e => {
@@ -115,10 +115,10 @@ class FollowUpInfo extends React.Component {
         title: '生存状态',
         dataIndex: 'livSta',
         key: 'livSta',
-        width: '10%',
+        width: 120,
         render: (text, record, index) => (
           <Select
-            defaultValue={record['livSta']}
+            defaultValue={String(record['livSta'])}
             style={{ width: 120 }}
             options={ls_Options}
             onChange={e => {
@@ -131,10 +131,10 @@ class FollowUpInfo extends React.Component {
         title: '影像类型',
         dataIndex: 'imaFilType',
         key: 'imaFilType',
-        width: '10%',
+        width: 120,
         render: (text, record, index) => (
           <Select
-            defaultValue={record['imaFilType']}
+            defaultValue={String(record['imaFilType'])}
             style={{ width: 120 }}
             options={it_Options}
             onChange={e => {
@@ -143,27 +143,27 @@ class FollowUpInfo extends React.Component {
           />
         ),
       },
-      {
-        title: 'suv',
-        dataIndex: 'suv',
-        width: '10%',
-        render: (text, record, index) => (
-          <InputNumber
-            defaultValue={record['suv']}
-            onChange={e => {
-              onChange(e, record, 'suv');
-            }}
-          />
-        ),
-      },
+      // {
+      //   title: 'suv',
+      //   dataIndex: 'suv',
+      //   width: '10%',
+      //   render: (text, record, index) => (
+      //     <InputNumber
+      //       onChange={e => {
+      //         onChange(e, record, 'suv');
+      //       }}
+      //     />
+      //   ),
+      // },
       {
         title: '影像',
         dataIndex: 'savFilPath',
         key: 'savFilPath',
-        width: '10%',
+        width: 80,
         render: (text, record, index) => (
           <Upload
             name="file[]" //发到后端的文件参数名
+            //action="/api/upload" //上传的地址
             action="/api/upload" //上传的地址
             headers={{
               authorization: 'authorization-text',
@@ -213,10 +213,9 @@ class FollowUpInfo extends React.Component {
       {
         title: '备注',
         dataIndex: 'remarks',
-        width: '10%',
+        width: 80,
         render: (text, record, index) => (
           <Input
-            defaultValue={record['remarks']}
             onChange={e => {
               onChange(e.target.value, record, 'remarks');
             }}
@@ -226,6 +225,7 @@ class FollowUpInfo extends React.Component {
       {
         title: 'operation',
         dataIndex: 'operation',
+        width: 80,
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <span>
@@ -257,7 +257,9 @@ class FollowUpInfo extends React.Component {
         this.setState({
           dataSource: dataSource.filter(item => item.id !== record.id),
         });
+        message.success('删除成功');
       } else {
+        message.error('删除失败，' + res.msg);
         console.log('删除失败');
       }
     } else {
@@ -320,11 +322,11 @@ class FollowUpInfo extends React.Component {
         </Button>
         <Table
           //components={components}
-          scroll={{ x: '120%' }}
           rowClassName={() => 'editable-row'}
           bordered
           dataSource={dataSource}
           columns={columns}
+          scroll={{ x: '1400px' }}
         />
         <Button
           type="primary"
@@ -336,7 +338,10 @@ class FollowUpInfo extends React.Component {
               pid: this.props.pid,
               data: this.state.dataSource,
             });
-            this.setState({ dataSource: res.data });
+            if (res.code === 200) {
+              this.setState({ dataSource: res.data });
+              message.success('保存成功');
+            } else message.error('保存失败，' + res.msg);
           }}
         >
           保存

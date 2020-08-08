@@ -16,21 +16,23 @@ import {
   Popconfirm,
   Row,
   Col,
+  message,
+  Tree,
 } from 'antd';
 import TreatSchedule from './TreatSchedule';
 import { treRecsave, treRecupdate } from '../../service';
 import moment from 'moment';
+import { treeData } from './InitialDiagnosisProcess';
 const layout = {
   labelAlign: 'left',
   labelCol: {
-    span: 4,
+    span: 3,
   },
   wrapperCol: {
-    span: 24,
+    span: 8,
   },
 };
 const layout1 = {
-  labelAlign: 'left',
   labelCol: {
     span: 3,
   },
@@ -51,14 +53,24 @@ const treatment_map = {
   other: 'Other',
 };
 
+const biopsy_way_Options = [
+  '手术',
+  '纵隔镜',
+  '胸腔镜',
+  '肺穿刺',
+  '纤支镜',
+  'EBUS',
+  'EUS',
+  '淋巴结活检',
+  '其他',
+];
 class TreatmentRecord extends React.Component {
   constructor(props: any) {
     super(props);
     if (this.props.initialValues) {
-      this.TreRec = this.props.initialValues.TreRec.filter(
-        x => Number(x.treNum) === Number(this.props.treNum),
-      )[0];
+      this.TreRec = this.props.initialValues.TreRec[this.props.treNum - 1];
       if (this.TreRec) {
+        this.state.effEva = this.TreRec.beEffEva;
         if (this.TreRec.beEffEvaDate)
           this.TreRec['beEffEvaDate'] = moment(this.TreRec.beEffEvaDate);
         if (this.TreRec.proDate)
@@ -67,17 +79,16 @@ class TreatmentRecord extends React.Component {
           this.state.trement_name = this.TreRec.trement;
           var treVal =
             ['surgery', 'radiotherapy'].indexOf(this.state.trement_name) != -1
-              ? this.props.initialValues[
-                  treatment_map[this.TreRec.trement]
-                ].filter(x => Number(x.treNum) === Number(this.props.treNum))[0]
-              : this.props.initialValues['OneToFive'].filter(
-                  x => Number(x.treNum) === Number(this.props.treNum),
-                )[0];
+              ? this.props.initialValues[treatment_map[this.TreRec.trement]][
+                  this.props.treNum - 1
+                ]
+              : this.props.initialValues['OneToFive'][this.props.treNum - 1];
           if (
             ['one', 'two', 'three', 'four', 'five', 'other'].indexOf(
               this.state.trement_name,
             ) != -1
           ) {
+            this.state.patDia = treVal.patDiaRes;
             if (treVal.begDate) treVal.begDate = moment(treVal.begDate);
             if (treVal.endDate) treVal.endDate = moment(treVal.endDate);
             if (treVal.treSolu) {
@@ -122,6 +133,7 @@ class TreatmentRecord extends React.Component {
   }
   TreRec = undefined;
   state = {
+    patDia: '',
     treatment: '',
     chemotherapy: false,
     targetedtherapy: false,
@@ -137,6 +149,7 @@ class TreatmentRecord extends React.Component {
     posAdjChem: false,
     isPro: false,
     clinTri: false, //临床实验名称
+    effEva: -1,
   };
   trement = [
     { label: '1线', value: 'one' },
@@ -167,19 +180,27 @@ class TreatmentRecord extends React.Component {
     '其他',
   ];
   best_effect_evalution = [
-    { label: 'PD-进展', value: 1 },
-    { label: 'SD-稳定', value: 2 },
-    { label: 'PR-部分缓解', value: 3 },
-    { label: 'CR-完全缓解', value: 4 },
-    { label: '术后未发现新病灶', value: 5 },
+    { label: 'PD-进展', value: '1' },
+    { label: 'SD-稳定', value: '2' },
+    { label: 'PR-部分缓解', value: '3' },
+    { label: 'CR-完全缓解', value: '4' },
+    { label: '术后未发现新病灶', value: '5' },
   ];
+  onCheck = (checkedKeys: string) => {
+    //点击病例诊断，把数据格式改变传入state
+    let checkvalues = checkedKeys.toString();
+    this.setState({ patDia: checkvalues });
+  };
   onfinish = async (values: any) => {
     console.log(values);
-    if (values.proDate) values.proDate = values.proDate.format('YYYY-MM-DD');
-    if (values.beEffEvaDate)
+    if (values.proDate && typeof values.proDate !== 'string')
+      values.proDate = values.proDate.format('YYYY-MM-DD');
+    if (values.beEffEvaDate && typeof values.beEffEvaDate !== 'string')
       values.beEffEvaDate = values.beEffEvaDate.format('YYYY-MM-DD');
-    if (values.begDate) values.begDate = values.begDate.format('YYYY-MM-DD');
-    if (values.endDate) values.endDate = values.endDate.format('YYYY-MM-DD');
+    if (values.begDate && typeof values.begDate !== 'string')
+      values.begDate = values.begDate.format('YYYY-MM-DD');
+    if (values.endDate && typeof values.endDate !== 'string')
+      values.endDate = values.endDate.format('YYYY-MM-DD');
 
     //处理treSolu,1-5线处理
     if (
@@ -194,11 +215,17 @@ class TreatmentRecord extends React.Component {
       if (this.state.antivasculartherapy) treSolu.push('AntivascularTherapy');
       if (this.state.othertherapy) treSolu.push('Other');
       values[this.state.trement_name]['treSolu'] = treSolu.toString();
-      if (values[this.state.trement_name]['begDate'])
+      if (
+        values[this.state.trement_name]['begDate'] &&
+        typeof values[this.state.trement_name]['begDate'] !== 'string'
+      )
         values[this.state.trement_name]['begDate'] = values[
           this.state.trement_name
         ]['begDate'].format('YYYY-MM-DD');
-      if (values[this.state.trement_name]['endDate'])
+      if (
+        values[this.state.trement_name]['endDate'] &&
+        typeof values[this.state.trement_name]['endDate'] !== 'string'
+      )
         values[this.state.trement_name]['endDate'] = values[
           this.state.trement_name
         ]['endDate'].format('YYYY-MM-DD');
@@ -207,20 +234,30 @@ class TreatmentRecord extends React.Component {
       values['ImmunityTherapy'] = this.state.ImmunityTherapy;
       values['AntivascularTherapy'] = this.state.AntivascularTherapy;
       values['Other'] = this.state.Other;
+      values[this.state.trement_name]['patDiaRes'] = this.state.patDia;
     }
     if (['surgery'].indexOf(this.state.trement_name) != -1) {
       values['Chemotherapy'] = this.state.Chemotherapy;
-      if (values[this.state.trement_name]['surDate'])
+      if (
+        values[this.state.trement_name]['surDate'] &&
+        typeof values[this.state.trement_name]['surDate'] !== 'string'
+      )
         values[this.state.trement_name]['surDate'] = values[
           this.state.trement_name
         ]['surDate'].format('YYYY-MM-DD');
     }
     if (['radiotherapy'].indexOf(this.state.trement_name) != -1) {
-      if (values[this.state.trement_name]['begDate'])
+      if (
+        values[this.state.trement_name]['begDate'] &&
+        typeof values[this.state.trement_name]['begDate'] !== 'string'
+      )
         values[this.state.trement_name]['begDate'] = values[
           this.state.trement_name
         ]['begDate'].format('YYYY-MM-DD');
-      if (values[this.state.trement_name]['endDate'])
+      if (
+        values[this.state.trement_name]['endDate'] &&
+        typeof values[this.state.trement_name]['endDate'] !== 'string'
+      )
         values[this.state.trement_name]['endDate'] = values[
           this.state.trement_name
         ]['endDate'].format('YYYY-MM-DD');
@@ -232,8 +269,10 @@ class TreatmentRecord extends React.Component {
       data: { id: this.id, treNum: this.props.treNum, ...values },
     });
     if (res && res.code == 200) {
+      message.success('保存成功');
       console.log('更新成功');
     } else {
+      message.error('保存失败，' + res.msg);
       console.log('更新失败');
     }
   };
@@ -391,23 +430,23 @@ class TreatmentRecord extends React.Component {
                 }}
               />
             </Form.Item>
+
             <Form.Item label="备注" name={[this.state.trement_name, 'note']}>
-                              
               <Input.TextArea rows={4} />
-                            
             </Form.Item>
-            <Form.Item
-              label="开始日期"
-              name={[this.state.trement_name, 'begDate']}
-            >
-              <DatePicker />
-            </Form.Item>
-            <Form.Item
-              label="结束日期"
-              name={[this.state.trement_name, 'endDate']}
-            >
-              <DatePicker />
-            </Form.Item>
+
+            {/* <Form.Item
+                label="开始日期"
+                name={[this.state.trement_name, 'begDate']}
+              >
+                <DatePicker />
+              </Form.Item>
+              <Form.Item
+                label="结束日期"
+                name={[this.state.trement_name, 'endDate']}
+              >
+                <DatePicker />
+              </Form.Item> */}
 
             <Form.Item
               label="是否重复活检"
@@ -422,7 +461,7 @@ class TreatmentRecord extends React.Component {
               label="活检方式"
               name={[this.state.trement_name, 'bioMet']}
             >
-              <Input />
+              <Checkbox.Group options={biopsy_way_Options} />
             </Form.Item>
             <Form.Item
               label="取材部位"
@@ -440,7 +479,12 @@ class TreatmentRecord extends React.Component {
               label="病理诊断结果"
               name={[this.state.trement_name, 'patDiaRes']}
             >
-              <Input />
+              <Tree
+                checkable
+                checkedKeys={(this.state.patDia || '').split(',')}
+                onCheck={this.onCheck}
+                treeData={treeData}
+              />
             </Form.Item>
           </Form.Item>
         ) : null}
@@ -473,9 +517,7 @@ class TreatmentRecord extends React.Component {
               label="清扫组数"
               name={[this.state.trement_name, 'cleGro']}
             >
-                            
               <Input />
-                          
             </Form.Item>
             <Form.Item
               label="手术日期"
@@ -573,10 +615,9 @@ class TreatmentRecord extends React.Component {
             <Form.Item
               label="分割次数"
               name={[this.state.trement_name, 'splTim']}
-              {...layout1}
             >
               <Row>
-                <Col span={12}>
+                <Col span={6}>
                   <InputNumber />
                 </Col>
                 <Col span={12}>
@@ -586,9 +627,9 @@ class TreatmentRecord extends React.Component {
                   >
                     <Select>
                       <Option value={'qd'}>qd</Option>
-                                            <Option value={'bid'}>bid</Option>
-                                            <Option value={'tid'}>tid</Option>
-                                            <Option value={'qid'}>qid</Option>
+                      <Option value={'bid'}>bid</Option>
+                      <Option value={'tid'}>tid</Option>
+                      <Option value={'qid'}>qid</Option>
                     </Select>
                   </Form.Item>
                 </Col>
@@ -601,14 +642,25 @@ class TreatmentRecord extends React.Component {
           <DatePicker />
         </Form.Item>
         <Form.Item label="最佳疗效评估" name="beEffEva">
-          <Select style={{ width: 120 }} options={this.best_effect_evalution} />
+          <Select
+            style={{ width: 120 }}
+            options={this.best_effect_evalution}
+            defaultValue={String(this.state.effEva)}
+            onChange={e => {
+              this.setState({ effEva: e });
+            }}
+          />
         </Form.Item>
-        <Form.Item label="进展日期" name="proDate">
-          <DatePicker />
-        </Form.Item>
-        <Form.Item label="进展描述" name="proDes">
-          <Input />
-        </Form.Item>
+        {String(this.state.effEva) === '1' ? (
+          <div>
+            <Form.Item label="进展日期" name="proDate">
+              <DatePicker />
+            </Form.Item>
+            <Form.Item label="进展描述" name="proDes">
+              <Input />
+            </Form.Item>
+          </div>
+        ) : null}
         <Form.Item>
           <Button type="primary" htmlType="submit">
             保存

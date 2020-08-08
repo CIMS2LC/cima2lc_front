@@ -14,6 +14,7 @@ import {
   Select,
   Row,
   Col,
+  message,
 } from 'antd';
 import moment from 'moment';
 import { check } from 'prettier';
@@ -592,16 +593,20 @@ class InitialDiagnosisProcess extends React.Component {
         ...values,
       });
       if (res.code == 200) {
+        message.success('保存成功');
         console.log('更新成功');
       } else {
+        message.error('保存失败，' + res.msg);
         console.log('更新失败');
       }
     } else {
       const res = await IniDiaProsave({ pid: this.props.pid, ...values });
       if (res.code == 200) {
         this.id = res.id;
+        message.success('保存成功');
         console.log('提交成功');
       } else {
+        message.error('保存失败，' + res.msg);
         console.log('提交失败');
       }
     }
@@ -718,6 +723,7 @@ class InitialDiagnosisProcess extends React.Component {
           />
         </Form.Item>
 
+        {/* <div>核分裂像/2mm2=</div> */}
         <Form.Item
           label="核分裂像/2mm2=个人显微镜8.3个40倍高倍视野"
           name="mitIma"
@@ -742,7 +748,7 @@ class InitialDiagnosisProcess extends React.Component {
         <Form.Item label="肿块大小(mm)" name="massSize" {...inputlayout}>
           <Input />
         </Form.Item>
-        <Form.Item label="Ki67（%）" name="Ki67" {...inputlayout}>
+        <Form.Item label="Ki67(%)" name="Ki67" {...inputlayout}>
           <Input />
         </Form.Item>
         <Form.Item label="转移部位" name="traSite">
