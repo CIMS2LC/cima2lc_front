@@ -263,7 +263,17 @@ class CRFDetail extends React.Component {
                         )}
                         onFinish={async values => {
                           //修改
-                          if (values.idNumber.length != 18) {
+                          if (values.idNumber == '') {
+                            alert('身份证号为空！');
+                            return;
+                          } else {
+                            if (values.idNumber.length != 18) {
+                              alert('身份证号(必填)为18位！');
+                              return;
+                            }
+                          }
+                          if (values.hospitalNumber == '') {
+                            alert('住院号/就诊号为空！');
                             return;
                           }
                           if (values.hospitalNumber == '') {
