@@ -11,6 +11,7 @@ import {
   Radio,
   Tag,
   DatePicker,
+  AutoComplete,
 } from 'antd';
 import moment from 'moment';
 
@@ -32,7 +33,7 @@ const EditableContext = React.createContext<any>();
 const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
-    <Form form={form} component={false}>
+    <Form form={form} component={false} wrapperCol={{ span: 24 }}>
       <EditableContext.Provider value={form}>
         <tr {...props} />
       </EditableContext.Provider>
@@ -93,7 +94,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     ) : (
       <div
         className="editable-cell-value-wrap"
-        style={{ paddingRight: 24 }}
+        // style={{ paddingRight: 24 }}
         onClick={toggleEdit}
       >
         {children}
@@ -158,26 +159,50 @@ class TreatSchedule extends React.Component {
       {
         title: '治疗名称',
         dataIndex: 'treatName',
-        width: '10%',
-        editable: true,
+        width: 80,
+        // editable: true,
+        render: (text, record, index) => {
+          return (
+            <Input
+              placeholder="请输入治疗名称"
+              defaultValue={text}
+              onChange={e => {
+                record['treatName'] = e.target.value;
+              }}
+            />
+          );
+        },
+      },
+      {
+        title: '周期',
+        dataIndex: 'currPeriod',
+        width: 80,
+        // editable: true,
+        render: (text, record, index) => {
+          return (
+            <InputNumber
+              placeholder="请输入周期数"
+              defaultValue={text}
+              onChange={e => {
+                record['currPeriod'] = e.target.value;
+              }}
+            />
+          );
+        },
       },
       {
         title: '药物方案',
         dataIndex: 'treSche',
-        width: '10%',
+        width: 120,
         render: (text, record, index) => {
           return (
-            <Select
-              style={{ width: 120 }}
-              onChange={value => {
-                record['treSolu'] = value;
-                record['treSche'] = value;
-                this.setState({ treSolu: value });
-              }}
-              defaultValue={record['treSche'] || '常用药物'}
+            <AutoComplete
+              style={{ width: '100%' }}
+              defaultValue={record['treSche'] || ''}
               options={Object.keys(
                 treat_schedule_medicine_options[this.props.treat_schedule_name],
               ).map(item => ({ value: item }))}
+              placeholder="请选择药物方案"
             />
           );
         },
@@ -185,13 +210,13 @@ class TreatSchedule extends React.Component {
       {
         title: '药物名称',
         key: 'drugName',
-        width: '20%',
+        width: 120,
         render: (text, record, index) => {
           return (
             <Select
               mode="tags"
               style={{ width: '100%' }}
-              placeholder="Tags Mode"
+              placeholder="请选择或填写药物名称"
               options={
                 treat_schedule_medicine_options[this.props.treat_schedule_name][
                   this.state.treSolu
@@ -250,7 +275,7 @@ class TreatSchedule extends React.Component {
       {
         title: '给药/治疗开始日期',
         key: 'begDate',
-        width: '20%',
+        width: 120,
         render: (text, record, index) => (
           <DatePicker
             defaultValue={moment(record['begDate'])}
@@ -263,7 +288,7 @@ class TreatSchedule extends React.Component {
       {
         title: '给药/治疗结束日期',
         key: 'endDate',
-        width: '20%',
+        width: 120,
         render: (text, record, index) => (
           <DatePicker
             defaultValue={moment(record['endDate'])}
@@ -274,8 +299,26 @@ class TreatSchedule extends React.Component {
         ),
       },
       {
+        title: '备注',
+        dataIndex: 'note',
+        width: 120,
+        // editable: true,
+        render: (text, record, index) => {
+          return (
+            <Input
+              placeholder="请输入备注"
+              defaultValue={text}
+              onChange={e => {
+                record['note'] = e.target.value;
+              }}
+            />
+          );
+        },
+      },
+      {
         title: '常用操作',
         dataIndex: 'commonOper',
+        width: 120,
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <span>
@@ -313,7 +356,8 @@ class TreatSchedule extends React.Component {
   handleAdd = () => {
     const { count, dataSource } = this.state;
     let newData = {
-      treatName: 'xxx',
+      // treatName: `治疗名称${count+1}`,
+      treatName: '',
       key: count,
       id: count,
       currPeriod: count + 1,
@@ -366,7 +410,7 @@ class TreatSchedule extends React.Component {
       };
     });
     return (
-      <div>
+      <div style={{ width: '1000px' }}>
         <Button
           onClick={this.handleAdd}
           type="primary"
@@ -375,12 +419,12 @@ class TreatSchedule extends React.Component {
           添加
         </Button>
         <Table
-          scroll={{ x: '100%' }}
           components={components}
           rowClassName={() => 'editable-row'}
           bordered
           dataSource={dataSource}
           columns={columns}
+          scroll={{ x: '1500px' }}
         />
         {this.props.hassave ? (
           <Button

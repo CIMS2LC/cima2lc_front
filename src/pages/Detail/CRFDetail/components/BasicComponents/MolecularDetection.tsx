@@ -54,7 +54,7 @@ class MolecularDetection extends React.Component {
             status: 'done',
             url: `/file/${this.pid}/${fileName}`,
           });
-          index = 1;
+          index += 1;
         });
         console.log(this.molDefaultFileList);
       }
@@ -100,8 +100,10 @@ class MolecularDetection extends React.Component {
             ...values,
           });
           if (res.code == 200) {
+            message.success('保存成功');
             console.log('更新成功');
           } else {
+            message.error('保存失败，' + res.msg);
             console.log('更新失败');
           }
           // } else {
@@ -175,9 +177,6 @@ class MolecularDetection extends React.Component {
           </Radio.Group>
         </Form.Item>
         <Form.Item label="TMB(/Mb)">
-          <Form.Item name="TMB">
-            <Input disabled={this.state.TMB_value} />
-          </Form.Item>
           <Switch
             checkedChildren="已检测"
             unCheckedChildren="未检测"
@@ -188,6 +187,9 @@ class MolecularDetection extends React.Component {
               });
             }}
           />
+          <Form.Item name="TMB">
+            <Input disabled={this.state.TMB_value} />
+          </Form.Item>
         </Form.Item>
         <Form.Item label="上传" name="upload">
           <Upload
@@ -221,6 +223,7 @@ class MolecularDetection extends React.Component {
                 x => x.slice(-info.name) !== info.name,
               );
               this.setState({ file_list: fileList });
+              console.log(fileList);
             }}
           >
             <Button>

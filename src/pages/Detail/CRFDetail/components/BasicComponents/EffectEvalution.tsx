@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Select, DatePicker } from 'antd';
+import { Form, Input, Button, Select, DatePicker, message } from 'antd';
 import { treRecupdate, treRecsave } from '../../service';
 const layout = {
   labelCol: {
@@ -49,8 +49,10 @@ class EffectEvalution extends React.Component {
         data: { id: this.id, treNum: this.props.treNum, ...values },
       });
       if (res.code == 200) {
+        message.success('保存成功');
         console.log('更新成功');
       } else {
+        message.error('保存失败，' + res.msg);
         console.log('更新失败');
       }
     } else {
@@ -60,8 +62,10 @@ class EffectEvalution extends React.Component {
       });
       if (res && res.code == 200) {
         this.id = res.id;
+        message.success('保存成功');
         console.log('提交成功');
       } else {
+        message.error('保存失败，' + res.msg);
         console.log('提交失败');
       }
     }

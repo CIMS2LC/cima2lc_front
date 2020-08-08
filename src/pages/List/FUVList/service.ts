@@ -67,6 +67,7 @@ export async function screen(params: any) {
     },
   });
 }
+
 export async function queryFollowUp(params: any) {
   return request('/api/illCase/followup', {
     params,

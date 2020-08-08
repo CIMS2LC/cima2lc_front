@@ -24,6 +24,7 @@ import SideReaction from './SideReaction';
 import SystemSign from './SystemSign';
 import TreatmentRecord from './TreatmentRecord';
 import EffectEvalution from './EffectEvalution';
+import OtherInspect from './OtherInspect';
 const { TabPane } = Tabs;
 const { Option } = Select;
 
@@ -32,7 +33,7 @@ const layout = {
     span: 2,
   },
   wrapperCol: {
-    span: 20,
+    span: 8,
   },
 };
 
@@ -139,6 +140,12 @@ class TreatmentInfo extends React.Component {
                   ? this.props.initialValues.TumorMarker[this.props.treNum]
                   : {}
               }
+            />
+          </TabPane>
+          <TabPane tab="其他检查" key="other_inspect">
+            <OtherInspect
+              pid={this.state.pid}
+              treNum={this.props.treNum}
               Lung={
                 this.props.initialValues
                   ? this.props.initialValues.Lung[this.props.treNum]

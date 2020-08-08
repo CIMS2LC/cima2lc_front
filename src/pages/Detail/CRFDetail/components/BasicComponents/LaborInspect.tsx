@@ -17,7 +17,7 @@ import {
 } from 'antd';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
 import { UploadOutlined } from '@ant-design/icons';
-import './table.less';
+import './table.css';
 import moment from 'moment';
 import { getCookie } from '@/pages/BasicComponents/request';
 import {

@@ -1,6 +1,6 @@
 import React from 'react';
 import EditableTable from '@/pages/BasicComponents/EditableTable';
-import { Radio, DatePicker, Cascader, Rate, Select } from 'antd';
+import { Radio, DatePicker, Cascader, Select } from 'antd';
 import { sideEffectsave, sideEffectupdate } from '../../service';
 import moment from 'moment';
 
@@ -242,6 +242,7 @@ const options = [
     ],
   },
 ];
+
 const grade_ops = [
   { value: 1, label: 1 },
   { value: 2, label: 2 },
@@ -265,7 +266,7 @@ const SideReaction = props => {
           title: '序号',
           dataIndex: 'key',
           key: 'key',
-          width: '5%',
+          width: 40,
           render: (text, record, index) => {
             return <span>{index + 1}</span>;
           },
@@ -274,7 +275,7 @@ const SideReaction = props => {
           title: '症状描述',
           dataIndex: 'sidReaName',
           key: 'sidReaName',
-          width: '10%',
+          width: 120,
           onChange: { onChange },
           render: (text, record, index) => {
             return (
@@ -294,7 +295,7 @@ const SideReaction = props => {
           title: '分级',
           dataIndex: 'sidRecCla',
           key: 'sidRecCla',
-          width: '10%',
+          width: 80,
           render: (text, record, index) => (
             <Select
               defaultValue={record['sidRecCla']}
@@ -309,7 +310,7 @@ const SideReaction = props => {
           title: '开始日期',
           dataIndex: 'begDate',
           key: 'begDate',
-          width: '10%',
+          width: 120,
           render: (text, record, index) => (
             <DatePicker
               defaultValue={moment(record['begDate'])}
@@ -323,7 +324,7 @@ const SideReaction = props => {
           title: '目前是否仍存在',
           dataIndex: 'isExe',
           key: 'isExe',
-          width: '10%',
+          width: 80,
           render: (text, record, index) => (
             <Radio.Group
               defaultValue={record['isExe']}
@@ -340,7 +341,7 @@ const SideReaction = props => {
           title: '结束日期',
           dataIndex: 'endDate',
           key: 'endDate',
-          width: '10%',
+          width: 120,
           render: (text, record, index) => (
             <DatePicker
               defaultValue={moment(record['endDate'])}

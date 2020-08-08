@@ -99,7 +99,18 @@ class Medicine extends React.Component {
         title: '药物名称',
         dataIndex: 'drugName',
         width: '20%',
-        editable: true,
+        // editable: true,
+        render: (text, record) => {
+          return (
+            <Input
+              placeholder={'请输入药物名称'}
+              defaultValue={text}
+              onChange={e => {
+                record['drugName'] = e.target.value;
+              }}
+            />
+          );
+        },
       },
       {
         title: '日使用剂量',
@@ -144,7 +155,7 @@ class Medicine extends React.Component {
   handleAdd = () => {
     const { count, dataSource } = this.state;
     let newData = {
-      drugName: '药物',
+      drugName: '',
       drugDose: '1g',
       duration: 0,
       key: count,

@@ -39,4 +39,17 @@ export default {
     });
   },
   'GET  /api/login/captcha': getFakeCaptcha,
+  'POST  /api/modify_password': (req: Request, res: Response) => {
+    if (req.body.account !== 'error') {
+      res.send({
+        code: 200,
+        msg: 'success',
+      });
+    } else {
+      res.send({
+        code: 10000,
+        msg: 'failed',
+      });
+    }
+  },
 };

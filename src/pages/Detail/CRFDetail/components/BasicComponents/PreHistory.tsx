@@ -7,6 +7,7 @@ import {
   Button,
   Checkbox,
   InputNumber,
+  message,
 } from 'antd';
 import Hormone from './Hormone';
 import Medicine from './Medicine';
@@ -15,7 +16,7 @@ import { PastHissave, PastHisupdate } from '../../service';
 const layout = {
   labelAlign: 'left',
   labelCol: {
-    span: 4,
+    span: 3,
   },
   wrapperCol: {
     span: 10,
@@ -206,16 +207,20 @@ class PreHistory extends React.Component {
               ...values,
             });
             if (res.code == 200) {
+              message.success('保存成功');
               console.log('更新成功');
             } else {
+              message.error('保存失败，' + res.msg);
               console.log('更新失败');
             }
           } else {
             const res = await PastHissave({ pid: this.props.pid, ...values });
             if (res.code == 200) {
               this.id = res.id;
+              message.success('保存成功');
               console.log('提交成功');
             } else {
+              message.error('保存失败，' + res.msg);
               console.log('提交失败');
             }
           }
@@ -316,7 +321,7 @@ class PreHistory extends React.Component {
           </Radio.Group>
         </Form.Item>
         {this.state.is_drink ? (
-          <Form.Item label="吸烟史">
+          <Form.Item label="饮酒史">
             <Form.Item
               label="累积饮酒时间（年）"
               name={['drinkingHis', 'drinkYearAvg']}
@@ -324,7 +329,7 @@ class PreHistory extends React.Component {
               <InputNumber />
             </Form.Item>
             <Form.Item
-              label="日平饮酒烟量（支）"
+              label="日平均饮酒量（mL）"
               name={['drinkingHis', 'drinkDayAvg']}
             >
               <InputNumber />
